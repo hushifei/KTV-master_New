@@ -1,0 +1,44 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "3FEA80AAA48F9FCDA928A5BF3EB6C069A669C4D2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "04101981B66E318109934C9516F88D824BB96459" : 0,
+    "3FEA80AAA48F9FCDA928A5BF3EB6C069A669C4D2" : 0,
+    "5FBA02D9AE206CAB54D9F2E87F847A6918CA755B" : 0,
+    "159A69E69085174A7C80113FBA980A94565AD2BD" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "4B02E13A-1027-4328-8091-843441229924",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "04101981B66E318109934C9516F88D824BB96459" : "KTV_601_nightKTV\/Funcions\/fmdb",
+    "3FEA80AAA48F9FCDA928A5BF3EB6C069A669C4D2" : "KTV-master",
+    "5FBA02D9AE206CAB54D9F2E87F847A6918CA755B" : "KTV",
+    "159A69E69085174A7C80113FBA980A94565AD2BD" : "KTV_601_night"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "KTV",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "KTV.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ccgus\/fmdb.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "04101981B66E318109934C9516F88D824BB96459"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/hushifei\/KTV_601_night.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "159A69E69085174A7C80113FBA980A94565AD2BD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/hushifei\/KTV-master.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3FEA80AAA48F9FCDA928A5BF3EB6C069A669C4D2"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/hushifei\/KTV.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5FBA02D9AE206CAB54D9F2E87F847A6918CA755B"
+    }
+  ]
+}

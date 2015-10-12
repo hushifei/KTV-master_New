@@ -1,0 +1,73 @@
+/* 
+  Localizable.strings
+  KTV
+
+  Created by mCloud on 15/9/9.
+  Copyright (c) 2015年 stevenhu. All rights reserved.
+*/
+
+/*Comm*/
+"mainvctitle"    = "VOD";
+"controller"     = "Play Control";
+"setting"        = "Setting";
+"selected"       = "Selected";
+
+/**mainViewController */
+"searchhinttext" = "Input singer or song name";
+"singers"        = "Singers";
+"hotest"            = "Hotest";
+"omnibus"        = "Omnibus";
+"newsong"        = "New Songs";
+"house"          = "Favorite";
+"connecthost"    = "Connect Host";
+
+"singers_area"   ="Area";
+"songs"          ="Songs";
+
+"hud_text_init"   ="Initializing Data";
+"hud_detail_wait" ="Please Be Waiting......";
+
+/** playController*/
+
+"vocalonoff" = "Vocal On/Off";
+"nextsong" = "Next Song";
+"pauseplay" = "Pause/Play";
+"replay"   = "Replay";
+"mute" = "Mute/Unmute";
+"cheer" = "Cheer";
+"booing" = "Booing";
+"soft"  = "Soft";
+"bright" = "Bright";
+"innervation"   = "Innervation";
+"switch" = "Switch";
+"service" = "Service";
+"microphone" = "Microphone";
+"music" = "Music";
+/** settingController*/
+
+"restartHost" = "Restart Host";
+"shutdownHost" = "Power Off Host";
+"clearCachedata" = "Clear Cache";
+"about" = "About";
+"restartsuccess" = "Restart Success";
+"restartfailure" = "Restart Failure";
+"shutdownsuccess" = "Shutdown Success";
+"shutdownfailure" = "Shutdown Failure";
+"clearcachedatasuccess" ="Clear Cache Data Sucess";
+
+/** searchConttroller */
+"searchhinttext_searchVC" = "Typo Singer、Song、First Letter";
+"searchcomment_searchVC" = "Enter the first letter of the search content to query the Song \n\n LiuDeHua Enter \"ldh\"\n NiXia Enter \"nx\"";
+"all" = "All";
+"cancel" = "Cancel";
+
+/** Other */
+"select" = "Select";
+"favorite" = "Favorite";
+"top" = "Top";
+
+/** binding Host */
+"networkError" = "No been connected to device";
+"confirm"  =  "Confirm";
+"connectnetwork" = "Connect WIFI";
+"connectNetContent" = "Setting-WIFI Network";

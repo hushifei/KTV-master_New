@@ -1,0 +1,75 @@
+/* 
+  Localizable.strings
+  KTV
+
+  Created by mCloud on 15/9/9.
+  Copyright (c) 2015年 stevenhu. All rights reserved.
+*/
+/*Comm*/
+"mainvctitle"    = "K歌";
+"controller"     = "播控";
+"setting"        = "设置";
+"selected"       = "已点";
+
+/**mainViewController */
+"searchhinttext" = "输入歌星或歌名";
+"singers"        = "歌手";
+"hotest"            = "排行榜";
+"omnibus"        = "精选集";
+"newsong"        = "新歌";
+"house"          = "收藏的歌";
+"connecthost"    = "连接包厢";
+
+"singers_area"   ="区域";
+"songs"          ="歌曲";
+"hud_text_init"   ="初始化数据";
+"hud_detail_wait" ="请耐心等待......";
+
+/** playController*/
+"vocalonoff" = "原/伴";
+"nextsong" = "切歌";
+"pauseplay" = "播/停";
+"replay"   = "重唱";
+"mute" = "静音/正常";
+"cheer" = "喝彩";
+"booing" = "倒彩";
+"soft"  = "柔和";
+"bright" = "明亮";
+"innervation"   = "动感";
+"switch" = "开关";
+"service" = "服务";
+"microphone" = "麦克风";
+"music" = "音乐";
+/** settingController*/
+
+"restartHost" = "重启主机";
+"shutdownHost" = "关闭主机";
+"clearCachedata" = "清除缓存数据";
+"about" = "关于";
+"restartsuccess" = "重启成功";
+"restartfailure" = "重启失败";
+"shutdownsuccess" = "关机成功";
+"shutdownfailure" = "关机失败";
+"clearcachedatasuccess" ="成功清除缓存";
+
+/** searchConttroller */
+"searchhinttext_searchVC" = "输入歌星、歌曲、简拼";
+"searchcomment_searchVC" = "输入搜索内容的首字母即可查询歌曲哈\r\n\r\n刘德华 输入\"ldh\"\n宁夏 输入\"nx\"";
+"all" = "全部";
+"cancel" = "取消";
+
+/** Other */
+"select" = "选择";
+"favorite" = "喜欢";
+"top" = "顶歌";
+
+/** binding Host */
+"networkError" = "网络连接失败";
+"confirm"  =  "确定";
+"connectnetwork" = "连接网络";
+"connectNetContent" = "进入设置界面连接无线网络";
+
+
+
+
+

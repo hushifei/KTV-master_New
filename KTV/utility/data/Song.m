@@ -1,0 +1,161 @@
+//
+//  Song.m
+//  KTV
+//
+//  Created by stevenhu on 15/4/24.
+//  Copyright (c) 2015年 stevenhu. All rights reserved.
+//
+#import "Song.h"
+#import "CommandControler.h"
+#import "NSString+Utility.h"
+
+@implementation Song
+
+-(void)setAddtime:(NSString *)addtime {
+    _addtime=[addtime  decodeBase64];
+}
+
+- (void)setBihua:(NSString *)bihua {
+    _bihua=[bihua  decodeBase64];
+}
+
+- (void)setChannel:(NSString *)channel {
+    _channel=[channel  decodeBase64];
+}
+
+- (void)setLanguage:(NSString *)language {
+    _language=[language  decodeBase64];
+}
+
+-(void)setMovie:(NSString *)movie {
+    _movie=[movie  decodeBase64];
+}
+
+- (void)setNewsong:(NSString *)newsong {
+    _newsong=[newsong  decodeBase64];
+}
+
+- (void)setNumber:(NSString *)number {
+    _number=[number  decodeBase64];
+}
+
+- (void)setPathid:(NSString *)pathid {
+    _pathid=[pathid  decodeBase64];
+    
+}
+
+- (void)setSex:(NSString *)sex {
+    _sex=[sex decodeBase64];
+    
+}
+
+- (void)setSinger:(NSString *)singer {
+    _singer=[singer  decodeBase64];
+    
+}
+
+- (void)setSinger1:(NSString *)singer1 {
+    _singer1=[singer1  decodeBase64];
+    
+}
+
+- (void)setSongname:(NSString *)songname {
+    _songname=[songname  decodeBase64];
+    
+}
+
+- (void)setSongpiy:(NSString *)songpiy {
+    _songpiy=[songpiy  decodeBase64];
+    
+}
+
+
+- (void)setSpath:(NSString *)spath {
+    _spath=[spath  decodeBase64];
+    
+}
+
+- (void)setStype:(NSString *)stype {
+    _stype=[stype  decodeBase64];
+    
+}
+
+- (void)setVolume:(NSString *)volume {
+    _volume=[volume  decodeBase64];
+    
+}
+
+- (void)setWord:(NSString *)word {
+    _word=[word  decodeBase64];
+}
+
+
+- (void)insertSongToCollectionTable {
+    __weak __block typeof (self) weakSelf=self;
+    NSString *querySqlStr=[NSString stringWithFormat:@"select * from CollectionTable where number='%@'",[_number encodeBase64]];
+    FMResultSet *rs=[[Utility instanceShare].db executeQuery:querySqlStr];
+    while ([rs next]) {
+        if ([self.delegate respondsToSelector:@selector(addSongToCollection:result:)]) {
+            [self.delegate addSongToCollection:weakSelf result:KMessageStyleInfo];
+        }
+        return;
+    }
+    NSString *insertSql1= [NSString stringWithFormat:@"INSERT INTO CollectionTable (number,songname,singer,singer1,songpiy,word,language,volume,channel,sex,stype,newsong,movie,pathid,bihua,addtime,spath)VALUES ('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",[_number encodeBase64],[_songname encodeBase64],[_singer encodeBase64],[_singer1 encodeBase64],[_songpiy encodeBase64],[_word encodeBase64],[_language encodeBase64],[_volume encodeBase64],[_channel encodeBase64],[_sex encodeBase64],[_stype encodeBase64],[_newsong encodeBase64],[_movie encodeBase64],[_pathid encodeBase64],[_bihua encodeBase64],[_addtime encodeBase64],[_spath encodeBase64]];
+    if (![[Utility instanceShare].db executeUpdate:insertSql1]) {
+        NSLog(@"插入失败1");
+        if ([self.delegate respondsToSelector:@selector(addSongToCollection:result:)]) {
+            [self.delegate addSongToCollection:weakSelf result:KMessageWarning];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(addSongToCollection:result:)]) {
+            [self.delegate addSongToCollection:weakSelf result:KMessageSuccess];
+        }
+    }
+}
+
+- (void)deleteSongFromCollectionTable {
+    NSString *insertSql1= [NSString stringWithFormat:@"delete from CollectionTable where number='%@'",[_number encodeBase64]];
+    __weak __block typeof (self) weakSelf=self;
+    if (![[Utility instanceShare].db executeUpdate:insertSql1]) {
+        NSLog(@"取消收藏失败");
+        if ([self.delegate respondsToSelector:@selector(deleteCollectionSong:result:)]) {
+            [self.delegate deleteCollectionSong:weakSelf result:KMessageWarning];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(deleteCollectionSong:result:)]) {
+            [self.delegate deleteCollectionSong:weakSelf result:KMessageSuccess];
+        }
+    }
+}
+
+- (void)cutSong {
+    if (_number.length>0) {
+        CommandControler *cmd=[[CommandControler alloc]init];
+        [cmd sendCmd_switchSong];
+        __weak __block typeof (self) weakSelf=self;
+        if ([self.delegate respondsToSelector:@selector(cutSongFromCollection:result:)]) {
+            [self.delegate cutSongFromCollection:weakSelf result:KMessageSuccess];
+        }
+    }
+}
+
+- (void)prioritySong {
+    CommandControler *cmd=[[CommandControler alloc]init];
+    [cmd sendCmd_get_yiDianList:^(NSArray *list) {
+        for (NSString *tmpNumber in list) {
+            NSLog(@"%@-->",tmpNumber);
+            if  ([tmpNumber isEqualToString:_number]) {
+                [cmd sendCmd_moveSongToTop:_number];
+                __weak __block typeof (self) weakSelf=self;
+                if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
+                    [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
+                }
+                return;
+            }
+        }
+    }];
+}
+
+
+
+@end
