@@ -19,6 +19,7 @@
 #import "SoundViewController.h"
 #import "MBProgressHUD.h"
 #import "Song.h"
+#import "DataMananager.h"
 
 @interface CollectionViewController ()<SongDelegate> {
     NSInteger _previousRow;
@@ -59,7 +60,7 @@
 
 - (void)initializeTableContent {
     _dataList=[[NSMutableArray alloc]init];
-    FMResultSet *rs=[[Utility instanceShare].db executeQuery:@"select * from CollectionTable"];
+    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:@"select * from CollectionTable"];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
         oneSong.addtime = [rs stringForColumn:@"addtime"];

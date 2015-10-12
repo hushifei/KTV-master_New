@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
-typedef void(^Completed)(BOOL Completed);
+typedef void(^DataImportCompleted)(BOOL Completed);
 @interface DataMananager : NSObject
-
+@property (nonatomic,readonly)FMDatabase *db;
+@property(nonatomic,readonly)DataImportCompleted completed;
++ (instancetype)instanceShare;
+- (void)addIntoDataSourceWithFileNames:(NSArray*)fileNames completed:(DataImportCompleted)completed;
+- (void)closeDB;
 @end

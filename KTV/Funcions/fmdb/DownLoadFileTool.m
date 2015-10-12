@@ -9,6 +9,7 @@
 #import "DownLoadFileTool.h"
 #import "CommandControler.h"
 #import "Utility.h"
+#import "DataMananager.h"
 #define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
 #define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
@@ -22,41 +23,57 @@
 }
 
 @end
-
+static DownLoadFileTool *instance=nil;
 @implementation DownLoadFileTool
 
-- (instancetype)init {
-    if (self=[super init]) {
-       defaults =[NSUserDefaults standardUserDefaults];
-       shareSession=[NSURLSession sharedSession];
-       fileManager=[NSFileManager defaultManager];
-       allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
-       savePath_TxtDir=[DOCUMENTPATH stringByAppendingPathComponent:@"/downloadDir/txt"];
-        if (![fileManager fileExistsAtPath:savePath_TxtDir]) {
-            [fileManager createDirectoryAtPath:savePath_TxtDir withIntermediateDirectories:YES attributes:nil error:nil];
-        }
-
++ (instancetype)instance {
+    if (!instance) {
+        instance = [[super allocWithZone:NULL] init];
     }
-    return self;
-    //
+    return instance;
 }
 
++ (id)allocWithZone:(NSZone *)zone {
+    return [self instance];
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    return self;
+}
+
+- (instancetype)init {
+    if (instance) {
+        return instance;
+    }
+    defaults =[NSUserDefaults standardUserDefaults];
+    shareSession=[NSURLSession sharedSession];
+    fileManager=[NSFileManager defaultManager];
+    allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
+    savePath_TxtDir=[DOCUMENTPATH stringByAppendingPathComponent:@"/downloadDir/txt"];
+    if (![fileManager fileExistsAtPath:savePath_TxtDir]) {
+        [fileManager createDirectoryAtPath:savePath_TxtDir withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    self = [super init];
+    return self;
+}
+
+
 - (void)downLoadTxtFile:(DownloadTxtFilesCompleted)completed {
+    
     if (completed) {
         _completed=completed;
     }
-    //1.checkVersion
-    NSString *currentVer=[defaults objectForKey:@"CURRENT_DATABASE_VERSION"];
-    if (currentVer==nil) {
-        //download
-    } else {
-      [self isNeedToUpdate_Database_version:^(BOOL canUpdate) {
-          if (canUpdate) {
-              //download
-          }
-      }];
-    }
     
+    //1.check network
+    if (![Utility instanceShare].networkStatus) {
+        _completed(NO);
+        NSLog(@"network status error");
+    }
+    [self isNeedToUpdate_Database_version:^(BOOL canUpdate) {
+        if (canUpdate) {
+            [self startDownloadFiles];
+        }
+    }];
 }
 
 - (void)startDownloadFiles {
@@ -70,6 +87,7 @@
     //等group里的task都执行完后执行notify方法里的内容,相当于把wait方法及之后要执行的代码合到一起了
     dispatch_group_notify(group, queue, ^{
         if (_completed) {
+            //import data
             _completed(YES);
         }
     });
@@ -80,7 +98,7 @@
     if (![Utility instanceShare].networkStatus)return;
     NSString *strURL=[COMM_URLStr stringByAppendingString:fileName];
     NSURL *url=[NSURL URLWithString:[strURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]]];
-//    NSLog(@"%@",url);
+    //    NSLog(@"%@",url);
     NSURLRequest *request=[[NSURLRequest alloc]initWithURL:url];
     NSURLSessionDownloadTask *dataTask=[shareSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
@@ -100,7 +118,7 @@
 
 - (void)copyTxtFile:(NSURL*)location Distance:(NSURL*)distancePath {
     [self removeFile:[distancePath absoluteString]];
-     [fileManager moveItemAtURL:location toURL:distancePath error:NULL];
+    [fileManager moveItemAtURL:location toURL:distancePath error:NULL];
 }
 
 //删除文件
@@ -134,9 +152,9 @@
                 }
             } else {
                 if (update) {
-                [defaults setObject:newVersion forKey:@"CURRENT_DATABASE_VERSION"];
-                [defaults synchronize];
-                update(YES);
+                    [defaults setObject:newVersion forKey:@"CURRENT_DATABASE_VERSION"];
+                    [defaults synchronize];
+                    update(YES);
                 }
             }
         }

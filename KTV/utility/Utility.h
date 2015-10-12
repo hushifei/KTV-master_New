@@ -75,11 +75,11 @@ typedef enum {
 typedef void(^OperationResult)(NSError* error);
 typedef void(^Completed)(BOOL Completed);
 @interface Utility : NSObject
-@property (nonatomic,readonly)FMDatabase *db;
 @property (nonatomic,assign)iphoneModel myIphoneModel;
 @property (readonly, strong, nonatomic) NSOperationQueue *queue;
 @property (readonly ,strong, nonatomic) NSManagedObjectContext *bgObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *mainObjectContext;
+//tools
 + (instancetype)instanceShare;
 + (float)user_iosVersion;
 + (UIImage *)imageWithColor:(UIColor *)color;
@@ -87,14 +87,14 @@ typedef void(^Completed)(BOOL Completed);
 + (NSString*)shouZiFu:(NSString*)string;
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert;
 // DabaBase
-- (void)addIntoDataSource:(Completed)completed;
-- (void)setupEnvModel:(NSString *)model DbFile:(NSString*)filename;
 - (NSManagedObjectContext*)createPrivateObjectContext;
 - (NSError*)save:(OperationResult)handler;
+// badge
 - (void)setYidianBadgeWidth:(BBBadgeBarButtonItem*)item;
-- (void)closeDB;
+//network
 - (void)networkStatus:(void(^)(BOOL isSecucess))block;
 - (BOOL)networkStatus;
+//nsstring handle
 + (CGSize)sizeWithString:(NSString *)string font:(UIFont *)font;
 + (BOOL)isChineseLanguge;
 @end

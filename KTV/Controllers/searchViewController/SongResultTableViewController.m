@@ -19,6 +19,7 @@
 #import "MBProgressHUD.h"
 #import "CommandControler.h"
 #import "AppDelegate.h"
+#import "DataMananager.h"
 @interface SongResultTableViewController ()<SongDelegate> {
     NSMutableArray *dataList;
     NSInteger _previousRow;
@@ -79,7 +80,7 @@
 - (void)initializeTableContent {
     NSString *singerName=[_singerName encodeBase64];
     NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where singer='%@' order by singer",singerName];
-    FMResultSet *rs=[[Utility instanceShare].db executeQuery:sqlStr];
+    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
         oneSong.addtime = [rs stringForColumn:@"addtime"];

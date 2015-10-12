@@ -63,18 +63,18 @@
     HUD.dimBackground=YES;
     HUD.detailsLabelColor=[UIColor greenColor];
     [HUD show:YES];
-    [[Utility instanceShare]addIntoDataSource:^(BOOL Completed) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [HUD hide:YES];
-        });
-        if (Completed) {
-            NSLog(@"Done");
-            
-        } else {
-            NSLog(@"network error");
-        }
-        
-    }];
+//    [[Utility instanceShare]addIntoDataSource:^(BOOL Completed) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [HUD hide:YES];
+//        });
+//        if (Completed) {
+//            NSLog(@"Done");
+//            
+//        } else {
+//            NSLog(@"network error");
+//        }
+//        
+//    }];
 }
 
 - (void)copyFile {

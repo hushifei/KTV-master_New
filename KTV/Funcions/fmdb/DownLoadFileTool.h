@@ -11,6 +11,8 @@ typedef void(^DownloadTxtFilesCompleted)(BOOL Completed);
 @interface DownLoadFileTool : NSObject
 @property(nonatomic,strong)NSArray *filePaths;
 @property(nonatomic,readonly)DownloadTxtFilesCompleted completed;
+
++ (instancetype)instance;
 - (void)downLoadTxtFile:(DownloadTxtFilesCompleted)completed;
 - (void)remove_downloadedTxtFiles;
 //获取数据版本

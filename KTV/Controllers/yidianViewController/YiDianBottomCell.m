@@ -9,7 +9,7 @@
 #import "YiDianBottomCell.h"
 #import "CommandControler.h"
 #import "Order.h"
-
+#import "DataMananager.h"
 @interface YiDianBottomCell ()
 
 @end
@@ -62,7 +62,7 @@
 - (IBAction)removeSong:(id)sender {
     //1.search order table
     NSString *order_sqlStr= [NSString stringWithFormat:@"select * from OrderTable"];
-    FMResultSet *order_rs=[[Utility instanceShare].db executeQuery:order_sqlStr];
+    FMResultSet *order_rs=[[DataMananager instanceShare].db executeQuery:order_sqlStr];
     Order *oneOrder=[[Order alloc]init];
     while ([order_rs next]) {
         oneOrder.number = [order_rs stringForColumn:@"number"];

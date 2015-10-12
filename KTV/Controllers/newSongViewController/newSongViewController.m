@@ -16,7 +16,7 @@
 #import "MBProgressHUD.h"
 #import "MJRefresh.h"
 #import "Song.h"
-
+#import "DataMananager.h"
 @interface newSongViewController ()<MBProgressHUDDelegate,SongDelegate> {
     NSInteger _previousRow;
     UIRefreshControl * bb;
@@ -77,7 +77,7 @@
 - (void)initializeTableContent {
     NSString *newSongFlag=[@"1" encodeBase64];
     NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where newsong='%@' limit %d",newSongFlag,pageLimint];
-    FMResultSet *rs=[[Utility instanceShare].db executeQuery:sqlStr];
+    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
         oneSong.number = [rs stringForColumn:@"number"];

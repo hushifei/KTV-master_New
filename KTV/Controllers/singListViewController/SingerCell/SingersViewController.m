@@ -20,6 +20,7 @@
 #import "MBProgressHUD.h"
 #import "UIImageView+WebCache.h"
 #import "NSString+Utility.h"
+#import "DataMananager.h"
 #define SINGER_PIC_URL @"http://192.168.43.1:8080/puze?cmd=0x02&filename="
 
 @interface SingersViewController () {
@@ -57,7 +58,7 @@
     //DESC 降序
     NSString *typeID=[_area encodeBase64];
     NSString *sqlStr= [NSString stringWithFormat:@"select * from SingerTable where area='%@' order by singer",typeID];
-    FMResultSet *rs=[[Utility instanceShare].db executeQuery:sqlStr];
+    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Singer *oneSinger=[[Singer alloc]init];
         oneSinger.area = [rs stringForColumn:@"area"];

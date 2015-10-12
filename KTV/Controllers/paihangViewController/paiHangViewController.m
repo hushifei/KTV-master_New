@@ -21,7 +21,7 @@
 #import "Order.h"
 #import "Song.h"
 #import "NSString+Utility.h"
-
+#import "DataMananager.h"
 @interface paiHangViewController ()<SongDelegate>
 {
     NSInteger _previousRow;
@@ -66,7 +66,7 @@
     //1.search order table
     _orderArray=[[NSMutableArray alloc]init];
     NSString *order_sqlStr= [NSString stringWithFormat:@"select * from OrderTable"];
-    FMResultSet *order_rs=[[Utility instanceShare].db executeQuery:order_sqlStr];
+    FMResultSet *order_rs=[[DataMananager instanceShare].db executeQuery:order_sqlStr];
     while ([order_rs next]) {
         Order *oneOrder=[[Order alloc]init];
         oneOrder.number = [order_rs stringForColumn:@"number"];
@@ -79,7 +79,7 @@
     for (Order *oneOrder in  _orderArray) {
         NSString *decoderNumber=[oneOrder.number encodeBase64];
         NSString *song_sqlStr= [NSString stringWithFormat:@"select * from SongTable where number='%@'",decoderNumber];
-        FMResultSet *song_rs=[[Utility instanceShare].db executeQuery:song_sqlStr];
+        FMResultSet *song_rs=[[DataMananager instanceShare].db executeQuery:song_sqlStr];
         while ([song_rs next]) {
             Song *oneSong=[[Song alloc]init];
             oneSong.addtime = [song_rs stringForColumn:@"addtime"];

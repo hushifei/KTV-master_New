@@ -8,7 +8,7 @@
 #import "Song.h"
 #import "CommandControler.h"
 #import "NSString+Utility.h"
-
+#import "DataMananager.h"
 @implementation Song
 
 -(void)setAddtime:(NSString *)addtime {
@@ -93,7 +93,7 @@
 - (void)insertSongToCollectionTable {
     __weak __block typeof (self) weakSelf=self;
     NSString *querySqlStr=[NSString stringWithFormat:@"select * from CollectionTable where number='%@'",[_number encodeBase64]];
-    FMResultSet *rs=[[Utility instanceShare].db executeQuery:querySqlStr];
+    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:querySqlStr];
     while ([rs next]) {
         if ([self.delegate respondsToSelector:@selector(addSongToCollection:result:)]) {
             [self.delegate addSongToCollection:weakSelf result:KMessageStyleInfo];
@@ -101,7 +101,7 @@
         return;
     }
     NSString *insertSql1= [NSString stringWithFormat:@"INSERT INTO CollectionTable (number,songname,singer,singer1,songpiy,word,language,volume,channel,sex,stype,newsong,movie,pathid,bihua,addtime,spath)VALUES ('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",[_number encodeBase64],[_songname encodeBase64],[_singer encodeBase64],[_singer1 encodeBase64],[_songpiy encodeBase64],[_word encodeBase64],[_language encodeBase64],[_volume encodeBase64],[_channel encodeBase64],[_sex encodeBase64],[_stype encodeBase64],[_newsong encodeBase64],[_movie encodeBase64],[_pathid encodeBase64],[_bihua encodeBase64],[_addtime encodeBase64],[_spath encodeBase64]];
-    if (![[Utility instanceShare].db executeUpdate:insertSql1]) {
+    if (![[DataMananager instanceShare].db executeUpdate:insertSql1]) {
         NSLog(@"插入失败1");
         if ([self.delegate respondsToSelector:@selector(addSongToCollection:result:)]) {
             [self.delegate addSongToCollection:weakSelf result:KMessageWarning];
@@ -116,7 +116,7 @@
 - (void)deleteSongFromCollectionTable {
     NSString *insertSql1= [NSString stringWithFormat:@"delete from CollectionTable where number='%@'",[_number encodeBase64]];
     __weak __block typeof (self) weakSelf=self;
-    if (![[Utility instanceShare].db executeUpdate:insertSql1]) {
+    if (![[DataMananager instanceShare].db executeUpdate:insertSql1]) {
         NSLog(@"取消收藏失败");
         if ([self.delegate respondsToSelector:@selector(deleteCollectionSong:result:)]) {
             [self.delegate deleteCollectionSong:weakSelf result:KMessageWarning];

@@ -22,6 +22,7 @@
 #define SONGTABLE @"SongTable"
 #define SINGERTABLE @"SingerTable"
 #import "NSString+Utility.h"
+#import "DataMananager.h"
 @interface ResultTableViewController ()<UITableViewDataSource,UITableViewDelegate,searchSongDelegate,UISearchBarDelegate> {
     NSInteger _previousRow;
     BOOL canSearch;
@@ -43,7 +44,7 @@
     _dataList = [[NSMutableArray alloc] init];
     _singerList = [[NSMutableArray alloc] init];
     [self initializeSearchController];
-    _searchDb = [Utility instanceShare].db;
+    _searchDb = [DataMananager instanceShare].db;
     [_searchDb open];
 }
 
