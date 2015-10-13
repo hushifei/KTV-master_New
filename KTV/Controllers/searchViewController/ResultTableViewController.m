@@ -196,15 +196,7 @@
         [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
     }
     }else {
-//        SingersViewController *singerVC = [[SingersViewController alloc] init];
-//        [self presentViewController:singerVC animated:YES completion:nil];
-//        SongListViewController *songVC=[[SongListViewController alloc]init];
         SingsTableViewCell *cell=[self singerCell:tableView :indexPath];
-//        songVC.singerName=cell.singer.singer;
-//        dispatch_sync(dispatch_get_main_queue(), ^{
-//            [self.navigationController pushViewController:songVC animated:YES];
-//
-//        });
         if ([_delegate respondsToSelector:@selector(clickSingerWithSingerName:)]) {
             [_delegate clickSingerWithSingerName:cell.singer.singer];
         }
@@ -213,7 +205,6 @@
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you ado not want the specified item to be editable.
     return NO;
 }
 
@@ -228,7 +219,6 @@
             [self.delegate searchDone];
         }
     }
-    
     [self.tableView reloadData];
 }
 
@@ -237,7 +227,6 @@
     if (!canSearch) return;
     if ( searchStr && searchStr.length>0) {
         canSearch=NO;
-//        [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
         [self initializeTableContent:searchStr];
     } else {
         canSearch=YES;
@@ -291,8 +280,6 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     canSearch=YES;
-    //    [self.dataList removeAllObjects];
-    //    [self reloadData];
     [self dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"searchBarCancelButtonClicked");
 }
@@ -362,12 +349,4 @@
             break;
     }
 }
-
-//-(UIStatusBarStyle)preferredStatusBarStyle {
-//    return UIStatusBarStyleLightContent;
-//}
-//
-//- (BOOL)prefersStatusBarHidden {
-//    return YES;
-//}
 @end

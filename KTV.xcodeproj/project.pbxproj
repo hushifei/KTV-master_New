@@ -71,6 +71,9 @@
 		C3AAC1261BCCD09C009582D1 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C3AAC1251BCCD09C009582D1 /* libsqlite3.tbd */; };
 		C3AAC12A1BCCD0CA009582D1 /* libz.1.2.5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C3AAC1291BCCD0CA009582D1 /* libz.1.2.5.tbd */; };
 		C3AAC12C1BCCD0E1009582D1 /* libiconv.2.4.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C3AAC12B1BCCD0E1009582D1 /* libiconv.2.4.0.tbd */; };
+		C3AAC12E1BCD0ED0009582D1 /* singer_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC12D1BCD0ED0009582D1 /* singer_flag.png */; settings = {ASSET_TAGS = (); }; };
+		C3AAC1301BCD1478009582D1 /* music_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC12F1BCD1478009582D1 /* music_icon.png */; settings = {ASSET_TAGS = (); }; };
+		C3AAC1341BCD1627009582D1 /* Default_Header.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC1331BCD1627009582D1 /* Default_Header.png */; settings = {ASSET_TAGS = (); }; };
 		D12374511B2D163500902361 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374301B2D163500902361 /* MKAnnotationView+WebCache.m */; };
 		D12374521B2D163500902361 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374321B2D163500902361 /* NSData+ImageContentType.m */; };
 		D12374531B2D163500902361 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374341B2D163500902361 /* SDImageCache.m */; };
@@ -446,6 +449,9 @@
 		C3AAC1251BCCD09C009582D1 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		C3AAC1291BCCD0CA009582D1 /* libz.1.2.5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.2.5.tbd; path = usr/lib/libz.1.2.5.tbd; sourceTree = SDKROOT; };
 		C3AAC12B1BCCD0E1009582D1 /* libiconv.2.4.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.4.0.tbd; path = usr/lib/libiconv.2.4.0.tbd; sourceTree = SDKROOT; };
+		C3AAC12D1BCD0ED0009582D1 /* singer_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = singer_flag.png; sourceTree = "<group>"; };
+		C3AAC12F1BCD1478009582D1 /* music_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = music_icon.png; sourceTree = "<group>"; };
+		C3AAC1331BCD1627009582D1 /* Default_Header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default_Header.png; sourceTree = "<group>"; };
 		D123742F1B2D163500902361 /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
 		D12374301B2D163500902361 /* MKAnnotationView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+WebCache.m"; sourceTree = "<group>"; };
 		D12374311B2D163500902361 /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
@@ -928,7 +934,10 @@
 		C3AAC0BC1BCC94FE009582D1 /* ohter */ = {
 			isa = PBXGroup;
 			children = (
+				C3AAC1331BCD1627009582D1 /* Default_Header.png */,
 				C3AAC0E01BCC9A98009582D1 /* DeviceRankNoLikeIcon@2x.png */,
+				C3AAC12F1BCD1478009582D1 /* music_icon.png */,
+				C3AAC12D1BCD0ED0009582D1 /* singer_flag.png */,
 				C3AAC0E11BCC9A98009582D1 /* DeviceRankNoLikeIcon@3x.png */,
 				C3AAC0BD1BCC953C009582D1 /* password_cancel_down@2x.png */,
 				C3AAC0BE1BCC953C009582D1 /* password_cancel_down@3x.png */,
@@ -2054,6 +2063,7 @@
 				D15430971AFDDCD600522DE1 /* stopstart.png in Resources */,
 				D15430751AFDDCD600522DE1 /* shenkong.png in Resources */,
 				D15430401AFDDCD600522DE1 /* nav_bottom_bg.png in Resources */,
+				C3AAC1341BCD1627009582D1 /* Default_Header.png in Resources */,
 				D15332971BA1B2BC00734C77 /* rouhe_normal.png in Resources */,
 				D154302D1AFDDCD600522DE1 /* bokong5.png in Resources */,
 				D153328D1BA1B2B000734C77 /* gaiguang_normal.png in Resources */,
@@ -2073,6 +2083,7 @@
 				D15E2AAD1AEBB9970093C773 /* jingXuanTableViewCell.xib in Resources */,
 				D15430721AFDDCD600522DE1 /* setting.png in Resources */,
 				D15430711AFDDCD600522DE1 /* paihangbang.png in Resources */,
+				C3AAC12E1BCD0ED0009582D1 /* singer_flag.png in Resources */,
 				D154303C1AFDDCD600522DE1 /* 37x-Checkmark.png in Resources */,
 				C3AAC0CB1BCC953C009582D1 /* password_ok_down@2x.png in Resources */,
 				D14F1CBD1AFBACE400EA6E50 /* profile.png in Resources */,
@@ -2180,6 +2191,7 @@
 				D154306D1AFDDCD600522DE1 /* kege.png in Resources */,
 				D154304A1AFDDCD600522DE1 /* line@2x.png in Resources */,
 				D1586B541AE14CBF00AF3EDB /* LaunchScreen.xib in Resources */,
+				C3AAC1301BCD1478009582D1 /* music_icon.png in Resources */,
 				D1FCD64F1B305B4A00F37EED /* SingsTableViewCell.xib in Resources */,
 				D14F1CC21AFBACE400EA6E50 /* separator@2x.jpg in Resources */,
 				20D838161BA1330100FB6AE3 /* Localizable.strings in Resources */,

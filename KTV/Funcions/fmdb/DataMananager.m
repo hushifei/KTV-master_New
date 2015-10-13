@@ -41,14 +41,25 @@ static  int limit=1000;
         NSLog(@"%@",DBPATH);
         if ([_db open]) {
             NSLog(@"DataBase is open ok");
-            if (!DEBUG) {
-                  [self createTables];
+            if (DEBUG) {
+                [self copyDBFile];
+            } else {
+                 [self createTables];
             }
         } else {
             NSLog(@"DataBase is open faied");
         }
     }
     return self;
+}
+
+- (void)copyDBFile {
+    NSFileManager *fileManager=[NSFileManager defaultManager];
+    NSString *filePath=[[NSBundle mainBundle]pathForResource:@"DB.sqlite" ofType:nil];
+    if ([fileManager fileExistsAtPath:DBPATH]) {
+        [fileManager removeItemAtPath:DBPATH error:nil];
+        [fileManager copyItemAtPath:filePath toPath:DBPATH error:nil];
+    }
 }
 
 - (void)createTables {

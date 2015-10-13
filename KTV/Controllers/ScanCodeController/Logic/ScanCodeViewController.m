@@ -26,8 +26,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title=NSLocalizedString(@"connecthost", nil);
-//     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav_bg"] forBarMetrics:UIBarMetricsDefault];
     [_cancelButton addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
+//    [_cancelButton setBackgroundImage:[UIImage imageNamed:@"password_cancel_up"] forState:UIControlStateNormal];
+//    [_cancelButton setBackgroundImage:[UIImage imageNamed:@"password_cancel_down"] forState:UIControlStateHighlighted];
+//    [_cancelButton setBackgroundImage:[UIImage imageNamed:@"password_cancel_down"] forState:UIControlStateSelected];
     UIImage *image=[[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"geshou_area_bg.png" ofType:nil]
 ]stretchableImageWithLeftCapWidth:60 topCapHeight:60];
     self.view.backgroundColor=[UIColor colorWithPatternImage:image];

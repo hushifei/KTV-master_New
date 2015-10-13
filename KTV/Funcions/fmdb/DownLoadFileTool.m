@@ -50,30 +50,27 @@ static DownLoadFileTool *instance=nil;
 }
 
 - (instancetype)init {
-    if (instance) {
-        return instance;
-    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
     defaults =[NSUserDefaults standardUserDefaults];
     shareSession=[NSURLSession sharedSession];
     fileManager=[NSFileManager defaultManager];
-    //    [DataMananager instanceShare];
-    allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
+    [DataMananager instanceShare];
+allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     savePath_TxtDir=[DOCUMENTPATH stringByAppendingPathComponent:@"/downloadDir/txt"];
     if (![fileManager fileExistsAtPath:savePath_TxtDir]) {
         [fileManager createDirectoryAtPath:savePath_TxtDir withIntermediateDirectories:YES attributes:nil error:nil];
     }
     downloadStatus=[[NSMutableArray alloc]initWithCapacity:4];
-    self = [super init];
-    return self;
+    instance = [super init];
+    });
+    return instance;
 }
 
-
 - (void)downLoadTxtFile:(DownloadTxtFilesCompleted)completed {
-    
     if (completed) {
         _completed=completed;
     }
-    
     // 1.check network
     if (![Utility instanceShare].networkStatus) {
         _completed(NO);
@@ -109,7 +106,6 @@ static DownLoadFileTool *instance=nil;
 - (void)downLoadFile:(NSString*)fileName{
     NSString *strURL=[COMM_URLStr stringByAppendingString:fileName];
     NSURL *url=[NSURL URLWithString:[strURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
-    //     NSLog(@"%@",url);
     NSURLRequest *request=[[NSURLRequest alloc]initWithURL:url];
     NSURLSessionDownloadTask *dataTask=[shareSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;

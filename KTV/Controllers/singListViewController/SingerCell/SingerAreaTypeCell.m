@@ -11,7 +11,6 @@
 
 @interface SingerAreaTypeCell () {
     NSOperationQueue *queue;
-    UIActivityIndicatorView *indicator;
 }
 
 @end
@@ -27,9 +26,9 @@
     
     // Configure the view for the selected state
 }
-
+//DeviceRankNoLikeIcon
 - (void)downLoadImage:(NSString *)imageName {
-    self.headImageV.image=[UIImage imageNamed:@"DeviceRankNoLikeIcon"];
+    self.headImageV.image=[UIImage imageNamed:@"Default_Header"];
     NSFileManager *manager=[NSFileManager defaultManager];
     NSString* savePath_PicDir=[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/downloadDir/Images"];
     if (![manager fileExistsAtPath:savePath_PicDir]) {
@@ -45,16 +44,6 @@
 
     }
     
-    if (!indicator) {
-        indicator=[[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        indicator.frame=CGRectMake(self.headImageV.bounds.size.width/2-15, self.headImageV.bounds.size.height/2-15, 30,30);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.headImageV addSubview:indicator];
-        });
-
-    }
-    indicator.hidden=NO;
-    [indicator startAnimating];
     if (imageName.length >0) {
         NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:imageName]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSURL *downloadURL=[NSURL URLWithString:urlStr];
@@ -74,10 +63,6 @@
             }else if (connectionError != nil){
                 NSLog(@"Error happened = %@",connectionError);
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [indicator stopAnimating];
-                indicator=nil;
-            });
         }];
     }
 }

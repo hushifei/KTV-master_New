@@ -10,11 +10,6 @@
 #import "ResultTableViewController.h"
 #import "Utility.h"
 #import "PinYinForObjc.h"
-#define TOPCELLIDENTIFY @"SearchTableCell"
-#import "SearchTableCell.h"
-#define BOTTOMCELLIDENTIFY @"SongBottomCell"
-#import "SongBottomCell.h"
-#import "YiDianViewController.h"
 #import "BBBadgeBarButtonItem.h"
 #import "Song.h"
 #import "NSManagedObject+helper.h"
@@ -49,8 +44,6 @@
     self.definesPresentationContext = YES;
     self.tableView.showsHorizontalScrollIndicator=NO;
     self.tableView.showsVerticalScrollIndicator=NO;
-    UINib *nib=[UINib nibWithNibName:@"SearchTableCell" bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
     _previousRow = -1;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.rowHeight=50;
@@ -97,7 +90,6 @@
                 textField = (UITextField *)subView;
             }
         }
-        
     }
     textField.clearButtonMode = UITextFieldViewModeNever;
     textField.leftViewMode = UITextFieldViewModeAlways;
@@ -121,7 +113,6 @@
     
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -134,34 +125,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataList.count;
-}
-
-
--(void)viewDidLayoutSubviews
-{
-    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
-    }
-    
-    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)]) {
-        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
-    }
-}
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]) {
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-    
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-}
-
-
-// Fake adding element
-- (IBAction)addItemToListButtonPressed {
-    BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.leftBarButtonItem;
-    barButton.badgeValue = [NSString stringWithFormat:@"%d", [barButton.badgeValue intValue] + 1];
 }
 
 - (void)searchDone {
@@ -190,12 +153,4 @@
 - (BOOL)canResignFirstResponder {
     return YES;
 }
-
-//-(UIStatusBarStyle)preferredStatusBarStyle {
-//    return UIStatusBarStyleLightContent;
-//}
-//
-//- (BOOL)prefersStatusBarHidden {
-//    return YES;
-//}
 @end
