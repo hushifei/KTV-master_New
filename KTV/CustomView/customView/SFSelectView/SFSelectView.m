@@ -15,7 +15,6 @@
     CGFloat natHeight;
     UIView *topView;
     float controlWidth;
-    CGPoint point;
     BOOL visiable;
     UIView *chunkview;
     UIImageView *imageV;
@@ -58,11 +57,11 @@
 - (void)animationView{
     if (!_items || _items.count<=0) return;
     if (self.frame.size.width <=0 || self.frame.size.height<=0) return;
+    UIViewController *TopVC=[UIApplication sharedApplication].keyWindow.rootViewController;
+    if ([TopVC isKindOfClass:[UINavigationController class]]) {
+        offset=64;
+    } else offset=2;
     if (!myTableView) {
-        UIViewController *TopVC=[UIApplication sharedApplication].keyWindow.rootViewController;
-        if ([TopVC isKindOfClass:[UINavigationController class]]) {
-            offset=44;
-        } else offset=2;
         chunkview=[[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         myTableView = [[UITableView alloc]init];
         myTableView.showsHorizontalScrollIndicator=NO;
@@ -73,7 +72,7 @@
         myTableView.backgroundColor=[UIColor clearColor];
         myTableView.dataSource = self;
         myTableView.delegate = self;
-        myTableView.rowHeight=40;
+        myTableView.rowHeight=30;
         myTableView.tableFooterView=[[UIView alloc]initWithFrame:CGRectZero];
         
     }
@@ -83,17 +82,15 @@
             window= [[UIApplication sharedApplication].windows firstObject];
         }
         [window addSubview:chunkview];
-        imageV=[[UIImageView alloc]initWithFrame:CGRectMake(0,0, 120, [_items count]*40)];
+        imageV=[[UIImageView alloc]initWithFrame:CGRectMake(10,50, 100, [_items count]*30+10)];
         imageV.image=[UIImage imageNamed:@"selectView_bg"];
-        myTableView.frame = CGRectMake(10,35,imageV.frame.size.width,imageV.frame.size.height);
+        myTableView.frame = CGRectMake(0,10,imageV.frame.size.width,imageV.frame.size.height);
         imageV.userInteractionEnabled=YES;
-        //        imageV.layer.shadowColor=[UIColor grayColor].CGColor;
-        //        imageV.layer.shadowOffset=CGSizeMake(-1, -2);
-        //        imageV.layer.shadowOpacity=3;
-        myTableView.backgroundView=imageV;
-        [chunkview addSubview:myTableView];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showSelectItems)];
         [chunkview addGestureRecognizer:tap];
+        [imageV addSubview:myTableView];
+        [chunkview addSubview:imageV];
+
     } else {
         [chunkview removeFromSuperview];
     }
