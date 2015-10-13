@@ -7,6 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+typedef NS_ENUM (NSUInteger,S_Actions) {
+    S_Can_Donload =0,
+    S_Can_ImportData,
+    S_Network_Error
+};
 typedef void(^DownloadTxtFilesCompleted)(BOOL Completed);
 @interface DownLoadFileTool : NSObject
 @property(nonatomic,strong)NSArray *filePaths;
@@ -15,6 +20,4 @@ typedef void(^DownloadTxtFilesCompleted)(BOOL Completed);
 + (instancetype)instance;
 - (void)downLoadTxtFile:(DownloadTxtFilesCompleted)completed;
 - (void)remove_downloadedTxtFiles;
-//获取数据版本
-- (void)isNeedToUpdate_Database_version:(void(^)(BOOL canUpdate))update;
 @end

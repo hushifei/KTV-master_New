@@ -18,12 +18,26 @@
 
 - (void)awakeFromNib {
     // Initialization code
+ 
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
     
     // Configure the view for the selected state
+}
+
+- (void)drawRect:(CGRect)rect {
+    [super drawRect:rect];
+    CGSize size=self.contentView.bounds.size;
+    NSArray *btns=@[_collectionrec,_priority,_cutsong,_remove];
+    float width=size.width/btns.count;
+    float x=0.0;
+    for (int i=0;i<btns.count;i++) {
+        UIButton *oneButton=btns[i];
+        oneButton.frame=CGRectMake(x+(width*i), 0, size.width,size.height);
+        NSLog(@"%@",NSStringFromCGRect(oneButton.frame));
+    }
 }
 
 - (IBAction)clicked_priority:(id)sender {

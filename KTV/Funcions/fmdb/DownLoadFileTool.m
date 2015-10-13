@@ -13,6 +13,7 @@
 #define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
 #define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+
 @interface DownLoadFileTool () {
     NSMutableArray *needImportFilefullPaths;
     NSString* savePath_TxtDir;
@@ -71,17 +72,33 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     if (completed) {
         _completed=completed;
     }
-    // 1.check network
-    if (![Utility instanceShare].networkStatus) {
-        _completed(NO);
-        NSLog(@"network status error");
-    }
-    [self isNeedToUpdate_Database_version:^(BOOL canUpdate) {
-        if (canUpdate) {
-            [self startDownloadFiles];
-        } else {
-            _completed(NO);
-        }
+    // check version and download files
+    [self isNeedToUpdate_Database_version:^(S_Actions action, BOOL completed) {
+            if (action==S_Can_Donload && completed) {
+                [self startDownloadFiles];
+            } else if (action ==S_Can_ImportData && completed) {
+                //check txt files exist
+                NSMutableArray *willImportArray=[NSMutableArray new] ;
+                for (NSString *fileName in allTXTFiles) {
+                    NSString *filePath=[savePath_TxtDir stringByAppendingPathComponent:fileName];
+                    if ([fileManager fileExistsAtPath:filePath]) {
+                        [willImportArray addObject:filePath];
+                    }
+                }
+                //import data;
+                if (willImportArray.count >0) {
+                  [self importTxtFilesToDataBase:willImportArray];
+                } else {
+                    if (_completed) {
+                        _completed(YES);
+                    }
+                }
+            } else {
+                //return error information
+                if (_completed) {
+                    _completed(YES);
+                }
+            }
     }];
 }
 
@@ -135,10 +152,9 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     [[DataMananager instanceShare]addIntoDataSourceWithFileNames:filePaths completed:^(BOOL Completed) {
         if (Completed) {
             if (_completed) {
-                if (newDatabaseVer && newDatabaseVer.length > 0) {
-                    [defaults setObject:newDatabaseVer forKey:@"CURRENT_DATABASE_VERSION"];
-                    [defaults synchronize];
-                }
+                [defaults setObject:newDatabaseVer forKey:@"CURRENT_DATABASE_VERSION"];
+                [defaults synchronize];
+                [self remove_downloadedTxtFiles];
                 _completed(YES);
             }
             NSLog(@"import data done!");
@@ -165,29 +181,31 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     if ([fileManager fileExistsAtPath:filePath]) {
         [fileManager removeItemAtPath:filePath error:nil];
     }
+    
     return YES;
 }
 
 //获取数据版本
-- (void)isNeedToUpdate_Database_version:(void(^)(BOOL canUpdate))update {
-    if (![Utility instanceShare].networkStatus) {
-        update(NO);
-    }
+- (void)isNeedToUpdate_Database_version:(void(^)(S_Actions action,BOOL completed))completed {
     NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xd4"];
-    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
+    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     NSURLSessionDataTask *dataTask=[shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
         if ([httpResponse statusCode]==200 && data) {
             newDatabaseVer=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
             NSString *currentVer=[defaults objectForKey:@"CURRENT_DATABASE_VERSION"];
-            if ([currentVer isEqualToString:newDatabaseVer]) {
-                if (update) {
-                    update(NO);
+            if (![currentVer isEqualToString:newDatabaseVer]) {
+                if (completed) {
+                    completed(S_Can_Donload,YES);
                 }
             } else {
-                if (update) {
-                    update(YES);
+                if (completed) {
+                    completed(S_Can_ImportData,YES);
                 }
+            }
+        } else {
+            if (completed) {
+                completed(S_Network_Error,NO);
             }
         }
     }];

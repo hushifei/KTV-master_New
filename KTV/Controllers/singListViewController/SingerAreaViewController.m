@@ -19,6 +19,7 @@
 #import "MBProgressHUD.h"
 #import "NSString+Utility.h"
 #import "DataMananager.h"
+#import "CommandControler.h"
 @interface SingerAreaViewController ()<UITableViewDataSource,UITableViewDelegate> {
 }
 
@@ -62,7 +63,7 @@
     [super viewWillAppear:animated];
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [[Utility instanceShare]setYidianBadgeWidth:weakBarButton];
+    [CommandControler setYidianBadgeWidth:weakBarButton];
     
 }
 

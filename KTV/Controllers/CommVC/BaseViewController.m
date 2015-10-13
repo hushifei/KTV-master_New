@@ -7,11 +7,11 @@
 //
 
 #import "BaseViewController.h"
-#import "BBBadgeBarButtonItem.h"
 #import "YiDianViewController.h"
 #import "Utility.h"
 #import "UIImage+Utility.h"
 #import "YiDianButton.h"
+#import "CommandControler.h"
 @interface BaseViewController ()
 
 @end
@@ -70,7 +70,8 @@
     [super viewWillAppear:animated];
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [[Utility instanceShare]setYidianBadgeWidth:weakBarButton];
+    [CommandControler setYidianBadgeWidth:weakBarButton];
+
 }
 /*
 #pragma mark - Navigation

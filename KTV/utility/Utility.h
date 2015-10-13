@@ -10,7 +10,6 @@
 #import "FMDB.h"
 extern NSString *const HReachabilityChangedNotification;
 
-@class BBBadgeBarButtonItem;
 //
 #define SCREENSIZE  [UIScreen mainScreen].bounds.size
 
@@ -54,7 +53,7 @@ extern NSString *const HReachabilityChangedNotification;
  *  MainViewController
  
  */
-#define NOTIFICATION_YIDIAN_INCREASION @"NOTIFICATION_YIDIAN_INCREASION"
+//#define NOTIFICATION_YIDIAN_INCREASION @"NOTIFICATION_YIDIAN_INCREASION"
 //
 //
 //@protocol yidianDelegate <NSObject>
@@ -89,8 +88,7 @@ typedef void(^Completed)(BOOL Completed);
 // DabaBase
 - (NSManagedObjectContext*)createPrivateObjectContext;
 - (NSError*)save:(OperationResult)handler;
-// badge
-- (void)setYidianBadgeWidth:(BBBadgeBarButtonItem*)item;
+
 //network
 - (void)networkStatus:(void(^)(BOOL isSecucess))block;
 - (BOOL)networkStatus;

@@ -7,6 +7,7 @@
 //
 
 #import "CommandControler.h"
+#import "Utility.h"
 #define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
 
 #define COMMANDURLHEADER_PIC @"http://192.168.43.1:8080/puze?cmd=0x02&filename="
@@ -305,11 +306,17 @@
 //点歌
 - (void)sendCmd_Diange:(NSString*)number {
     //    http://192.168.43.1:8080/puze?cmd=0xc1&number=编号
-    NSString *urlStr=[[COMMANDURLHEADER stringByAppendingFormat:@"0xc1&number=%@",number]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
-    
-    [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+    NSString *urlStr=[[COMMANDURLHEADER stringByAppendingFormat:@"0xc1&number=%@",number]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSLog(@"url:%@",urlStr);
+    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+    NSURLSession *session=[NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"%@",error.description);
+        }
+        NSLog(@"%@",data);
     }];
+    [dataTask resume];
 }
 //点歌(顶)
 - (void)sendCmd_DiangeToTop:(NSString*)number {
@@ -328,6 +335,8 @@
     request.HTTPBody=data;
     
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+        NSLog(@"%@",data);
+        
     }];
 }
 //推送图片
@@ -372,5 +381,26 @@
         }
     }];
 }
+
++ (void)setYidianBadgeWidth:(BBBadgeBarButtonItem *)item  {
+        NSString *urlStr=[[@"http://192.168.43.1:8080/puze/?cmd=" stringByAppendingFormat:@"0xbc"]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSLog(@"query:%@",urlStr);
+        NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+        NSURLSession *session=[NSURLSession sharedSession];
+        NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"get yidian List error");
+                return;
+            }
+            NSString *strContent=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+            NSMutableArray *arr=[[strContent componentsSeparatedByString:@"\r\n"] mutableCopy];
+            [arr removeLastObject];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                item.badgeValue=[NSString stringWithFormat:@"%d",(int)arr.count];
+            });
+        }];
+        dataTask.priority=NSURLSessionTaskPriorityHigh;
+        [dataTask resume];
+    }
 
 @end

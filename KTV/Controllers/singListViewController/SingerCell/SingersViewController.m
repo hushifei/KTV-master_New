@@ -21,6 +21,7 @@
 #import "UIImageView+WebCache.h"
 #import "NSString+Utility.h"
 #import "DataMananager.h"
+#import "CommandControler.h"
 #define SINGER_PIC_URL @"http://192.168.43.1:8080/puze?cmd=0x02&filename="
 
 @interface SingersViewController ()
@@ -84,15 +85,9 @@
     [super viewWillAppear:animated];
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [[Utility instanceShare]setYidianBadgeWidth:weakBarButton];
-    [barButton registNofification];
+    [CommandControler setYidianBadgeWidth:weakBarButton];
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
-    [barButton removeNotification];
-    [super viewDidDisappear:animated];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

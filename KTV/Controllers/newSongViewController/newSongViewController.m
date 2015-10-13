@@ -16,6 +16,7 @@
 #import "MBProgressHUD.h"
 #import "Song.h"
 #import "DataMananager.h"
+#import "CommandControler.h"
 @interface newSongViewController ()<MBProgressHUDDelegate,SongDelegate> {
     NSInteger _previousRow;
     HuToast *myToast;
@@ -76,14 +77,7 @@
     [super viewWillAppear:animated];
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [[Utility instanceShare]setYidianBadgeWidth:weakBarButton];
-    [barButton registNofification];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
-    [barButton removeNotification];
-    [super viewDidDisappear:animated];
+    [CommandControler setYidianBadgeWidth:weakBarButton];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -8,7 +8,6 @@
 //fmdb
 #import "Utility.h"
 #import "CommandControler.h"
-#import "BBBadgeBarButtonItem.h"
 #import "NSString+Utility.h"
 #import <SystemConfiguration/SystemConfiguration.h>
 //#define tmpDBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"tmpDB.sqlite"]
@@ -16,10 +15,8 @@
 
 #define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-static  int limit=1000;
 NSString *const HReachabilityChangedNotification=@"HReachabilityChangedNotification";
 @interface Utility() {
-    NSMutableArray *needImportFilefullPaths;
     NSString* savePath_TxtDir;
     int hasCount;
     NSTimer *networkTimer;
@@ -102,24 +99,6 @@ static Utility *shareInstance=nil;
 
 + (NSString*)shouZiFu:(NSString*)string {
     return  [[Utility chineseToPinYin:string]substringToIndex:1];
-}
-
-- (void)setYidianBadgeWidth:(BBBadgeBarButtonItem *)item  {
-    NSString *urlStr=[[@"http://192.168.43.1:8080/puze/?cmd=" stringByAppendingFormat:@"0xbc"]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue new] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        //            NSLog(@"%d",[(NSHTTPURLResponse*)response statusCode]); 200 is ok
-        if (connectionError) {
-            NSLog(@"get yidian List connection error");
-            return;
-        }
-        NSString *strContent=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-        NSMutableArray *arr=[[strContent componentsSeparatedByString:@"\r\n"] mutableCopy];
-        [arr removeLastObject];
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            item.badgeValue=[NSString stringWithFormat:@"%d",(int)arr.count];
-        });
-    }];
 }
 
 - (void)networkStatus:(void(^)(BOOL isSecucess))block {

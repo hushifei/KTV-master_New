@@ -20,6 +20,7 @@
 #import "MBProgressHUD.h"
 #import "Song.h"
 #import "DataMananager.h"
+#import "CommandControler.h"
 
 @interface CollectionViewController ()<SongDelegate> {
     NSInteger _previousRow;
@@ -78,15 +79,8 @@
     [super viewWillAppear:animated];
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [[Utility instanceShare]setYidianBadgeWidth:weakBarButton];
-    [barButton registNofification];
+    [CommandControler setYidianBadgeWidth:weakBarButton];
     
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
-    [barButton removeNotification];
-    [super viewDidDisappear:animated];
 }
 
 

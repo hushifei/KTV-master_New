@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "BBBadgeBarButtonItem.h"
 @interface CommandControler : NSObject
 typedef void(^SendResult)(BOOL secusse);
 typedef void(^yiDianList)(NSArray *list);
@@ -61,6 +62,8 @@ typedef void(^yiDianList)(NSArray *list);
 // 关机
 - (void)sendCmd_shutdownDevice:(SendResult)result;
 
+// badge
++ (void)setYidianBadgeWidth:(BBBadgeBarButtonItem*)item;
 
 
 @end

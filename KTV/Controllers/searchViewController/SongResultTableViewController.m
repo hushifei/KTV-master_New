@@ -20,6 +20,7 @@
 #import "CommandControler.h"
 #import "AppDelegate.h"
 #import "DataMananager.h"
+#import "CommandControler.h"
 @interface SongResultTableViewController ()<SongDelegate> {
     NSMutableArray *dataList;
     NSInteger _previousRow;
@@ -68,7 +69,7 @@
 - (void)updateYidanBadge {
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [[Utility instanceShare]setYidianBadgeWidth:weakBarButton];
+    [CommandControler setYidianBadgeWidth:weakBarButton];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

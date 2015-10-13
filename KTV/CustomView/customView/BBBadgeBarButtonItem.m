@@ -7,6 +7,7 @@
 //
 
 #import "BBBadgeBarButtonItem.h"
+#import "CommandControler.h"
 #import "Utility.h"
 // Set a padding for the badge
 static int const BBBadgeMargin = 4;
@@ -43,24 +44,24 @@ static int const BBoriginY = 0;
 }
 
 
-- (void)notification_refreshBadge {
-    __weak __typeof(self)weakSelf = self;
-    [[Utility instanceShare]setYidianBadgeWidth:weakSelf];
-}
-
-- (void)registNofification {
-      [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notification_refreshBadge) name:NOTIFICATION_YIDIAN_INCREASION object:nil];
-}
-- (void)removeNotification {
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:NOTIFICATION_YIDIAN_INCREASION object:nil];
-}
+//- (void)notification_refreshBadge {
+//    __weak __typeof(self)weakSelf = self;
+//    [CommandControler setYidianBadgeWidth:weakSelf];
+//}
+//
+//- (void)registNofification {
+//      [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notification_refreshBadge) name:NOTIFICATION_YIDIAN_INCREASION object:nil];
+//}
+//- (void)removeNotification {
+//    [[NSNotificationCenter defaultCenter]removeObserver:self name:NOTIFICATION_YIDIAN_INCREASION object:nil];
+//}
 
 - (void)initializer
 {
     // Default design initialization
     self.badgeBGColor   = [UIColor redColor];
     self.badgeTextColor = [UIColor whiteColor];
-    self.badgeFont      = [UIFont fontWithName:@"Helvetica" size:14];
+//    self.badgeFont      = [UIFont fontWithName:@"Helvetica" size:14];
     self.shouldHideBadgeAtZero = YES;
     self.shouldAnimateBadge = YES;
     self.badgeValue = @"0";
@@ -93,7 +94,7 @@ static int const BBoriginY = 0;
 
     // Set the new value
     self.badge.text = self.badgeValue;
-    [[ NSUserDefaults standardUserDefaults]setValue:self.badge.text forKey:@"YIDIAN_COUNT"];
+//    [[ NSUserDefaults standardUserDefaults]setValue:self.badge.text forKey:@"YIDIAN_COUNT"];
 
     
     // When the value changes the badge could need to get bigger
@@ -112,18 +113,14 @@ static int const BBoriginY = 0;
     float minWidth = expectedLabelSize.width;
     // Using const we make sure the badge doesn't get too smal
     minWidth = (minWidth < minHeight) ? minHeight : expectedLabelSize.width;
-    
-    
-    
+    CAShapeLayer *shaper=[CAShapeLayer new];
+    [self.badge.layer addSublayer:shaper];
+    self.badge.clipsToBounds=YES;
     // Animate the size modification just in case
     [UIView animateWithDuration:0.2 animations:^{
         self.badge.frame = CGRectMake(BBoriginX, BBoriginY, minWidth + BBBadgeMargin, minHeight + BBBadgeMargin);
         self.badge.layer.cornerRadius   = (minHeight + BBBadgeMargin) / 2;
     }];
-
-//    CAShapeLayer *shaper=[CAShapeLayer new];
-//    [self.badge.layer addSublayer:shaper];
-    self.badge.clipsToBounds=YES;
 }
 
 - (UILabel *)duplicateLabel:(UILabel *)labelToCopy

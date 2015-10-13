@@ -9,10 +9,12 @@
 #import "UILabel+Animation.h"
 #import "Utility.h"
 #import "CommandControler.h"
-
+#import "BBBadgeBarButtonItem.h"
+static BBBadgeBarButtonItem *barItem=nil;
 @implementation UILabel (Animation)
 - (void)shakeAndFlyAnimationToView:(UIBarButtonItem*)item{
     //－－－－>shake
+    barItem=(BBBadgeBarButtonItem*)item;
     CABasicAnimation *shake=[CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     shake.fromValue=[NSNumber numberWithFloat:-0.2];
     shake.toValue=[NSNumber numberWithFloat:0.4];
@@ -88,7 +90,8 @@
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     NSLog(@"animationDidStopGroup------>");
-    [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_YIDIAN_INCREASION object:nil];
+    [CommandControler setYidianBadgeWidth:barItem];
+//    [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_YIDIAN_INCREASION object:nil];
 }
 
 

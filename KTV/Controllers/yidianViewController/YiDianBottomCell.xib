@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -11,15 +10,11 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0W4-7b-U6W">
-                        <rect key="frame" x="104" y="5" width="60" height="34"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="34" id="4CW-35-m1J"/>
-                            <constraint firstAttribute="width" constant="60" id="DwS-En-dQb"/>
-                        </constraints>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0W4-7b-U6W">
+                        <rect key="frame" x="80" y="5" width="80" height="34"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="tintColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                         <state key="normal" title="优先" image="priority_bt.png">
@@ -29,27 +24,8 @@
                             <action selector="clicked_priority:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="OiC-cf-5Yk"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JkR-ht-I3J">
-                        <rect key="frame" x="148" y="5" width="60" height="34"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="60" id="C1T-xX-z8H"/>
-                            <constraint firstAttribute="height" constant="34" id="gJZ-xR-WVi"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="tintColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                        <state key="normal" title="切歌" image="cutsong_bt.png">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <connections>
-                            <action selector="clicked_cutsong:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="BWJ-LK-AOL"/>
-                        </connections>
-                    </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dLi-Ka-pWS">
-                        <rect key="frame" x="228" y="5" width="60" height="34"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="34" id="bpN-Qc-nLm"/>
-                            <constraint firstAttribute="width" constant="60" id="meT-9z-rhW"/>
-                        </constraints>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dLi-Ka-pWS">
+                        <rect key="frame" x="240" y="5" width="80" height="34"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="移除" image="remove_yidian.png">
                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -59,12 +35,8 @@
                             <action selector="removeSong:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="7rN-wa-q67"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XL0-qh-GYI">
-                        <rect key="frame" x="24" y="5" width="60" height="34"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="34" id="iEQ-4I-P6D"/>
-                            <constraint firstAttribute="width" constant="60" id="yek-LO-vpe"/>
-                        </constraints>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XL0-qh-GYI">
+                        <rect key="frame" x="0.0" y="5" width="80" height="34"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="tintColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                         <state key="normal" title="收藏" image="collection_bt.png">
@@ -74,23 +46,18 @@
                             <action selector="clicked_collection:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="eS1-WY-XDi"/>
                         </connections>
                     </button>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JkR-ht-I3J">
+                        <rect key="frame" x="160" y="5" width="80" height="34"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="tintColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                        <state key="normal" title="切歌" image="cutsong_bt.png">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="clicked_cutsong:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="BWJ-LK-AOL"/>
+                        </connections>
+                    </button>
                 </subviews>
-                <constraints>
-                    <constraint firstAttribute="centerY" secondItem="dLi-Ka-pWS" secondAttribute="centerY" id="2Nj-9M-9M4"/>
-                    <constraint firstItem="0W4-7b-U6W" firstAttribute="leading" secondItem="XL0-qh-GYI" secondAttribute="trailing" constant="20" id="AgG-LG-o2G"/>
-                    <constraint firstItem="dLi-Ka-pWS" firstAttribute="leading" secondItem="JkR-ht-I3J" secondAttribute="trailing" constant="14" id="FJW-Zm-met"/>
-                    <constraint firstAttribute="centerY" secondItem="XL0-qh-GYI" secondAttribute="centerY" id="Lkk-nw-r2o"/>
-                    <constraint firstItem="XL0-qh-GYI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="lSy-V7-65C"/>
-                    <constraint firstAttribute="centerY" secondItem="JkR-ht-I3J" secondAttribute="centerY" id="le7-Q4-NeG"/>
-                    <constraint firstItem="dLi-Ka-pWS" firstAttribute="leading" secondItem="JkR-ht-I3J" secondAttribute="trailing" constant="20" id="neh-nU-nMX"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="dLi-Ka-pWS" secondAttribute="trailing" constant="24" id="r3P-Ir-AJa"/>
-                    <constraint firstAttribute="centerY" secondItem="0W4-7b-U6W" secondAttribute="centerY" id="rsG-T4-Exq"/>
-                </constraints>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="FJW-Zm-met"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="collectionrec" destination="XL0-qh-GYI" id="mCV-tK-RiO"/>
@@ -98,6 +65,7 @@
                 <outlet property="priority" destination="0W4-7b-U6W" id="orI-e0-gUJ"/>
                 <outlet property="remove" destination="dLi-Ka-pWS" id="yqn-M8-1Rq"/>
             </connections>
+            <point key="canvasLocation" x="267" y="170"/>
         </tableViewCell>
     </objects>
     <resources>

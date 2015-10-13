@@ -7,7 +7,7 @@
 //
 
 #import "SoundViewController.h"
-#import "BBBadgeBarButtonItem.h"
+#import "CommandControler.h"
 #import "YiDianViewController.h"
 #import "Utility.h"
 @interface SoundViewController ()<UITextFieldDelegate>{
@@ -73,13 +73,11 @@
     [super viewWillAppear:animated];
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [[Utility instanceShare]setYidianBadgeWidth:weakBarButton];
-    [barButton registNofification];
+    [CommandControler setYidianBadgeWidth:weakBarButton];
 }
 
 - (void)viewDidDisappear:(BOOL)animated  {
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
-    [barButton registNofification];
     [super viewDidDisappear:animated];
 }
 

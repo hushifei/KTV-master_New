@@ -15,5 +15,11 @@ typedef void(^DataImportCompleted)(BOOL Completed);
 + (instancetype)instanceShare;
 - (void)addIntoDataSourceWithFileNames:(NSArray*)fileNames completed:(DataImportCompleted)completed;
 - (int)rowCountWithStatment:(NSString*)statment;
+// 判断是否存在表
+- (BOOL)isTableOK:(NSString *)tableName;
+// 获得表的数据条数
+- (int)getTableItemCount:(NSString *)tableName;
+// 清除表-清数据
+- (BOOL)eraseTable:(NSString *)tableName;
 - (void)closeDB;
 @end

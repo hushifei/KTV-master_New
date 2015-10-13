@@ -27,6 +27,4 @@
 @property BOOL shouldAnimateBadge;
 
 - (BBBadgeBarButtonItem *)initWithCustomUIButton:(UIButton *)customButton;
-- (void)registNofification;
-- (void)removeNotification;
 @end
