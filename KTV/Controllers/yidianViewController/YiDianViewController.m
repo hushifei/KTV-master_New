@@ -330,6 +330,12 @@
 }
 
 #pragma mark -#########################################################
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
 
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
 
 @end

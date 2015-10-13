@@ -18,12 +18,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    offset=[NSNumber numberWithUnsignedInteger:0];
+    pageLimint=PAGELIMINT;
+    UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
+    self.tableView.tableFooterView=backView;
+    self.tableView.showsHorizontalScrollIndicator=NO;
+    self.tableView.showsVerticalScrollIndicator=NO;
+    dataList=[[NSMutableArray alloc]init];
     [self initNavigationItem];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,6 +55,39 @@
     [self.navigationController pushViewController:yidianVC animated:YES];
 }
 
+- (void)loadMJRefreshingView {
+    self.tableView.footer=[MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+    __weak __typeof(self) weakSelf=self;
+    self.tableView.header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [weakSelf loadNewData];
+    }];
+    // 马上进入刷新状态
+    [self.tableView.header beginRefreshing];
+}
+
+
+- (void)loadMoreData {
+    // 1.添加数据,拿到当前的上拉刷新控件，结束刷新状态
+    if (dataList.count < totalRowCount) {
+        offset=[NSNumber numberWithUnsignedInteger:dataList.count];
+        [self initializeTableContent];
+        [self.tableView.footer endRefreshing];
+    } else {
+        [self.tableView.footer endRefreshingWithNoMoreData];
+    }
+}
+
+- (void)loadNewData {
+    offset=[NSNumber numberWithUnsignedInteger:0];
+    [dataList removeAllObjects];
+    [self initializeTableContent];
+    [self.tableView.header endRefreshing];
+}
+
+- (void)initializeTableContent {
+    
+}
+
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
@@ -60,5 +95,10 @@
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
+
+- (void)dealloc {
+    [dataList removeAllObjects];
+}
+
 
 @end

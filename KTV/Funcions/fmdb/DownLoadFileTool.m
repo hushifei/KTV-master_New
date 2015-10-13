@@ -30,14 +30,19 @@ static DownLoadFileTool *instance=nil;
 @implementation DownLoadFileTool
 
 + (instancetype)instance {
-    if (!instance) {
-        instance = [[super allocWithZone:NULL] init];
-    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+    instance = [[self alloc]init];
+    });
     return instance;
 }
 
 + (id)allocWithZone:(NSZone *)zone {
-    return [self instance];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+    instance = [super allocWithZone:zone];
+    });
+    return instance;
 }
 
 - (id)copyWithZone:(NSZone *)zone {

@@ -14,5 +14,6 @@ typedef void(^DataImportCompleted)(BOOL Completed);
 @property(nonatomic,readonly)DataImportCompleted completed;
 + (instancetype)instanceShare;
 - (void)addIntoDataSourceWithFileNames:(NSArray*)fileNames completed:(DataImportCompleted)completed;
+- (int)rowCountWithStatment:(NSString*)statment;
 - (void)closeDB;
 @end

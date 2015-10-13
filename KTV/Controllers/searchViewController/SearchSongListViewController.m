@@ -62,14 +62,11 @@
     [self.searchController.searchBar sizeToFit];
     self.edgesForExtendedLayout=UIRectEdgeNone;
     self.searchController.hidesNavigationBarDuringPresentation=NO;
-//    self.tableView.tableHeaderView=self.searchController.searchBar;
     self.automaticallyAdjustsScrollViewInsets=YES;
     self.navigationItem.titleView=self.searchController.searchBar;
     self.searchController.searchBar.placeholder=NSLocalizedString(@"searchhinttext_searchVC", nil);
     self.searchController.searchBar.backgroundImage=[UIImage imageWithColor:[UIColor clearColor]];
     [self createDefaultView];
-//    UIView *backView=[[UIView alloc]initWithFrame:CGRectZero];
-//    self.tableView.tableFooterView=backView;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -78,13 +75,13 @@
 }
 
 - (void)createDefaultView {
-    promtView=[[UIView alloc]initWithFrame:CGRectMake(self.view.center.x-300/2, 60, 300, 150)];
+    promtView=[[UIView alloc]initWithFrame:CGRectMake(self.view.center.x-300/2, 10, 300, 150)];
     UILabel *labelStr=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
     labelStr.numberOfLines=0;
     labelStr.textColor=[UIColor groupTableViewBackgroundColor];
     labelStr.font=[UIFont systemFontOfSize:15];
     labelStr.text=NSLocalizedString(@"searchcomment_searchVC", ni);
-    
+    [labelStr sizeToFit];
     [promtView addSubview:labelStr];
     [self.view addSubview:promtView];
     
@@ -102,13 +99,10 @@
         }
         
     }
-    
     textField.clearButtonMode = UITextFieldViewModeNever;
-    
     textField.leftViewMode = UITextFieldViewModeAlways;
     textField.leftView = _leftView;
-    
-    
+
 }
 
 - (void)showPromtView:(BOOL)isShow {

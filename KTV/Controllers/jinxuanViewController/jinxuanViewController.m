@@ -37,10 +37,6 @@
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:tableBgImage];
     self.tableView.backgroundView=bgImageView;
     self.tableView.rowHeight=60.0f;
-    UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-    self.tableView.tableFooterView=backView;
-    self.tableView.showsHorizontalScrollIndicator=NO;
-    self.tableView.showsVerticalScrollIndicator=NO;
     UINib *nib=[UINib nibWithNibName:CELLIDENTIFY bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
     [self initializeTableContent];

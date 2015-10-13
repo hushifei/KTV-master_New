@@ -45,15 +45,8 @@
     myToast=[[HuToast alloc]init];
     self.automaticallyAdjustsScrollViewInsets=YES;
     [self createContextUI];
-    
-    //    [self copyFile];
-    //    if ([Utility networkStatus]) {
-    //        [self performSelectorInBackground:@selector(initData) withObject:nil];
-    //    } else {
-    //        NSLog(@"network error");
-    //    }
+//    [self copyFile];
     [self performSelector:@selector(initData) withObject:nil afterDelay:6];
-    
 }
 
 - (void)initData {
@@ -64,7 +57,6 @@
     HUD.square = YES;
     HUD.dimBackground=YES;
     HUD.detailsLabelColor=[UIColor greenColor];
-    [HUD show:YES];
     [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [HUD hide:YES];
@@ -76,6 +68,7 @@
             }
         });
     }];
+    [HUD show:YES];
 }
 
 - (void)copyFile {

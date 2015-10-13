@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface BaseTableViewController : UITableViewController
-
+#import "MJRefresh.h"
+#define PAGELIMINT 50
+@interface BaseTableViewController : UITableViewController {
+    NSNumber *offset;
+    int pageLimint;
+    int totalRowCount;
+    NSMutableArray *dataList;
+}
+- (void)loadMJRefreshingView;
+- (void)loadMoreData;
+- (void)loadNewData;
+- (void)initializeTableContent;
 @end

@@ -15,7 +15,9 @@
 @property (assign,nonatomic)BOOL opened;
 @property (weak,nonatomic)UIBarButtonItem *buttonitem;
 @property(nonatomic,weak)Song *oneSong;
-- (IBAction)addSong:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *selecteBtn;
+
+//- (IBAction)addSong:(id)sender;
 
 @end
 

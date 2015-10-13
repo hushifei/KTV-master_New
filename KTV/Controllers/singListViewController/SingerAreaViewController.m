@@ -20,7 +20,6 @@
 #import "NSString+Utility.h"
 #import "DataMananager.h"
 @interface SingerAreaViewController ()<UITableViewDataSource,UITableViewDelegate> {
-    NSMutableArray *dataList;
 }
 
 @end
@@ -31,26 +30,13 @@
         self.title=NSLocalizedString(@"singers_area", nil);
     UINib *nib=[UINib nibWithNibName:@"SingsTableViewCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
-    UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-    self.tableView.tableFooterView=backView;
-    self.tableView.showsHorizontalScrollIndicator=NO;
-    self.tableView.showsVerticalScrollIndicator=NO;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
         self.tableView.separatorColor=[UIColor colorWithRed:100 green:27 blue:55 alpha:1];
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
     self.tableView.backgroundView=bgImageView;
     self.tableView.rowHeight=80;
-    //navigation bar
-    dataList=[NSMutableArray new];
-//    [self initNavigationItem];
-        MBProgressHUD *hud=[[MBProgressHUD alloc] initWithView:self.navigationController.view];
-        [self.navigationController.view addSubview:hud];
-        hud.labelText=@"加载...";
-        [hud showAnimated:YES whileExecutingBlock:^{
-            [self initializeTableContent];
-        } completionBlock:^{
-            [hud removeFromSuperview];
-        }];
+    [self initializeTableContent];
+
 }
 
 - (void)initializeTableContent {
@@ -62,7 +48,7 @@
         oneType.ztype = [rs stringForColumn:@"type"];
         oneType.ztypeid = [rs stringForColumn:@"typeid"];
         oneType.ztypename = [rs stringForColumn:@"typename"];
-        NSLog(@"oneSong:%@,%@,%@",oneType.ztype,oneType.ztypeid,oneType.ztypename);
+//        NSLog(@"oneSong:%@,%@,%@",oneType.ztype,oneType.ztypeid,oneType.ztypename);
         if ([oneType.ztypename isEqualToString:@"全部"]) continue;
         [dataList addObject:oneType];
     }

@@ -23,7 +23,6 @@ static  int limit=1000;
     dispatch_once(&onceToken, ^{
         if (!shareInstance) {
             shareInstance=[[self alloc]init];
-            
         }
     });
     return shareInstance;
@@ -42,7 +41,9 @@ static  int limit=1000;
         NSLog(@"%@",DBPATH);
         if ([_db open]) {
             NSLog(@"DataBase is open ok");
-            [self initlizationTable];
+            if (!DEBUG) {
+                  [self createTables];
+            }
         } else {
             NSLog(@"DataBase is open faied");
         }
@@ -50,7 +51,7 @@ static  int limit=1000;
     return self;
 }
 
-- (void)initlizationTable {
+- (void)createTables {
     //1.check and create SongTable
     NSString *sqlCreateTable =@"CREATE TABLE IF NOT EXISTS SongTable (number TEXT PRIMARY KEY,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
     
@@ -60,7 +61,7 @@ static  int limit=1000;
     } else {
         NSLog(@"success to creating SongTable table");
     }
-    
+
     //2.check and create SingerTable
     sqlCreateTable =@"CREATE TABLE IF NOT EXISTS SingerTable (sid TEXT,singer TEXT,pingyin TEXT,s_bi_hua TEXT,area TEXT)";
     
@@ -70,7 +71,7 @@ static  int limit=1000;
     } else {
         NSLog(@"success to creating SingerTable table");
     }
-    
+
     //3.check and create TypeTable
     sqlCreateTable =@"CREATE TABLE IF NOT EXISTS TypeTable (typeid TEXT,type TEXT,typename TEXT)";
     res = [_db executeUpdate:sqlCreateTable];
@@ -79,10 +80,7 @@ static  int limit=1000;
     } else {
         NSLog(@"success to creating TypeTable table");
     }
-    
-    //删除表 OrderTable
-    NSString *sqlDeleteRecord =@"DROP TABLE IF EXISTS OrderTable";
-    [_db executeUpdate:sqlDeleteRecord];
+
     //创建表
     sqlCreateTable =@"CREATE TABLE IF NOT EXISTS OrderTable (number TEXT,rcid TEXT,ordername TEXT)";
     
@@ -93,7 +91,6 @@ static  int limit=1000;
         NSLog(@"success to creating OrderTable table");
     }
     
-    
     //check and create CollectionTable
     sqlCreateTable =@"CREATE TABLE IF NOT EXISTS CollectionTable (number TEXT PRIMARY KEY,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
     res = [_db executeUpdate:sqlCreateTable];
@@ -103,6 +100,28 @@ static  int limit=1000;
     } else {
         NSLog(@"success to creating TypeTable table");
     }
+}
+
+- (void)dropTables {
+    //删除表 SongTable
+    NSString *sqlDeleteRecord =@"DROP TABLE IF EXISTS SongTable";
+    [_db executeUpdate:sqlDeleteRecord];
+    
+    //删除表 SingerTable
+    sqlDeleteRecord =@"DROP TABLE IF EXISTS SingerTable";
+    [_db executeUpdate:sqlDeleteRecord];
+    
+    //删除表 TypeTable
+    sqlDeleteRecord =@"DROP TABLE IF EXISTS TypeTable";
+    [_db executeUpdate:sqlDeleteRecord];
+    
+    //删除表 OrderTable
+    sqlDeleteRecord =@"DROP TABLE IF EXISTS OrderTable";
+    [_db executeUpdate:sqlDeleteRecord];
+    
+    //删除表 CollectionTable
+    sqlDeleteRecord =@"DROP TABLE IF EXISTS CollectionTable";
+    [_db executeUpdate:sqlDeleteRecord];
 }
 
 - (void)addIntoDataSourceWithFileNames:(NSArray*)fileNames completed:(DataImportCompleted)completed {
@@ -366,6 +385,17 @@ static  int limit=1000;
     free(orderadd);
     return nil;
 }
+
+- (int)rowCountWithStatment:(NSString*)statment {
+    if ([_db open]) {
+        FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:statment];
+        while ([rs next]) {
+          return [rs intForColumnIndex:0];
+        }
+    }
+    return 0;
+}
+
 
 - (void)closeDB {
     [_db close];

@@ -12,7 +12,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *numberStr;
 @property (weak, nonatomic) IBOutlet UILabel *songName;
 @property (nonatomic,assign)BOOL opened;
-@property (weak, nonatomic) IBOutlet UIButton *diangeBtn;
 @property (weak,nonatomic)UIBarButtonItem *buttonitem;
 @property (weak, nonatomic) IBOutlet UIImageView *sanjiaoxing;
 @property(nonatomic,weak)Song *oneSong;

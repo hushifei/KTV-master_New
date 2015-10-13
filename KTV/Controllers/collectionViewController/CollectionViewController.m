@@ -26,8 +26,6 @@
     HuToast *myToast;
     
 }
-@property (nonatomic, strong) NSMutableArray *dataList;
-
 @end
 
 @implementation CollectionViewController
@@ -39,27 +37,15 @@
     self.title=NSLocalizedString(@"house", nil);
     UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
-    self.tableView.showsHorizontalScrollIndicator=NO;
-    self.tableView.showsVerticalScrollIndicator=NO;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"geshou_area_bg"]];
     self.tableView.backgroundView=bgImageView;
-    UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-    self.tableView.tableFooterView=backView;
     self.tableView.rowHeight=60;
-    //TODO::LOAD DATA;
-    MBProgressHUD *hud=[[MBProgressHUD alloc] initWithView:self.navigationController.view];
-    [self.navigationController.view addSubview:hud];
-    hud.labelText=@"加载...";
-    [hud showAnimated:YES whileExecutingBlock:^{
-        [self initializeTableContent];
-    } completionBlock:^{
-        [hud removeFromSuperview];
-    }];
+    [self initializeTableContent];
 }
 
 - (void)initializeTableContent {
-    _dataList=[[NSMutableArray alloc]init];
+    dataList=[[NSMutableArray alloc]init];
     FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:@"select * from CollectionTable"];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
@@ -80,7 +66,7 @@
         oneSong.stype = [rs stringForColumn:@"stype"];
         oneSong.volume = [rs stringForColumn:@"volume"];
         oneSong.word = [rs stringForColumn:@"word"];
-        [_dataList addObject:oneSong];
+        [dataList addObject:oneSong];
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
@@ -133,7 +119,7 @@
             } else {
                 cell.sanjiaoxing.hidden=YES;
             }
-            [_dataList removeObjectAtIndex:_previousRow+1];
+            [dataList removeObjectAtIndex:_previousRow+1];
             [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow = -1;
         }
@@ -144,10 +130,10 @@
                 preCell.sanjiaoxing.hidden=YES;
             }
             
-            [_dataList removeObjectAtIndex:_previousRow+1];
+            [dataList removeObjectAtIndex:_previousRow+1];
             [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow = indexPath.row;
-            [_dataList insertObject:@"增加的" atIndex:indexPath.row+1];
+            [dataList insertObject:@"增加的" atIndex:indexPath.row+1];
             [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
         }
         else {
@@ -159,16 +145,16 @@
             
             NSInteger oler=_previousRow;
             _previousRow = indexPath.row;
-            [_dataList insertObject:@"增加的" atIndex:indexPath.row+1];
+            [dataList insertObject:@"增加的" atIndex:indexPath.row+1];
             [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-            [_dataList removeObjectAtIndex:oler+1];
+            [dataList removeObjectAtIndex:oler+1];
             _previousRow -=1;
             [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:oler+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
         }
         
     } else {
         _previousRow = indexPath.row;
-        [_dataList insertObject:@"增加的" atIndex:_previousRow+1];
+        [dataList insertObject:@"增加的" atIndex:_previousRow+1];
         [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
     }
     
@@ -182,7 +168,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.dataList.count;
+    return dataList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -195,13 +181,13 @@
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"song_bt_bg"]];
             //cancel collection
-            cell.oneSong=_dataList[_previousRow];
+            cell.oneSong=dataList[_previousRow];
             cell.oneSong.delegate=self;
         }
         return cell;
     } else {
         CollectionViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
-        cell.oneSong=_dataList[indexPath.row];
+        cell.oneSong=dataList[indexPath.row];
         cell.buttonitem=self.navigationItem.rightBarButtonItem;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor=[UIColor clearColor];
@@ -241,8 +227,8 @@
     [myToast dissmiss];
     switch (result) {
         case KMessageSuccess: {
-            [_dataList removeObjectAtIndex:_previousRow+1];
-            [_dataList removeObjectAtIndex:_previousRow];
+            [dataList removeObjectAtIndex:_previousRow+1];
+            [dataList removeObjectAtIndex:_previousRow];
             [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0],[NSIndexPath indexPathForRow:_previousRow inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow=-1;
             [myToast setToastWithMessage:@"成功取消收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
@@ -283,7 +269,7 @@
     } else {
         cell.sanjiaoxing.hidden=YES;
     }
-    [_dataList removeObjectAtIndex:_previousRow+1];
+    [dataList removeObjectAtIndex:_previousRow+1];
     [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     _previousRow=-1;
     [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
@@ -300,7 +286,7 @@
     } else {
         cell.sanjiaoxing.hidden=YES;
     }
-    [_dataList removeObjectAtIndex:_previousRow+1];
+    [dataList removeObjectAtIndex:_previousRow+1];
     [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     _previousRow=-1;
     [myToast setToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
@@ -311,7 +297,6 @@
 
 - (void)dealloc {
     myToast=nil;
-    self.dataList=nil;
 }
 
 @end

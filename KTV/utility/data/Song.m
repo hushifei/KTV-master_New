@@ -115,7 +115,7 @@
 
 - (void)deleteSongFromCollectionTable {
     NSString *insertSql1= [NSString stringWithFormat:@"delete from CollectionTable where number='%@'",[_number encodeBase64]];
-    __weak __block typeof (self) weakSelf=self;
+   __block __weak typeof (self) weakSelf=self;
     if (![[DataMananager instanceShare].db executeUpdate:insertSql1]) {
         NSLog(@"取消收藏失败");
         if ([self.delegate respondsToSelector:@selector(deleteCollectionSong:result:)]) {

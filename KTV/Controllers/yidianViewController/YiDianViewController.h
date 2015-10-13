@@ -6,8 +6,8 @@
 //  Copyright (c) 2015年 stevenhu. All rights reserved.
 //
 
-#import "BaseTableViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface YiDianViewController : BaseTableViewController
+@interface YiDianViewController : UITableViewController
 
 @end

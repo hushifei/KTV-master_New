@@ -13,8 +13,8 @@
 
 - (void)awakeFromNib {
     _opened=NO;
-    [_selecteBtn setTitle:NSLocalizedString(@"select", nil) forState:UIControlStateNormal];
-    [self.diangeBtn setTitleColor:[UIColor greenColor] forState:UIControlStateHighlighted];
+    [self.selecteBtn setTitle:NSLocalizedString(@"select", nil) forState:UIControlStateNormal];
+//    [self.selecteBtn setTitleColor:[UIColor greenColor] forState:UIControlStateHighlighted];
     // Initialization code
 }
 

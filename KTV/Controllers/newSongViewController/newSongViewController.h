@@ -9,5 +9,4 @@
 #import "BaseTableViewController.h"
 
 @interface newSongViewController : BaseTableViewController
-
 @end

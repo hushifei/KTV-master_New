@@ -23,9 +23,7 @@
 #import "DataMananager.h"
 #define SINGER_PIC_URL @"http://192.168.43.1:8080/puze?cmd=0x02&filename="
 
-@interface SingersViewController () {
-    NSMutableArray *dataList;
-}
+@interface SingersViewController ()
 @property(nonatomic,strong)NSArray *indexArray;
 @end
 
@@ -34,15 +32,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title=NSLocalizedString(@"singers", nil);
-    dataList=[NSMutableArray new];
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
     UINib *nib=[UINib nibWithNibName:@"SingerAreaTypeCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
-    UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-    self.tableView.tableFooterView=backView;
-    self.tableView.showsHorizontalScrollIndicator=NO;
-    self.tableView.showsVerticalScrollIndicator=NO;
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
+   totalRowCount= [[DataMananager instanceShare]rowCountWithStatment:[NSString stringWithFormat:@"select count(*) from SingerTable where area='%@'",[_area encodeBase64]]];
+    [self loadMJRefreshingView];
+    
     self.tableView.backgroundView=bgImageView;
     MBProgressHUD *hud=[[MBProgressHUD alloc] initWithView:self.navigationController.view];
     [self.navigationController.view addSubview:hud];
@@ -57,7 +53,7 @@
 - (void)initializeTableContent {
     //DESC 降序
     NSString *typeID=[_area encodeBase64];
-    NSString *sqlStr= [NSString stringWithFormat:@"select * from SingerTable where area='%@' order by singer",typeID];
+    NSString *sqlStr= [NSString stringWithFormat:@"select * from SingerTable where area='%@' order by singer limit %d OFFSET %@",typeID,pageLimint,offset];
     FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Singer *oneSinger=[[Singer alloc]init];
@@ -65,7 +61,7 @@
         oneSinger.pingyin = [rs stringForColumn:@"pingyin"];
         oneSinger.s_bi_hua = [rs stringForColumn:@"s_bi_hua"];
         oneSinger.singer = [rs stringForColumn:@"singer"];
-        NSLog(@"%@",oneSinger.singer);
+//        NSLog(@"%@",oneSinger.singer);
         [dataList addObject:oneSinger];
     }
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -73,6 +69,16 @@
     });
 }
 
+- (void)loadMoreData {
+    // 1.添加数据,拿到当前的上拉刷新控件，结束刷新状态
+    if (dataList.count < totalRowCount) {
+        offset=[NSNumber numberWithUnsignedInteger:dataList.count];
+        [self initializeTableContent];
+        [self.tableView.footer endRefreshing];
+    } else {
+        [self.tableView.footer endRefreshingWithNoMoreData];
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated  {
     [super viewWillAppear:animated];

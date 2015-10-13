@@ -23,10 +23,9 @@
 #import "DataMananager.h"
 @interface SongListViewController ()<SongDelegate>
 {
-    NSMutableArray *dataList;
     NSInteger _previousRow;
     HuToast *myToast;
-
+    NSInteger offset;
 }
 @end
 
@@ -37,26 +36,13 @@
     _previousRow = -1;
     myToast=[[HuToast alloc]init];
     self.title=NSLocalizedString(@"songs", nil);
-    dataList=[[NSMutableArray alloc]init];
     UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
-    self.tableView.showsHorizontalScrollIndicator=NO;
-    self.tableView.showsVerticalScrollIndicator=NO;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
     self.tableView.backgroundView=bgImageView;
-    UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-    self.tableView.tableFooterView=backView;
     self.tableView.rowHeight=50;
-    
-    MBProgressHUD *hud=[[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:hud];
-    hud.labelText=@"加载...";
-    [hud showAnimated:YES whileExecutingBlock:^{
-        [self initializeTableContent];
-    } completionBlock:^{
-        [hud removeFromSuperview];
-    }];
+    [self initializeTableContent];
 }
 
 - (void)viewWillAppear:(BOOL)animated  {

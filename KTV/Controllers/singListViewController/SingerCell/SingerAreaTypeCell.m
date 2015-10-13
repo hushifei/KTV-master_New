@@ -29,7 +29,7 @@
 }
 
 - (void)downLoadImage:(NSString *)imageName {
-    self.headImageV.image=[UIImage imageNamed:@"kge_head"];
+    self.headImageV.image=[UIImage imageNamed:@"DeviceRankNoLikeIcon"];
     NSFileManager *manager=[NSFileManager defaultManager];
     NSString* savePath_PicDir=[NSHomeDirectory() stringByAppendingPathComponent:@"Documents/downloadDir/Images"];
     if (![manager fileExistsAtPath:savePath_PicDir]) {

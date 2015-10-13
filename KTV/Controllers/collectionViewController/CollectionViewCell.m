@@ -12,6 +12,9 @@
 @implementation CollectionViewCell
 
 - (void)awakeFromNib {
+    _opened=NO;
+    [self.selecteBtn setTitle:NSLocalizedString(@"select", nil) forState:UIControlStateNormal];
+//    [self.selecteBtn setTitleColor:[UIColor greenColor] forState:UIControlStateHighlighted];
     // Initialization code
 }
 

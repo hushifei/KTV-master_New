@@ -14,16 +14,11 @@
 #import "YiDianViewController.h"
 #import "BBBadgeBarButtonItem.h"
 #import "MBProgressHUD.h"
-#import "MJRefresh.h"
 #import "Song.h"
 #import "DataMananager.h"
 @interface newSongViewController ()<MBProgressHUDDelegate,SongDelegate> {
     NSInteger _previousRow;
-    UIRefreshControl * bb;
-    NSMutableArray *dataList;
     HuToast *myToast;
-    int pageLimint;
-
 }
 @end
 
@@ -32,51 +27,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title=NSLocalizedString(@"newsong", nil);
-    pageLimint=50;
     myToast=[[HuToast alloc]init];
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newSong_bg"]];
     self.tableView.backgroundView=bgImageView;
-    self.tableView.showsHorizontalScrollIndicator=NO;
-    self.tableView.showsVerticalScrollIndicator=NO;
     UINib *nib=[UINib nibWithNibName:@"SongTopCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
     _previousRow = -1;
-    dataList=[[NSMutableArray alloc]init];
     UIImageView  *headerImageV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 200)];
     [headerImageV setImage:[UIImage imageNamed:@"newsong_header"]];
     self.tableView.tableHeaderView=headerImageV;
-    UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-    self.tableView.tableFooterView=backView;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.rowHeight=54;
-    [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(loadMetadata:)];
-    
-    MBProgressHUD *hud=[[MBProgressHUD alloc] initWithView:self.navigationController.view];
-    [self.navigationController.view addSubview:hud];
-    hud.labelText=@"加载...";
-    [hud showAnimated:YES whileExecutingBlock:^{
-        [self initializeTableContent];
-    } completionBlock:^{
-        [hud removeFromSuperview];
-    }];
-
+    totalRowCount=300;
+    [self loadMJRefreshingView];
 }
 
-- (void)loadMoreData
-{
-    // 1.添加数据
-  
-    // 拿到当前的上拉刷新控件，结束刷新状态
-
-        [self.tableView reloadData];
-        
-        [self.tableView.footer endRefreshing];
-}
-
-
-- (void)initializeTableContent {
+- (void)initializeTableContent{
     NSString *newSongFlag=[@"1" encodeBase64];
-    NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where newsong='%@' limit %d",newSongFlag,pageLimint];
+    NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where newsong='%@' ORDER BY singer limit %d OFFSET %@",newSongFlag,pageLimint,offset];
     FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
