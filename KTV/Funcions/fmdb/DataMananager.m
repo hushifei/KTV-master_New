@@ -39,8 +39,10 @@ static  int limit=1000;
 - (id)init {
     if (self=[super init]) {
         _db=[[FMDatabase alloc]initWithPath:DBPATH];
+        NSLog(@"%@",DBPATH);
         if ([_db open]) {
             NSLog(@"DataBase is open ok");
+            [self initlizationTable];
         } else {
             NSLog(@"DataBase is open faied");
         }
@@ -48,19 +50,65 @@ static  int limit=1000;
     return self;
 }
 
+- (void)initlizationTable {
+    //1.check and create SongTable
+    NSString *sqlCreateTable =@"CREATE TABLE IF NOT EXISTS SongTable (number TEXT PRIMARY KEY,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
+    
+    BOOL res = [_db executeUpdate:sqlCreateTable];
+    if (!res) {
+        NSLog(@"error when creating SongTable table");
+    } else {
+        NSLog(@"success to creating SongTable table");
+    }
+    
+    //2.check and create SingerTable
+    sqlCreateTable =@"CREATE TABLE IF NOT EXISTS SingerTable (sid TEXT,singer TEXT,pingyin TEXT,s_bi_hua TEXT,area TEXT)";
+    
+    res = [_db executeUpdate:sqlCreateTable];
+    if (!res) {
+        NSLog(@"error when creating SingerTable table");
+    } else {
+        NSLog(@"success to creating SingerTable table");
+    }
+    
+    //3.check and create TypeTable
+    sqlCreateTable =@"CREATE TABLE IF NOT EXISTS TypeTable (typeid TEXT,type TEXT,typename TEXT)";
+    res = [_db executeUpdate:sqlCreateTable];
+    if (!res) {
+        NSLog(@"error when creating TypeTable table");
+    } else {
+        NSLog(@"success to creating TypeTable table");
+    }
+    
+    //删除表 OrderTable
+    NSString *sqlDeleteRecord =@"DROP TABLE IF EXISTS OrderTable";
+    [_db executeUpdate:sqlDeleteRecord];
+    //创建表
+    sqlCreateTable =@"CREATE TABLE IF NOT EXISTS OrderTable (number TEXT,rcid TEXT,ordername TEXT)";
+    
+    res = [_db executeUpdate:sqlCreateTable];
+    if (!res) {
+        NSLog(@"error when creating OrderTable table");
+    } else {
+        NSLog(@"success to creating OrderTable table");
+    }
+    
+    
+    //check and create CollectionTable
+    sqlCreateTable =@"CREATE TABLE IF NOT EXISTS CollectionTable (number TEXT PRIMARY KEY,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
+    res = [_db executeUpdate:sqlCreateTable];
+    if (!res) {
+        NSLog(@"error when creating TypeTable table");
+        
+    } else {
+        NSLog(@"success to creating TypeTable table");
+    }
+}
+
 - (void)addIntoDataSourceWithFileNames:(NSArray*)fileNames completed:(DataImportCompleted)completed {
     if (completed) {
         _completed=completed;
     }
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [self startTodoInitailizationData:fileNames];
-        if (completed) {
-            return completed(YES);
-        }
-    });
-}
-- (BOOL)startTodoInitailizationData:(NSArray*)fileNames {
     for (NSString *oneFilePath in fileNames) {
         NSString *fileName=[oneFilePath lastPathComponent];
         if ([fileName isEqualToString:@"songlist.txt"]) {
@@ -73,22 +121,16 @@ static  int limit=1000;
         } else if ([fileName isEqualToString:@"orderdata.txt"]) {
             [self importDataForOrder:oneFilePath];
         }
+        
+        if ([oneFilePath isEqualToString:[fileNames lastObject]]) {
+            _completed(YES);
+        }
+        
     }
-    [self initCollectionTable];
-    return YES;
+    
 }
 
-
 - (NSError*)importDataForSongs:(NSString*)txtFilePath {
-    //check and create Table
-    NSString *sqlCreateTable =@"CREATE TABLE IF NOT EXISTS SongTable (number TEXT PRIMARY KEY,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
-    
-    BOOL res = [_db executeUpdate:sqlCreateTable];
-    if (!res) {
-        NSLog(@"error when creating SongTable table");
-    } else {
-        NSLog(@"success to creating SongTable table");
-    }
     NSString *fileName=[txtFilePath lastPathComponent];
     NSString *str=[NSString stringWithContentsOfFile:txtFilePath encoding:NSUTF8StringEncoding error:nil];
     NSArray *lines=[str componentsSeparatedByString:@"\t\r\n"];
@@ -111,7 +153,7 @@ static  int limit=1000;
                     NSArray *lineArry=[dataSource[i] componentsSeparatedByString:@"\t"];
                     if  (lineArry.count !=17) {
                         toIndex--;
-                        //                        NSLog(@"--line error--%d",i);
+                        // NSLog(@"--line error--%d",i);
                         continue;
                     }
                     
@@ -149,16 +191,6 @@ static  int limit=1000;
 
 
 - (NSError*)importDataForSingers:(NSString*)txtFilePath {
-    //check and create Table
-    NSString *sqlCreateTable =@"CREATE TABLE IF NOT EXISTS SingerTable (sid TEXT,singer TEXT,pingyin TEXT,s_bi_hua TEXT,area TEXT)";
-    
-    BOOL res = [_db executeUpdate:sqlCreateTable];
-    if (!res) {
-        NSLog(@"error when creating SingerTable table");
-    } else {
-        NSLog(@"success to creating SingerTable table");
-    }
-    
     NSString *fileName=[txtFilePath lastPathComponent];
     NSString *str=[NSString stringWithContentsOfFile:txtFilePath encoding:NSUTF8StringEncoding error:nil];
     NSArray *lines=[str componentsSeparatedByString:@"\r\n"];
@@ -223,14 +255,6 @@ static  int limit=1000;
 
 
 - (NSError*)importDataForType:(NSString*)txtFilePath {
-    //check and create Table
-    NSString *sqlCreateTable =@"CREATE TABLE IF NOT EXISTS TypeTable (typeid TEXT,type TEXT,typename TEXT)";
-    BOOL res = [_db executeUpdate:sqlCreateTable];
-    if (!res) {
-        NSLog(@"error when creating TypeTable table");
-    } else {
-        NSLog(@"success to creating TypeTable table");
-    }
     
     NSString *fileName=[txtFilePath lastPathComponent];
     NSString *str=[NSString stringWithContentsOfFile:txtFilePath encoding:NSUTF8StringEncoding error:nil];
@@ -302,19 +326,6 @@ static  int limit=1000;
 
 
 - (NSError*)importDataForOrder:(NSString*)txtFilePath {
-    //删除表
-    NSString *sqlDeleteRecord =@"DROP TABLE IF EXISTS OrderTable";
-    [_db executeUpdate:sqlDeleteRecord];
-    //创建表
-    NSString *sqlCreateTable =@"CREATE TABLE IF NOT EXISTS OrderTable (number TEXT,rcid TEXT,ordername TEXT)";
-    
-    BOOL res = [_db executeUpdate:sqlCreateTable];
-    if (!res) {
-        NSLog(@"error when creating OrderTable table");
-    } else {
-        NSLog(@"success to creating OrderTable table");
-    }
-    
     struct orderrec {
         char number[8];
         int rcid;
@@ -354,19 +365,6 @@ static  int limit=1000;
     fclose(fn);
     free(orderadd);
     return nil;
-}
-
-- (BOOL)initCollectionTable {
-    //check and create Table
-    NSString *sqlCreateTable =@"CREATE TABLE IF NOT EXISTS CollectionTable (number TEXT PRIMARY KEY,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
-    BOOL res = [_db executeUpdate:sqlCreateTable];
-    if (!res) {
-        NSLog(@"error when creating TypeTable table");
-        
-    } else {
-        NSLog(@"success to creating TypeTable table");
-    }
-    return res;
 }
 
 - (void)closeDB {

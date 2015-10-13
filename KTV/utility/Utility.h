@@ -21,7 +21,7 @@ extern NSString *const HReachabilityChangedNotification;
 
 /*
  *  MainViewController
-
+ 
  */
 #define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)

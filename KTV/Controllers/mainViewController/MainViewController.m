@@ -5,7 +5,7 @@
 //  Created by stevenhu on 15/4/17.
 //  Copyright (c) 2015年 stevenhu. All rights reserved.
 //
-
+#import "DownLoadFileTool.h"
 #import "MainViewController.h"
 #import "huSearchBar.h"
 #import "SettingViewController.h"
@@ -45,13 +45,15 @@
     myToast=[[HuToast alloc]init];
     self.automaticallyAdjustsScrollViewInsets=YES;
     [self createContextUI];
-//    [self copyFile];
-//    if ([Utility networkStatus]) {
-//        [self performSelectorInBackground:@selector(initData) withObject:nil];
-//    } else {
-//        NSLog(@"network error");
-//    }
-
+    
+    //    [self copyFile];
+    //    if ([Utility networkStatus]) {
+    //        [self performSelectorInBackground:@selector(initData) withObject:nil];
+    //    } else {
+    //        NSLog(@"network error");
+    //    }
+    [self performSelector:@selector(initData) withObject:nil afterDelay:6];
+    
 }
 
 - (void)initData {
@@ -63,18 +65,17 @@
     HUD.dimBackground=YES;
     HUD.detailsLabelColor=[UIColor greenColor];
     [HUD show:YES];
-//    [[Utility instanceShare]addIntoDataSource:^(BOOL Completed) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [HUD hide:YES];
-//        });
-//        if (Completed) {
-//            NSLog(@"Done");
-//            
-//        } else {
-//            NSLog(@"network error");
-//        }
-//        
-//    }];
+    [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [HUD hide:YES];
+            if (Completed) {
+                NSLog(@"download file done!");
+                
+            } else {
+                NSLog(@"download file Error!");
+            }
+        });
+    }];
 }
 
 - (void)copyFile {
@@ -98,7 +99,7 @@
 
 -(void)click_geshou:(id)sender {
     SingerAreaViewController *vc=[[SingerAreaViewController alloc]init];
-//    UINavigationController *naVC=[[UINavigationController alloc]initWithRootViewController:vc];
+    //    UINavigationController *naVC=[[UINavigationController alloc]initWithRootViewController:vc];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -147,13 +148,13 @@
     //main view
     //bg
     UIImageView *bgImageView;
-//    if (self.navigationController!=nil) {
-//        CGRect rect=self.view.frame;
-//        rect.size.height-=self.navigationController.navigationBar.bounds.size.height;
-//        bgImageView=[[UIImageView alloc]initWithFrame:rect];
-//    } else {
-        bgImageView=[[UIImageView alloc]initWithFrame:self.view.frame];
-//    }
+    //    if (self.navigationController!=nil) {
+    //        CGRect rect=self.view.frame;
+    //        rect.size.height-=self.navigationController.navigationBar.bounds.size.height;
+    //        bgImageView=[[UIImageView alloc]initWithFrame:rect];
+    //    } else {
+    bgImageView=[[UIImageView alloc]initWithFrame:self.view.frame];
+    //    }
     bgImageView.image=[UIImage imageNamed:@"mainVC_bg"];
     self.view =bgImageView;
     bgImageView.center=self.view.center;
@@ -167,7 +168,7 @@
     CABasicAnimation *rotation=[CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotation.toValue=[NSNumber numberWithFloat:M_PI * 2.0 ];
     rotation.duration=10;
-//    rotation.autoreverses=YES;
+    //    rotation.autoreverses=YES;
     rotation.repeatCount=MAXFLOAT;
     rotation.removedOnCompletion=NO;
     rotation.fillMode=kCAFillModeForwards;
@@ -199,8 +200,8 @@
     geshouLabel.text=NSLocalizedString(@"singers", nil);
     geshouLabel.textAlignment=NSTextAlignmentCenter;
     geshouLabel.font=[UIFont systemFontOfSize:14.0f];
-//    [geshouLabel sizeThatFits:CGSizeZero];
-//    [geshouLabel sizeToFit];
+    //    [geshouLabel sizeThatFits:CGSizeZero];
+    //    [geshouLabel sizeToFit];
     [geshouLabel setTextColor:[UIColor groupTableViewBackgroundColor]];
     [topBGView addSubview:geshouLabel];
     
@@ -281,7 +282,7 @@
     [conHostBtn setImage:[UIImage imageNamed:@"conhost"] forState:UIControlStateNormal];
     [bottomBGView addSubview:conHostBtn];
     
-
+    
     UILabel *conHostLabel=[[UILabel alloc]initWithFrame:CGRectZero];
     [conHostLabel setTextColor:[UIColor groupTableViewBackgroundColor]];
     conHostLabel.font=[UIFont systemFontOfSize:14.0f];

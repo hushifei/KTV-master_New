@@ -125,7 +125,7 @@ static Utility *shareInstance=nil;
 - (void)networkStatus:(void(^)(BOOL isSecucess))block {
     NSURL *url=[NSURL URLWithString:@"http://192.168.43.1:8080/puze/"];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:2];
-   NSURLSessionDataTask *dataTask =[shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDataTask *dataTask =[shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse=(NSHTTPURLResponse*)response;
         NSInteger statuscode=httpResponse.statusCode;
         if (error==nil) {
@@ -147,7 +147,7 @@ static Utility *shareInstance=nil;
 - (void)checkNetworkStatus {
     NSURL *url=[NSURL URLWithString:@"http://192.168.43.1:8080/puze/"];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:2];
-   NSURLSessionDataTask *dataTask = [shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDataTask *dataTask = [shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse=(NSHTTPURLResponse*)response;
         NSInteger statuscode=httpResponse.statusCode;
         if (error==nil) {
@@ -161,11 +161,11 @@ static Utility *shareInstance=nil;
             netWorkStatus=NO;
             NSLog(@"network connection error");
         }
-       
-       if (netWorkStatus==NO) {
-        [[NSNotificationCenter defaultCenter]postNotificationName:HReachabilityChangedNotification object:shareInstance userInfo:@{@"networkStatus":@NO}];
-       }
-       
+        
+        if (netWorkStatus==NO) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:HReachabilityChangedNotification object:shareInstance userInfo:@{@"networkStatus":@NO}];
+        }
+        
     }];
     [dataTask resume];
 }
