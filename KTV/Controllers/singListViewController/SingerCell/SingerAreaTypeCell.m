@@ -45,7 +45,7 @@
     }
     
     if (imageName.length >0) {
-        NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:imageName]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:imageName]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         NSURL *downloadURL=[NSURL URLWithString:urlStr];
         NSURLRequest *request = [NSURLRequest requestWithURL:downloadURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0f];
         queue=[[NSOperationQueue alloc]init];
