@@ -22,4 +22,7 @@ typedef void(^DataImportCompleted)(BOOL Completed);
 // 清除表-清数据
 - (BOOL)eraseTable:(NSString *)tableName;
 - (void)closeDB;
+
+- (BOOL)databaseAlready;
+- (void)setDatabaseAlready:(BOOL)already;
 @end

@@ -10,9 +10,11 @@
 #import "NSString+Utility.h"
 #define DBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB.sqlite"]
 static DataMananager *shareInstance=nil;
+#define DATABASE_ALREADY  @"DATABASE_ALREADY"
 static  int limit=1000;
 @interface DataMananager () {
     int hasCount;
+    NSUserDefaults *userDefaults;
 }
 
 @end
@@ -39,13 +41,16 @@ static  int limit=1000;
     if (self=[super init]) {
         _db=[[FMDatabase alloc]initWithPath:DBPATH];
         NSLog(@"%@",DBPATH);
+        userDefaults=[NSUserDefaults standardUserDefaults];
         if ([_db open]) {
             NSLog(@"DataBase is open ok");
-//            if (DEBUG) {
-//                [self copyDBFile];
-//            } else {
+            if (DEBUG) {
+                if (![userDefaults objectForKey:@"DATABASE_ALREADY"]) {
+                    [self copyDBFile];
+                }
+            } else {
                  [self createTables];
-//            }
+            }
         } else {
             [_db close];
             NSAssert1(0, @"Failed to open database file with message '%@'.", [_db lastErrorMessage]);
@@ -60,6 +65,7 @@ static  int limit=1000;
     if ([fileManager fileExistsAtPath:DBPATH]) {
         [fileManager removeItemAtPath:DBPATH error:nil];
         [fileManager copyItemAtPath:filePath toPath:DBPATH error:nil];
+        [self setDatabaseAlready:YES];
     }
 }
 
@@ -77,6 +83,15 @@ static  int limit=1000;
         }
     }
     return NO;
+}
+
+- (BOOL)databaseAlready {
+   return [userDefaults objectForKey:DATABASE_ALREADY];
+}
+
+- (void)setDatabaseAlready:(BOOL)already {
+    [userDefaults objectForKey:DATABASE_ALREADY];
+    [userDefaults synchronize];
 }
 
 // 获得表的数据条数
@@ -214,6 +229,7 @@ static  int limit=1000;
             [self importDataForOrder:oneFilePath];
         }
     }
+    [self setDatabaseAlready:YES];
     _completed(YES);
 
 }
