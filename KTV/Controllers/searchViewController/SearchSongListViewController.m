@@ -14,7 +14,8 @@
 #import "Song.h"
 #import "NSManagedObject+helper.h"
 #import "SFSelectView.h"
-#import "SongResultTableViewController.h"
+//#import "SongResultTableViewController.h"
+#import "SongListViewController.h"
 #import "UIImage+Utility.h"
 @interface SearchSongListViewController ()<searchSongDelegate>{
     NSInteger _previousRow;
@@ -138,10 +139,22 @@
 
 - (void)clickSingerWithSingerName:(NSString*)singerName {
     [self dismissViewControllerAnimated:NO completion:^{
-        SongResultTableViewController *songVC=[[SongResultTableViewController alloc]init];
+        SongListViewController *songVC=[[SongListViewController alloc]init];
         songVC.singerName=singerName;
-        UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:songVC];
-        [self presentViewController:nav animated:YES completion:nil];
+        songVC.needLoadData=YES;
+        [self.navigationController pushViewController:songVC animated:YES];
+        NSLog(@"111");
+    }];
+}
+
+
+- (void)clickSong:(NSArray *)songs {
+    [self dismissViewControllerAnimated:NO completion:^{
+        SongListViewController *songVC=[[SongListViewController alloc]init];
+        songVC.needLoadData=NO;
+        [songVC setDataList:songs];
+        [self.navigationController pushViewController:songVC animated:YES];
+        [songVC.tableView reloadData];
         NSLog(@"111");
     }];
 }

@@ -149,6 +149,7 @@
     SongListViewController *vc=[[SongListViewController alloc]init];
     Singer *oneSinger=dataList[indexPath.row];
     vc.singerName=oneSinger.singer;
+    vc.needLoadData=YES;
    [self.navigationController pushViewController:vc animated:YES];
 }
 @end

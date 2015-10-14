@@ -9,6 +9,7 @@
 #import "SearchResultCell.h"
 #import "WebImage.h"
 #import "Singer.h"
+#import "Song.h"
 #define COMMANDURLHEADER_PIC @"http://192.168.43.1:8080/puze?cmd=0x02&filename="
 @interface SearchResultCell() {
     UIImageView *header;
@@ -40,20 +41,25 @@
     CGFloat titleWidth=rect.size.width-CGRectGetMaxX(header.frame)-80;
     CGFloat titleX=CGRectGetMaxX(header.frame)+40;
     titleLabel.frame=CGRectMake(titleX, y,titleWidth,height);
+//    titleLabel.textAlignment=NSTextAlignmentCenter;
     [super drawRect:rect];
 }
 
-- (void)config:(SRC_Type)type_flag withSinger:(nullable Singer*)singer {
-    if (type_flag==SRC_Singer && singer) {
-        NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:singer.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+- (void)configWithObject:(nonnull id)object {
+    if ([object isKindOfClass:[Singer class]]) {
+        Singer *oneSinger=(Singer*)object;
+        titleLabel.text=oneSinger.singer;
+        NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         if ([[Utility instanceShare]networkStatus]) {
             [header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
         } else {
             header.image=[UIImage imageNamed:@"Default_Header"];
         }
-    } else {
+    } else if ([object isKindOfClass:[Song class]]){
         header.image=[UIImage imageNamed:@"music_icon"];
+        titleLabel.text=[(Song*)object songname];
     }
+    
 }
 
 @end

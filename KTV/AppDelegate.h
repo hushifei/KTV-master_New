@@ -18,7 +18,7 @@
  2.数据加载  v
  3.网络监测
  4.测试已点  v
- 5.搜歌
+ 5.搜歌  Singer ok  song ongoing
  5.播控
  6.data ready v
  7.cell 更改成纯代码

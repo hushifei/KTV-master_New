@@ -42,7 +42,19 @@
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
     self.tableView.backgroundView=bgImageView;
     self.tableView.rowHeight=50;
-    [self initializeTableContent];
+    if (self.needLoadData) {
+        [self initializeTableContent];
+    }
+}
+
+-(void)setDataList:(NSArray*)array {
+    if (dataList==nil) {
+        dataList=[NSMutableArray new];
+    } else {
+        [dataList removeAllObjects];
+
+    }
+    [dataList addObjectsFromArray:array];
 }
 
 - (void)viewWillAppear:(BOOL)animated  {

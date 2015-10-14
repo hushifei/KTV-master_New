@@ -13,6 +13,8 @@
 - (void)searching;
 - (void)searchDone;
 - (void)clickSingerWithSingerName:(NSString*)singerName;
+- (void)clickSong:(NSArray*)songs;
+
 @end
 
 enum selectSearchType{

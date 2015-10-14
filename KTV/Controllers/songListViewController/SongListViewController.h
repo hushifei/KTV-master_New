@@ -9,6 +9,9 @@
 #import "BaseTableViewController.h"
 @interface SongListViewController : BaseTableViewController
 @property(nonatomic,copy)NSString *singerName;
+@property(nonatomic,assign)BOOL needLoadData;
 
+
+-(void)setDataList:(NSArray*)array;
 @end
 
