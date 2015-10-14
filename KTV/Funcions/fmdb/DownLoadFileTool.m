@@ -78,6 +78,12 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
                 [self startDownloadFiles];
             } else if (action ==S_Can_ImportData && completed) {
                 //check txt files exist
+                if ([dataManager databaseAlready]) {
+                    if (_completed) {
+                        _completed(YES);
+                    }
+                    return;
+                }
                 NSMutableArray *willImportArray=[NSMutableArray new] ;
                 for (NSString *fileName in allTXTFiles) {
                     NSString *filePath=[savePath_TxtDir stringByAppendingPathComponent:fileName];
@@ -91,6 +97,7 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
                 } else {
                     if (_completed) {
                         _completed(YES);
+                        return;
                     }
                 }
             } else {
@@ -149,6 +156,8 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
 
 - (void)importTxtFilesToDataBase:(NSArray*)filePaths {
     //import data
+    [dataManager setDatabaseAlready:NO];
+    [defaults synchronize];
     [[DataMananager instanceShare]addIntoDataSourceWithFileNames:filePaths completed:^(BOOL Completed) {
         if (Completed) {
             if (_completed) {
