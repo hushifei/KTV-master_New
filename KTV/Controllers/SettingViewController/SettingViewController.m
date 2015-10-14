@@ -14,6 +14,7 @@
 #import "AboutViewController.h"
 #import "CommandControler.h"
 #import "HuToast.h"
+#import "UIImageView+WebCache.h"
 @interface SettingViewController () {
     CommandControler *cmd;
     HuToast *myToast;
@@ -128,7 +129,8 @@
             break;
         }
         case 2: {
-            //clear tmp file and so on; 
+            //clear tmp file and so on;
+            
             [myToast setToastWithMessage:NSLocalizedString(@"clearcachedatasuccess", nil)  WithTimeDismiss:@"2" messageType:KMessageSuccess];
             break;
         }

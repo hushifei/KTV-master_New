@@ -61,10 +61,10 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [HUD hide:YES];
             if (Completed) {
-                NSLog(@"download file done!");
+                NSLog(@"download file And import data done!");
                 
             } else {
-                NSLog(@"download file Error!");
+                NSLog(@"download file OR import data Error!");
             }
         });
     }];

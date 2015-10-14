@@ -10,6 +10,7 @@
 #import "CommandControler.h"
 #import "Utility.h"
 #import "DataMananager.h"
+#import "SDWebImageManager.h"
 #define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
 #define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
@@ -76,6 +77,7 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     [self isNeedToUpdate_Database_version:^(S_Actions action, BOOL completed) {
             if (action==S_Can_Donload && completed) {
                 [self startDownloadFiles];
+                [[SDWebImageManager sharedManager].imageCache cleanDisk];
             } else if (action ==S_Can_ImportData && completed) {
                 //check txt files exist
                 if ([dataManager databaseAlready]) {

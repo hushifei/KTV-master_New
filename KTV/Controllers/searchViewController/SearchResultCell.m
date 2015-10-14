@@ -46,7 +46,11 @@
 - (void)config:(SRC_Type)type_flag withSinger:(nullable Singer*)singer {
     if (type_flag==SRC_Singer && singer) {
         NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:singer.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        [header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
+        if ([[Utility instanceShare]networkStatus]) {
+            [header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
+        } else {
+            header.image=[UIImage imageNamed:@"Default_Header"];
+        }
     } else {
         header.image=[UIImage imageNamed:@"music_icon"];
     }
