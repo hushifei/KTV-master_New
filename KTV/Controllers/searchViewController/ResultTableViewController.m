@@ -151,16 +151,16 @@
 //    return 45.0f;
 //}
 
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     id object=_dataList[indexPath.row];
     if ([object isKindOfClass:[Singer class]]) {
-        Singer *oneSinger=_dataList[indexPath.row];
-        if ([_delegate respondsToSelector:@selector(clickSingerWithSingerName:)]) {
-            [_delegate clickSingerWithSingerName:oneSinger.singer];
+        if ([_delegate respondsToSelector:@selector(clickSinger:)]) {
+            [_delegate clickSinger:(Singer*)object];
         }
     } else {
         if ([_delegate respondsToSelector:@selector(clickSong:)]) {
-            [_delegate clickSong:@[object]];
+            [_delegate clickSong:(Song*)object];
         }
       }
     

@@ -12,6 +12,7 @@
 #import "PinYinForObjc.h"
 #import "BBBadgeBarButtonItem.h"
 #import "Song.h"
+#import "Singer.h"
 #import "NSManagedObject+helper.h"
 #import "SFSelectView.h"
 //#import "SongResultTableViewController.h"
@@ -137,25 +138,21 @@
     promtView.hidden=YES;
 }
 
-- (void)clickSingerWithSingerName:(NSString*)singerName {
+- (void)clickSinger:(Singer*)singer {
     [self dismissViewControllerAnimated:NO completion:^{
         SongListViewController *songVC=[[SongListViewController alloc]init];
-        songVC.singerName=singerName;
+        songVC.singerName=singer.singer;
         songVC.needLoadData=YES;
         [self.navigationController pushViewController:songVC animated:YES];
-        NSLog(@"111");
     }];
 }
 
-
-- (void)clickSong:(NSArray *)songs {
+- (void)clickSong:(Song *)song {
     [self dismissViewControllerAnimated:NO completion:^{
         SongListViewController *songVC=[[SongListViewController alloc]init];
         songVC.needLoadData=NO;
-        [songVC setDataList:songs];
+        [songVC setDataList:song];
         [self.navigationController pushViewController:songVC animated:YES];
-        [songVC.tableView reloadData];
-        NSLog(@"111");
     }];
 }
 

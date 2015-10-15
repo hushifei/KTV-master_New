@@ -26,6 +26,7 @@
     NSInteger _previousRow;
     HuToast *myToast;
     NSInteger offset;
+    Song *searchSong;
 }
 @end
 
@@ -44,17 +45,18 @@
     self.tableView.rowHeight=50;
     if (self.needLoadData) {
         [self initializeTableContent];
+    } else {
+        if (searchSong) {
+            [dataList addObject:searchSong];
+            [self.tableView reloadData];
+            self.needLoadData=YES;
+        }
     }
 }
 
--(void)setDataList:(NSArray*)array {
-    if (dataList==nil) {
-        dataList=[NSMutableArray new];
-    } else {
-        [dataList removeAllObjects];
-
-    }
-    [dataList addObjectsFromArray:array];
+-(void)setDataList:(Song*)oneSong {
+    if (![oneSong isKindOfClass:[Song class]] || oneSong==nil) return;
+    searchSong=oneSong;
 }
 
 - (void)viewWillAppear:(BOOL)animated  {
@@ -326,6 +328,16 @@
     //cut song
 }
 
+//-(UIStatusBarStyle)preferredStatusBarStyle {
+//    return UIStatusBarStyleLightContent;
+//}
+
+- (BOOL)prefersStatusBarHidden {
+    if (searchSong) {
+        return NO;
+    }
+    return YES;
+}
 #pragma mark -#########################################################
 
 @end

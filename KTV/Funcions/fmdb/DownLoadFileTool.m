@@ -25,6 +25,7 @@
     NSMutableArray *downloadStatus;
     NSString *newDatabaseVer;
     DataMananager *dataManager;
+    dispatch_group_t group;
 }
 
 @end
@@ -112,20 +113,18 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
 }
 
 - (void)startDownloadFiles {
-    dispatch_queue_t queue=dispatch_get_global_queue(2, 0);
-    dispatch_group_t group=dispatch_group_create();
+    group=dispatch_group_create();
     for (NSString *fileName in allTXTFiles) {
-        dispatch_group_async(group, queue, ^{
+            dispatch_group_enter(group);
             [self downLoadFile:fileName];
-        });
     }
     //等group里的task都执行完后执行notify方法里的内容,相当于把wait方法及之后要执行的代码合到一起了
-    //    dispatch_group_notify(group, queue, ^{
-    //        if (_completed) {
-    //            //import data
-    //            _completed(YES);
-    //        }
-    //    });
+        dispatch_group_notify(group,dispatch_get_global_queue(0, 0), ^{
+            if (_completed) {
+                [self importTxtFilesToDataBase:downloadStatus];
+                _completed(YES);
+            }
+        });
 }
 //下载文件
 //typelist.txt  songlist.txt orderdata.txt singlist.txt
@@ -146,12 +145,7 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
         } else {
             NSLog(@"download file eror -->%@",fileName);
         }
-        
-        if (downloadStatus.count==4) {
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                [self importTxtFilesToDataBase:downloadStatus];
-            });
-        }
+        dispatch_group_leave(group);
     }];
     [dataTask resume];
 }
