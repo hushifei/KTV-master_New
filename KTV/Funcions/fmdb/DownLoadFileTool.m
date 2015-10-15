@@ -40,7 +40,7 @@ static DownLoadFileTool *instance=nil;
     return instance;
 }
 
-+ (id)allocWithZone:(NSZone *)zone {
++ (instancetype)allocWithZone:(NSZone *)zone {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
     instance = [super allocWithZone:zone];
@@ -48,7 +48,7 @@ static DownLoadFileTool *instance=nil;
     return instance;
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (instancetype)copyWithZone:(NSZone *)zone {
     return self;
 }
 
@@ -83,7 +83,7 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
                 //check txt files exist
                 if ([dataManager databaseAlready]) {
                     if (_completed) {
-                        _completed(YES);
+                        _completed(YES,nil);
                     }
                     return;
                 }
@@ -95,18 +95,18 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
                     }
                 }
                 //import data;
-                if (willImportArray.count >0) {
+                if (willImportArray.count ==4) {
                   [self importTxtFilesToDataBase:willImportArray];
                 } else {
                     if (_completed) {
-                        _completed(YES);
+                        _completed(YES,nil);
                         return;
                     }
                 }
             } else {
                 //return error information
                 if (_completed) {
-                    _completed(YES);
+                    _completed(YES,[NSError errorWithDomain:@"9999" code:9999 userInfo:@{@"errorDescript":@"network error"}]);
                 }
             }
     }];
@@ -120,10 +120,7 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     }
     //等group里的task都执行完后执行notify方法里的内容,相当于把wait方法及之后要执行的代码合到一起了
         dispatch_group_notify(group,dispatch_get_global_queue(0, 0), ^{
-            if (_completed) {
                 [self importTxtFilesToDataBase:downloadStatus];
-                _completed(YES);
-            }
         });
 }
 //下载文件
@@ -160,7 +157,7 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
                 [defaults setObject:newDatabaseVer forKey:@"CURRENT_DATABASE_VERSION"];
                 [defaults synchronize];
                 [self remove_downloadedTxtFiles];
-                _completed(YES);
+                _completed(YES,nil);
             }
             NSLog(@"import data done!");
         }

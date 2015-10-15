@@ -30,7 +30,7 @@
 - (void)downLoadImage:(NSString *)imageName {
     if (imageName && imageName.length>0) {
         NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:imageName]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        if ([[Utility instanceShare]networkStatus]) {
+        if ([Utility instanceShare].netWorkStatus) {
             [_headImageV sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
         } else {
             _headImageV.image=[UIImage imageNamed:@"Default_Header"];

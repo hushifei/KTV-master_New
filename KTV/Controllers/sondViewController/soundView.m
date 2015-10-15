@@ -451,7 +451,7 @@
 
 
 - (void)handSendSoundMessageCommandWithValue:(NSNumber*)value View:(ZVolumeSlide*)slider {
-    if ([[Utility instanceShare]networkStatus]) {
+    if ([Utility instanceShare].netWorkStatus) {
         CommandControler *cmd=[[CommandControler alloc]init];
         if (slider.tag==1) {
             NSBlockOperation *mic_operation=[NSBlockOperation blockOperationWithBlock:^{

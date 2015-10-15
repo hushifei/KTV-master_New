@@ -383,7 +383,7 @@
 }
 
 + (void)setYidianBadgeWidth:(BBBadgeBarButtonItem *)item  {
-    if (![[Utility instanceShare]networkStatus]) return;
+    if (![Utility instanceShare].netWorkStatus) return;
         NSString *urlStr=[[@"http://192.168.43.1:8080/puze/?cmd=" stringByAppendingFormat:@"0xbc"]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSLog(@"query:%@",urlStr);
         NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];

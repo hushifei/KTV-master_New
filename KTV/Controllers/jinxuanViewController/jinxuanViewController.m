@@ -9,7 +9,6 @@
 #import "jinxuanViewController.h"
 #import "jingXuanTableViewCell.h"
 #define CELLIDENTIFY @"jingXuanTableViewCell"
-#import "NSManagedObject+helper.h"
 #import "Typelist.h"
 #import "SingersViewController.h"
 #import "SingerAreaViewController.h"

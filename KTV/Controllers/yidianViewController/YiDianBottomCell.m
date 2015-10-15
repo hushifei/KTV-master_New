@@ -74,24 +74,28 @@
 }
 
 - (IBAction)removeSong:(id)sender {
-    //1.search order table
-    NSString *order_sqlStr= [NSString stringWithFormat:@"select * from OrderTable"];
-    FMResultSet *order_rs=[[DataMananager instanceShare].db executeQuery:order_sqlStr];
-    Order *oneOrder=[[Order alloc]init];
-    while ([order_rs next]) {
-        oneOrder.number = [order_rs stringForColumn:@"number"];
-        oneOrder.rcid = [order_rs stringForColumn:@"rcid"];
-        oneOrder.ordername = [order_rs stringForColumn:@"ordername"];
-        if ([oneOrder.number isEqualToString:_oneSong.number]) {
-            CommandControler *cmd=[[CommandControler alloc]init];
-            [cmd sendCmd_remove_yidian:oneOrder.ordername];
-            if ([_delegate respondsToSelector:@selector(removeFromYidian:result:)]) {
-                [_delegate removeFromYidian:_oneSong result:KMessageSuccess];
-            }
-            break;
-        }
+//    //1.search order table
+//    NSString *order_sqlStr= [NSString stringWithFormat:@"select * from OrderTable"];
+//    FMResultSet *order_rs=[[DataMananager instanceShare].db executeQuery:order_sqlStr];
+//    Order *oneOrder=[[Order alloc]init];
+//    while ([order_rs next]) {
+//        oneOrder.number = [order_rs stringForColumn:@"number"];
+//        oneOrder.rcid = [order_rs stringForColumn:@"rcid"];
+//        oneOrder.ordername = [order_rs stringForColumn:@"ordername"];
+//        if ([oneOrder.number isEqualToString:_oneSong.number]) {
+//            CommandControler *cmd=[[CommandControler alloc]init];
+//            [cmd sendCmd_remove_yidian:oneOrder.ordername];
+//            if ([_delegate respondsToSelector:@selector(removeFromYidian:result:)]) {
+//                [_delegate removeFromYidian:_oneSong result:KMessageSuccess];
+//            }
+//            break;
+//        }
+//    }
+    CommandControler *cmd=[[CommandControler alloc]init];
+    [cmd sendCmd_remove_yidian:_orderID];
+    if ([_delegate respondsToSelector:@selector(removeFromYidian:result:)]) {
+        [_delegate removeFromYidian:_oneSong result:KMessageSuccess];
     }
-    
 }
 
 

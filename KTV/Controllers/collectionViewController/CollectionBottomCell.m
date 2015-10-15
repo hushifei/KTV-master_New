@@ -7,7 +7,6 @@
 //
 
 #import "CollectionBottomCell.h"
-#import "NSManagedObject+helper.h"
 #import "CommandControler.h"
 @implementation CollectionBottomCell
 

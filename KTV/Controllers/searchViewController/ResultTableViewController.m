@@ -9,7 +9,6 @@
 #import "ResultTableViewController.h"
 #import "Song.h"
 #import "Singer.h"
-#import "NSManagedObject+helper.h"
 #import "Utility.h"
 #import "PinYinForObjc.h"
 //#define TOPCELLIDENTIFY @"SearchTableCell"

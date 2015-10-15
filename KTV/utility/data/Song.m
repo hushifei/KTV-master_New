@@ -157,5 +157,19 @@
 }
 
 
+- (void)diangeToTop {
+    CommandControler *cmd=[[CommandControler alloc]init];
+    [cmd sendCmd_DiangeToTop:_number];
+    
+ ffff 要延迟
+    [self performSelector:@selector(gogo) withObject:self afterDelay:5];
 
+}
+
+- (void)gogo {
+    __weak __block typeof (self) weakSelf=self;
+    if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
+        [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
+    }
+}
 @end

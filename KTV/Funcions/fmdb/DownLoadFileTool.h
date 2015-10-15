@@ -12,7 +12,7 @@ typedef NS_ENUM (NSUInteger,S_Actions) {
     S_Can_ImportData,
     S_Network_Error
 };
-typedef void(^DownloadTxtFilesCompleted)(BOOL Completed);
+typedef void(^DownloadTxtFilesCompleted)(BOOL Completed,NSError *error);
 @interface DownLoadFileTool : NSObject
 @property(nonatomic,strong)NSArray *filePaths;
 @property(nonatomic,readonly)DownloadTxtFilesCompleted completed;

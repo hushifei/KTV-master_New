@@ -10,7 +10,12 @@
 #import "BaseTabBarViewController.h"
 #import "Utility.h"
 #import "SDWebImageManager.h"
+#import "MBProgressHUD.h"
+#import "DownLoadFileTool.h"
 @interface AppDelegate () {
+//    MBProgressHUD *HUD;
+    Utility *utilityTool;
+    BOOL idel;
 }
 
 @end
@@ -18,17 +23,16 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    utilityTool=[Utility instanceShare];
+    idel=YES;
+    [utilityTool addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
     BaseTabBarViewController *_tabVC=[[BaseTabBarViewController alloc]init];
     UIImage *imagebottom=[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"nav_bottom_bg" ofType:@"png"]];
     [_tabVC.tabBar setBackgroundImage:imagebottom];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(networkChanged:) name:HReachabilityChangedNotification object:nil];
     self.window.rootViewController=_tabVC;
     return YES;
 }
 
-- (void)networkChanged:(NSNotification*)notification {
-    NSLog(@"%@",[notification userInfo]);
-}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -56,4 +60,44 @@
     [[SDWebImageManager sharedManager].imageCache clearMemory];
     [[SDWebImageManager sharedManager].imageCache clearDisk];
 }
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"netWorkStatus"]) {
+        
+        if ([[change valueForKey:NSKeyValueChangeNewKey]boolValue] && idel) {
+            idel=NO;
+            [self initData];
+        }
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)initData {
+//    HUD = [[MBProgressHUD alloc] initWithView:self.window];
+//    [self.window.rootViewController.view addSubview:HUD];
+//    HUD.labelText =NSLocalizedString(@"hud_text_init", nil);
+//    HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait", nil);
+//    HUD.square = YES;
+//    HUD.dimBackground=YES;
+//    HUD.detailsLabelColor=[UIColor greenColor];
+    [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed,NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+//            [HUD hide:YES];
+//            if (Completed) {
+//                NSLog(@"download file And import data done!");
+//                
+//            } else {
+//                NSLog(@"download file OR import data Error!");
+//            }
+            idel=YES;
+        });
+    }];
+//    [HUD show:YES];
+}
+
+- (void)dealloc {
+    [utilityTool removeObserver:self forKeyPath:@"netWorkStatus" context:nil];
+}
+
 @end

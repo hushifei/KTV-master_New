@@ -50,7 +50,7 @@
         Singer *oneSinger=(Singer*)object;
         titleLabel.text=oneSinger.singer;
         NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        if ([[Utility instanceShare]networkStatus]) {
+        if ([Utility instanceShare].netWorkStatus) {
             [header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
         } else {
             header.image=[UIImage imageNamed:@"Default_Header"];

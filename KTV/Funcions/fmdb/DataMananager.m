@@ -37,24 +37,31 @@ static  int limit=1000;
     return shareInstance;
 }
 
-- (id)init {
-    if (self=[super init]) {
+- (instancetype)init {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         _db=[[FMDatabase alloc]initWithPath:DBPATH];
         NSLog(@"%@",DBPATH);
         userDefaults=[NSUserDefaults standardUserDefaults];
         if ([_db open]) {
             NSLog(@"DataBase is open ok");
             if (![userDefaults objectForKey:@"DATABASE_ALREADY"]) {
-//                if (DEBUG) {
-//                    [self copyDBFile];
-//                }
+                //                if (DEBUG) {
+                //                    [self copyDBFile];
+                //                }
                 [self createTables];
             }
         } else {
             [_db close];
             NSAssert1(0, @"Failed to open database file with message '%@'.", [_db lastErrorMessage]);
         }
-    }
+        shareInstance=[super init];
+    });
+    return shareInstance;
+}
+
+
+- (instancetype)copyWithZone:(NSZone *)zone {
     return self;
 }
 

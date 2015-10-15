@@ -7,15 +7,12 @@
 //
 //fmdb
 #import "Utility.h"
-#import "CommandControler.h"
 #import "NSString+Utility.h"
-#import <SystemConfiguration/SystemConfiguration.h>
-//#define tmpDBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"tmpDB.sqlite"]
+#import "FMDB.h"
 #define DBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB.sqlite"]
 
 #define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-NSString *const HReachabilityChangedNotification=@"HReachabilityChangedNotification";
 @interface Utility() {
     NSString* savePath_TxtDir;
     int hasCount;
@@ -23,9 +20,6 @@ NSString *const HReachabilityChangedNotification=@"HReachabilityChangedNotificat
     NSURLSession *shareSession;
     BOOL netWorkStatus;
 }
--(void)reachabilityChanged:(NSNotification*)note;
-@property (nonatomic, copy)NSString *modelName;
-@property (nonatomic, copy)NSString *dbFileName;
 @end
 static Utility *shareInstance=nil;
 @implementation Utility
@@ -39,18 +33,15 @@ static Utility *shareInstance=nil;
     return shareInstance;
 }
 
-- (id)init {
-    if (self=[super init]) {
+- (instancetype)init {
+    static  dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         [self checkIphoneDevice];
         shareSession=[NSURLSession sharedSession];
-        netWorkStatus=NO;
-    }
-    networkTimer=[NSTimer scheduledTimerWithTimeInterval:5 target:shareInstance selector:@selector(checkNetworkStatus) userInfo:nil repeats:YES];
-    return self;
-}
-
-- (NSError *)save:(OperationResult)handler {
-    return nil;
+        networkTimer=[NSTimer scheduledTimerWithTimeInterval:8 target:shareInstance selector:@selector(checkNetworkStatus) userInfo:nil repeats:YES];
+       shareInstance= [super init];
+    });
+    return shareInstance;
 }
 
 - (void)checkIphoneDevice {
@@ -109,15 +100,15 @@ static Utility *shareInstance=nil;
         NSInteger statuscode=httpResponse.statusCode;
         if (error==nil) {
             if (statuscode ==200 ) {
-                netWorkStatus=YES;
+                [self setValue:[NSNumber numberWithBool:YES] forKey:@"netWorkStatus"];
             } else {
-                netWorkStatus=NO;
+                [self setValue:[NSNumber numberWithBool:NO] forKey:@"netWorkStatus"];
             }
         } else {
-            netWorkStatus=NO;
+            [self setValue:[NSNumber numberWithBool:NO] forKey:@"netWorkStatus"];
         }
         if (block) {
-            block(netWorkStatus);
+            block(self.netWorkStatus);
         }
     }];
     [dataTask resume];
@@ -131,25 +122,26 @@ static Utility *shareInstance=nil;
         NSInteger statuscode=httpResponse.statusCode;
         if (error==nil) {
             if (statuscode ==200 ) {
-                netWorkStatus=YES;
+                [self setValue:[NSNumber numberWithBool:YES] forKey:@"netWorkStatus"];
             } else {
-                netWorkStatus=NO;
+                [self setValue:[NSNumber numberWithBool:NO] forKey:@"netWorkStatus"];
                 NSLog(@"network connection error");
             }
         } else {
-            netWorkStatus=NO;
+            [self setValue:[NSNumber numberWithBool:NO] forKey:@"netWorkStatus"];
             NSLog(@"network connection error");
         }
-        
-        if (netWorkStatus==NO) {
-            [[NSNotificationCenter defaultCenter]postNotificationName:HReachabilityChangedNotification object:shareInstance userInfo:@{@"networkStatus":@NO}];
-        }
-        
+//        
+//        static int a=0;
+//        if (a>=4) {
+//            [self setValue:[NSNumber numberWithBool:YES] forKey:@"netWorkStatus"];
+//        }
+//        a++;
     }];
     [dataTask resume];
 }
 
-- (BOOL)networkStatus {
+- (BOOL)netWorkStatus {
     return netWorkStatus;
 }
 
@@ -172,7 +164,8 @@ static Utility *shareInstance=nil;
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [networkTimer invalidate];
+    networkTimer=nil;
 }
 @end
 

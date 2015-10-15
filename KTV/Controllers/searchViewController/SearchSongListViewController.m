@@ -13,7 +13,6 @@
 #import "BBBadgeBarButtonItem.h"
 #import "Song.h"
 #import "Singer.h"
-#import "NSManagedObject+helper.h"
 #import "SFSelectView.h"
 //#import "SongResultTableViewController.h"
 #import "SongListViewController.h"

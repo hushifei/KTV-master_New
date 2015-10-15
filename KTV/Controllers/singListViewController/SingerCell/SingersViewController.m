@@ -10,7 +10,6 @@
 #import "SingerAreaTypeCell.h"
 #import "SongListViewController.h"
 #import "Singer.h"
-#import "NSManagedObject+helper.h"
 #define CELLIDENTIFY @"SingerAreaTypeCell"
 #import "YiDianViewController.h"
 #import "BBBadgeBarButtonItem.h"

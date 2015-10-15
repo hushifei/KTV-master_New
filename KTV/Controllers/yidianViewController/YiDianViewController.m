@@ -30,7 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title=NSLocalizedString(@"selected", nil);
-//    _previousRow = -1;
+    _previousRow = -1;
     myToast=[[HuToast alloc]init];
     cmd=[[CommandControler alloc]init];
     [self initializeTableContent];
@@ -116,6 +116,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row==0) return;
     YiDianTopViewCell *cell=(YiDianTopViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
     if (cell.opened) {
@@ -192,12 +193,18 @@
         YiDianTopViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
         cell.oneSong=self.dataSrc[indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        if (indexPath.row==0) {
+            [cell setPlayStatusToHide:NO];
+        }
         cell.backgroundColor=[UIColor clearColor];
+
         if (cell.opened) {
             cell.sanjiaoxing.hidden=NO;
         } else {
             cell.sanjiaoxing.hidden=YES;
         }
+        
         return cell;
         
     }
@@ -307,7 +314,7 @@
 }
 
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
-    [myToast dissmiss];
+//    [myToast dissmiss];
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     YiDianTopViewCell *cell=(YiDianTopViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
@@ -317,16 +324,24 @@
         cell.sanjiaoxing.hidden=YES;
     }
     [_dataSrc removeObjectAtIndex:_previousRow+1];
-    [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    _previousRow=-1;
+    [self initializeTableContent];
     [myToast setToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
-    //TODO::
-    
+
     //cut song
 }
 
 - (void)removeFromYidian:(Song *)oneSong result:(KMessageStyle)result {
-    [self performSelector:@selector(initializeTableContent) withObject:nil afterDelay:2];
+    NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
+    YiDianTopViewCell *cell=(YiDianTopViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    cell.opened=!cell.opened;
+    if (cell.opened) {
+        cell.sanjiaoxing.hidden=NO;
+    } else {
+        cell.sanjiaoxing.hidden=YES;
+    }
+    [_dataSrc removeObjectAtIndex:_previousRow+1];
+//    [self performSelector:@selector(initializeTableContent) withObject:nil afterDelay:1];
+    [self initializeTableContent];
 }
 
 #pragma mark -#########################################################

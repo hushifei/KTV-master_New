@@ -35,7 +35,7 @@
 
 
 - (IBAction)clicked_priority:(id)sender {
-    [_oneSong prioritySong];
+    [_oneSong diangeToTop];
 }
 
 - (IBAction)clicked_cutsong:(id)sender {

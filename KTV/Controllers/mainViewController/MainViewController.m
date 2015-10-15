@@ -5,7 +5,6 @@
 //  Created by stevenhu on 15/4/17.
 //  Copyright (c) 2015年 stevenhu. All rights reserved.
 //
-#import "DownLoadFileTool.h"
 #import "MainViewController.h"
 #import "huSearchBar.h"
 #import "SettingViewController.h"
@@ -18,9 +17,6 @@
 #import "CollectionViewController.h"
 #import "SoundViewController.h"
 #import "Utility.h"
-#import "BokongView.h"
-#import "MBProgressHUD.h"
-#import "HuToast.h"
 #import "BaseNavigationController.h"
 @interface MainViewController ()<UISearchBarDelegate,ScanCodeDelegate> {
     UIButton *geshouBtn;
@@ -31,9 +27,6 @@
     UIButton *conHostBtn;
     UIBarButtonItem *kege;
     UIBarButtonItem *bokong;
-    MBProgressHUD *HUD;
-    HuToast *myToast;
-    NSURLConnection *connection;
 }
 
 @end
@@ -42,33 +35,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    myToast=[[HuToast alloc]init];
     self.automaticallyAdjustsScrollViewInsets=YES;
     [self createContextUI];
 //    [self copyFile];
-    [self performSelector:@selector(initData) withObject:nil afterDelay:6];
-}
-
-- (void)initData {
-    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-    [self.navigationController.view addSubview:HUD];
-    HUD.labelText =NSLocalizedString(@"hud_text_init", nil);
-    HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait", nil);
-    HUD.square = YES;
-    HUD.dimBackground=YES;
-    HUD.detailsLabelColor=[UIColor greenColor];
-    [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [HUD hide:YES];
-            if (Completed) {
-                NSLog(@"download file And import data done!");
-                
-            } else {
-                NSLog(@"download file OR import data Error!");
-            }
-        });
-    }];
-    [HUD show:YES];
 }
 
 - (void)copyFile {
