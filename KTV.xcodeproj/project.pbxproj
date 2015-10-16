@@ -42,7 +42,7 @@
 		C3AAC0CD1BCC953C009582D1 /* password_ok_up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0C31BCC953C009582D1 /* password_ok_up@2x.png */; settings = {ASSET_TAGS = (); }; };
 		C3AAC0CE1BCC953C009582D1 /* password_ok_up@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0C41BCC953C009582D1 /* password_ok_up@3x.png */; settings = {ASSET_TAGS = (); }; };
 		C3AAC0CF1BCC953C009582D1 /* yuan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0C51BCC953C009582D1 /* yuan@2x.png */; settings = {ASSET_TAGS = (); }; };
-		C3AAC0D01BCC953C009582D1 /* yuan@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0C61BCC953C009582D1 /* yuan@3x.png */; settings = {ASSET_TAGS = (); }; };
+		C3AAC0D01BCC953C009582D1 /* yuan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0C61BCC953C009582D1 /* yuan@2x.png */; settings = {ASSET_TAGS = (); }; };
 		C3AAC0D21BCC958F009582D1 /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0D11BCC958F009582D1 /* error.png */; settings = {ASSET_TAGS = (); }; };
 		C3AAC0D41BCC95AA009582D1 /* head.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0D31BCC95AA009582D1 /* head.png */; settings = {ASSET_TAGS = (); }; };
 		C3AAC0DA1BCC9618009582D1 /* WXErrorMsg.m in Sources */ = {isa = PBXBuildFile; fileRef = C3AAC0D71BCC9618009582D1 /* WXErrorMsg.m */; settings = {ASSET_TAGS = (); }; };
@@ -74,7 +74,6 @@
 		C3AAC12E1BCD0ED0009582D1 /* singer_flag.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC12D1BCD0ED0009582D1 /* singer_flag.png */; settings = {ASSET_TAGS = (); }; };
 		C3AAC1301BCD1478009582D1 /* music_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC12F1BCD1478009582D1 /* music_icon.png */; settings = {ASSET_TAGS = (); }; };
 		C3AAC1341BCD1627009582D1 /* Default_Header.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC1331BCD1627009582D1 /* Default_Header.png */; settings = {ASSET_TAGS = (); }; };
-		C3BD52F81BD10B7000E1DB2D /* YBTemperatureSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = C3BD52F71BD10B7000E1DB2D /* YBTemperatureSlider.m */; settings = {ASSET_TAGS = (); }; };
 		C3CB01F41BCDF7FC0021B615 /* SearchResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3CB01F31BCDF7FC0021B615 /* SearchResultCell.m */; settings = {ASSET_TAGS = (); }; };
 		D12374511B2D163500902361 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374301B2D163500902361 /* MKAnnotationView+WebCache.m */; };
 		D12374521B2D163500902361 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374321B2D163500902361 /* NSData+ImageContentType.m */; };
@@ -253,8 +252,6 @@
 		D167359D1BA4544C0057CA0A /* SongBottomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D167359B1BA4544C0057CA0A /* SongBottomCell.xib */; };
 		D16735A51BA454EB0057CA0A /* SongTopCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D16735A41BA454EB0057CA0A /* SongTopCell.xib */; };
 		D168FE171AE5351900587C58 /* huSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = D168FE141AE5351900587C58 /* huSearchBar.m */; };
-		D16D12081AE21FFD005D7719 /* SongList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D16D11FD1AE21FFD005D7719 /* SongList.xcdatamodeld */; };
-		D16D120C1AE21FFD005D7719 /* ZZImportData.m in Sources */ = {isa = PBXBuildFile; fileRef = D16D12031AE21FFD005D7719 /* ZZImportData.m */; };
 		D16E526B1AE6755F00E57011 /* bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = D16E52231AE6755F00E57011 /* bitstream.c */; };
 		D16E526C1AE6755F00E57011 /* mask.c in Sources */ = {isa = PBXBuildFile; fileRef = D16E52251AE6755F00E57011 /* mask.c */; };
 		D16E526E1AE6755F00E57011 /* qrencode.c in Sources */ = {isa = PBXBuildFile; fileRef = D16E52291AE6755F00E57011 /* qrencode.c */; };
@@ -396,7 +393,7 @@
 		C3AAC0C31BCC953C009582D1 /* password_ok_up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "password_ok_up@2x.png"; sourceTree = "<group>"; };
 		C3AAC0C41BCC953C009582D1 /* password_ok_up@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "password_ok_up@3x.png"; sourceTree = "<group>"; };
 		C3AAC0C51BCC953C009582D1 /* yuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yuan@2x.png"; sourceTree = "<group>"; };
-		C3AAC0C61BCC953C009582D1 /* yuan@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yuan@3x.png"; sourceTree = "<group>"; };
+		C3AAC0C61BCC953C009582D1 /* yuan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "yuan@2x.png"; sourceTree = "<group>"; };
 		C3AAC0D11BCC958F009582D1 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error.png; sourceTree = "<group>"; };
 		C3AAC0D31BCC95AA009582D1 /* head.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = head.png; sourceTree = "<group>"; };
 		C3AAC0D61BCC9618009582D1 /* WXErrorMsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXErrorMsg.h; sourceTree = "<group>"; };
@@ -450,9 +447,6 @@
 		C3AAC12D1BCD0ED0009582D1 /* singer_flag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = singer_flag.png; sourceTree = "<group>"; };
 		C3AAC12F1BCD1478009582D1 /* music_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = music_icon.png; sourceTree = "<group>"; };
 		C3AAC1331BCD1627009582D1 /* Default_Header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default_Header.png; sourceTree = "<group>"; };
-		C3BD52F51BD0FC4600E1DB2D /* KTV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = KTV.entitlements; sourceTree = "<group>"; };
-		C3BD52F61BD10B7000E1DB2D /* YBTemperatureSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YBTemperatureSlider.h; sourceTree = "<group>"; };
-		C3BD52F71BD10B7000E1DB2D /* YBTemperatureSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YBTemperatureSlider.m; sourceTree = "<group>"; };
 		C3CB01F21BCDF7FC0021B615 /* SearchResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultCell.h; sourceTree = "<group>"; };
 		C3CB01F31BCDF7FC0021B615 /* SearchResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultCell.m; sourceTree = "<group>"; };
 		D123742F1B2D163500902361 /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
@@ -689,9 +683,6 @@
 		D16735A41BA454EB0057CA0A /* SongTopCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SongTopCell.xib; sourceTree = "<group>"; };
 		D168FE131AE5351900587C58 /* huSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = huSearchBar.h; sourceTree = "<group>"; };
 		D168FE141AE5351900587C58 /* huSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = huSearchBar.m; sourceTree = "<group>"; };
-		D16D11FE1AE21FFD005D7719 /* SongList.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SongList.xcdatamodel; sourceTree = "<group>"; };
-		D16D12021AE21FFD005D7719 /* ZZImportData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZImportData.h; sourceTree = "<group>"; };
-		D16D12031AE21FFD005D7719 /* ZZImportData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZImportData.m; sourceTree = "<group>"; };
 		D16E52231AE6755F00E57011 /* bitstream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bitstream.c; sourceTree = "<group>"; };
 		D16E52241AE6755F00E57011 /* bitstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitstream.h; sourceTree = "<group>"; };
 		D16E52251AE6755F00E57011 /* mask.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mask.c; sourceTree = "<group>"; };
@@ -946,7 +937,7 @@
 				C3AAC0D11BCC958F009582D1 /* error.png */,
 				C3AAC0C41BCC953C009582D1 /* password_ok_up@3x.png */,
 				C3AAC0C51BCC953C009582D1 /* yuan@2x.png */,
-				C3AAC0C61BCC953C009582D1 /* yuan@3x.png */,
+				C3AAC0C61BCC953C009582D1 /* yuan@2x.png */,
 			);
 			path = ohter;
 			sourceTree = "<group>";
@@ -1477,7 +1468,6 @@
 		D1586B421AE14CBF00AF3EDB /* KTV */ = {
 			isa = PBXGroup;
 			children = (
-				C3BD52F51BD0FC4600E1DB2D /* KTV.entitlements */,
 				D156A3EE1AECE2810091C419 /* images */,
 				D175F07B1AE15D5B004E3B9A /* CustomView */,
 				D16D116C1AE1FE85005D7719 /* Controllers */,
@@ -1596,7 +1586,6 @@
 		D16D11F61AE21FFD005D7719 /* data */ = {
 			isa = PBXGroup;
 			children = (
-				D16D11FD1AE21FFD005D7719 /* SongList.xcdatamodeld */,
 				D161A5431B480A380029AC19 /* Order.h */,
 				D161A5441B480A380029AC19 /* Order.m */,
 				D159026E1AEA7F8400D8409B /* Singer.h */,
@@ -1605,8 +1594,6 @@
 				D159026C1AEA7F8400D8409B /* Song.m */,
 				D15902681AEA71AC00D8409B /* Typelist.h */,
 				D15902691AEA71AC00D8409B /* Typelist.m */,
-				D16D12021AE21FFD005D7719 /* ZZImportData.h */,
-				D16D12031AE21FFD005D7719 /* ZZImportData.m */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -1822,8 +1809,6 @@
 			isa = PBXGroup;
 			children = (
 				D170BF8E1BAE66E000A8FAF5 /* ZVolumeSlide.h */,
-				C3BD52F61BD10B7000E1DB2D /* YBTemperatureSlider.h */,
-				C3BD52F71BD10B7000E1DB2D /* YBTemperatureSlider.m */,
 				D170BF8F1BAE66E000A8FAF5 /* ZVolumeSlide.m */,
 				D170BF901BAE66E000A8FAF5 /* ZVolumeSlide_clearBack.png */,
 				D170BF911BAE66E000A8FAF5 /* ZVolumeSlide_volumeCell1.png */,
@@ -2158,7 +2143,7 @@
 				D154302F1AFDDCD600522DE1 /* bokong_shouqi1.png in Resources */,
 				C3AAC0C91BCC953C009582D1 /* password_cancel_up@2x.png in Resources */,
 				D15430681AFDDCD600522DE1 /* bokong_selected@2x.png in Resources */,
-				C3AAC0D01BCC953C009582D1 /* yuan@3x.png in Resources */,
+				C3AAC0D01BCC953C009582D1 /* yuan@2x.png in Resources */,
 				D14F1CC51AFBACE400EA6E50 /* unselected.jpeg in Resources */,
 				D16735961BA4540A0057CA0A /* ScanCodeViewController.xib in Resources */,
 				C3AAC0D21BCC958F009582D1 /* error.png in Resources */,
@@ -2251,7 +2236,6 @@
 				D155C6A01AF466F40085CDCB /* YiDianTopViewCell.m in Sources */,
 				D161A5451B480A380029AC19 /* Order.m in Sources */,
 				D13D66B61B31B6D900928457 /* AboutViewController.m in Sources */,
-				D16D12081AE21FFD005D7719 /* SongList.xcdatamodeld in Sources */,
 				C3AAC1231BCCA2F7009582D1 /* UIScrollView+MJRefresh.m in Sources */,
 				C344DB4E1BCB493400F1325D /* DataMananager.m in Sources */,
 				D156A3ED1AECE2050091C419 /* MainViewController.m in Sources */,
@@ -2260,7 +2244,6 @@
 				C344DB681BCB5CEA00F1325D /* BaseNavigationController.m in Sources */,
 				D15E2AA41AEBB19C0093C773 /* jinxuanViewController.m in Sources */,
 				D19469331AEE53920077E738 /* BokongView.m in Sources */,
-				C3BD52F81BD10B7000E1DB2D /* YBTemperatureSlider.m in Sources */,
 				D12374571B2D163500902361 /* SDWebImageDownloaderOperation.m in Sources */,
 				D156A3E41AECE0F80091C419 /* CollectionViewController.m in Sources */,
 				D12374511B2D163500902361 /* MKAnnotationView+WebCache.m in Sources */,
@@ -2273,7 +2256,6 @@
 				D12374531B2D163500902361 /* SDImageCache.m in Sources */,
 				D175F1131AE15F78004E3B9A /* PinyinHelper.m in Sources */,
 				D16E52711AE6755F00E57011 /* rscode.c in Sources */,
-				D16D120C1AE21FFD005D7719 /* ZZImportData.m in Sources */,
 				C3AAC1181BCCA2F7009582D1 /* MJRefreshAutoNormalFooter.m in Sources */,
 				D123745E1B2D163500902361 /* UIImageView+HighlightedWebCache.m in Sources */,
 				D15902701AEA7F8400D8409B /* Singer.m in Sources */,
@@ -2623,19 +2605,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		D16D11FD1AE21FFD005D7719 /* SongList.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				D16D11FE1AE21FFD005D7719 /* SongList.xcdatamodel */,
-			);
-			currentVersion = D16D11FE1AE21FFD005D7719 /* SongList.xcdatamodel */;
-			path = SongList.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = D1586B381AE14CBF00AF3EDB /* Project object */;
 }

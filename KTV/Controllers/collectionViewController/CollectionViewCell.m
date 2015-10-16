@@ -30,13 +30,17 @@
     _oneSong=oneSong;
 }
 
-//- (IBAction)addSong:(id)sender {
-//    if (self.buttonitem && self.oneCollectionRec.number.length > 0) {
-//        CommandControler *cmd=[[CommandControler alloc]init];
-//        [cmd sendCmd_Diange:self.oneCollectionRec.number];
-//        [self.collectionFlagView shakeAndFlyAnimationToView:self.buttonitem];
-//    }
-//}
+- (IBAction)addSong:(id)sender {
+    //没有检查是否添加成功
+    if (self.buttonitem && self.oneSong.number.length > 0) {
+        CommandControler *cmd=[[CommandControler alloc]init];
+        [cmd sendCmd_Diange:self.oneSong.number completed:^(BOOL completed, NSError *error) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.collectionFlagView shakeAndFlyAnimationToView:self.buttonitem];
+            });
+        }];
+    }
+}
 //
 //- (void)setOneCollectionRec:(CollectionRec *)oneCollectionRec {
 //    self.songName.text=oneCollectionRec.sname;

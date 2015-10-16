@@ -191,9 +191,10 @@
         YiDianTopViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
         cell.oneSong=self.dataSrc[indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
         if (indexPath.row==0) {
             [cell setPlayStatusToHide:NO];
+        } else {
+            [cell setPlayStatusToHide:YES];
         }
         cell.backgroundColor=[UIColor clearColor];
         

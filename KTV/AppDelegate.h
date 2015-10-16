@@ -14,7 +14,10 @@
 @end
 
 /*
- 1.播控
- 2.cell action
- 3.cell 更改成纯代码
+ ----.cell 更改成纯代码
+ ----.播控
+    1.原／伴 
+    2.播／停
+    3.mic/sound
+    4.mute/unmute
 */

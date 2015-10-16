@@ -10,5 +10,7 @@
 #import "Song.h"
 
 @interface CollectionBottomCell : UITableViewCell
+@property(nonatomic,weak)IBOutlet UIButton *collectBtn;
+@property(nonatomic,weak)IBOutlet UIButton *cancelBtn;
 @property(nonatomic,weak)Song *oneSong;
 @end

@@ -561,4 +561,5 @@
 //        [toast setToastWithMessage:NSLocalizedString(@"networkError", nil) WithTimeDismiss:@"2" messageType:KMessageStyleError];
 //    }
 }
+
 @end

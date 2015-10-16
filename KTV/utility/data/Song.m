@@ -181,6 +181,7 @@
     __weak __block typeof (self) weakSelf=self;
     CommandControler *cmd=[[CommandControler alloc]init];
     [cmd sendCmd_DiangeToTop:_number completed:^(BOOL completed, NSError *error) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
         if (completed) {
             if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
                 [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
@@ -188,6 +189,6 @@
         } else {
             //network error
         }
-    }];
+        });}];
 }
 @end

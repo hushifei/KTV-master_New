@@ -71,5 +71,8 @@
 "confirm"  =  "Confirm";
 "connectnetwork" = "Connect WIFI";
 "connectNetContent" = "Setting-WIFI Network";
-
 "playing"="onPlaying";
+
+
+//** new song VC **/
+"collect" = "Collect";

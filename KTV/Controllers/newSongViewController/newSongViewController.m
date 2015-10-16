@@ -297,8 +297,15 @@
     _previousRow=-1;
     [myToast setToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     //TODO::
-    
-    //cut song
+    [self performSelector:@selector(updateYidanBadge) withObject:self afterDelay:0.5];
+}
+
+- (void)updateYidanBadge {
+    BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
+    __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
+    [CommandControler setYidianBadgeWidth:weakBarButton completed:^(BOOL completed, NSError *error) {
+        
+    }];
 }
 
 #pragma mark -#########################################################

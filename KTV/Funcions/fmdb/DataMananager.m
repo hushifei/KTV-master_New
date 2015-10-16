@@ -46,9 +46,6 @@ static  int limit=1000;
         if ([_db open]) {
             NSLog(@"DataBase is open ok");
             if (![userDefaults objectForKey:@"DATABASE_ALREADY"]) {
-                //                if (DEBUG) {
-                //                    [self copyDBFile];
-                //                }
                 [self createTables];
             }
         } else {

@@ -302,7 +302,15 @@
     [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     _previousRow=-1;
     [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
-    //TODO::
+    [self performSelector:@selector(updateYidanBadge) withObject:self afterDelay:0.5];
+}
+
+- (void)updateYidanBadge {
+    BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
+    __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
+    [CommandControler setYidianBadgeWidth:weakBarButton completed:^(BOOL completed, NSError *error) {
+        
+    }];
 }
 
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
