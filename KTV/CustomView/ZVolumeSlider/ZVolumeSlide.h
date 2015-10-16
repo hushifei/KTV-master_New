@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 @class ZVolumeSlide;
 @protocol ZVolumeSlideDelegate <NSObject>
-
-- (void) slideValueChange:(NSNumber*) value slider:(ZVolumeSlide*)slider;
-
+@optional
+- (void)slideValueChange:(NSNumber*) value slider:(ZVolumeSlide*)slider;
+@required
+- (void)sliderDidEndDrag:(NSNumber*)value slider:(ZVolumeSlide*)slider;
 @end
 
 
-@interface ZVolumeSlide : UIView
+@interface ZVolumeSlide : UIControl
 @property (weak, nonatomic) id<ZVolumeSlideDelegate>delegate;
 @property (strong, nonatomic) UISlider  *slideView;
 @property (strong, nonatomic) UIView    *processView;

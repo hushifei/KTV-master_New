@@ -50,50 +50,48 @@
     _previousRow = -1;
     _dataSrc=[[NSMutableArray alloc]init];
     _yidianArray=[[NSMutableArray alloc]init];
-    [cmd sendCmd_get_yiDianList:^(NSArray *list) {
-        if (list.count>0) {
-            NSLog(@"%@",list);
-            for (NSString *oneYidianStr in list) {
-                NSArray *oneYidianInfo=[oneYidianStr componentsSeparatedByString:@";"];
-                if (oneYidianInfo.count==2) {
-                    NSDictionary *dict=[[NSDictionary alloc]initWithObjectsAndKeys:oneYidianInfo[1],oneYidianInfo[0], nil];
-                    [_yidianArray addObject:dict];
+    [cmd sendCmd_get_yiDianList:^(BOOL completed, NSArray *list) {
+        if (!completed || list.count==0) return;
+        for (NSString *oneYidianStr in list) {
+            NSArray *oneYidianInfo=[oneYidianStr componentsSeparatedByString:@";"];
+            if (oneYidianInfo.count==2) {
+                NSDictionary *dict=[[NSDictionary alloc]initWithObjectsAndKeys:oneYidianInfo[1],oneYidianInfo[0], nil];
+                [_yidianArray addObject:dict];
+            }
+        }
+        
+        for (NSDictionary *dict in _yidianArray) {
+            for (NSString *number in dict.allValues) {
+                NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where number='%@'",[number encodeBase64]];
+                FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
+                while ([rs next]) {
+                    Song *oneSong=[[Song alloc]init];
+                    oneSong.addtime = [rs stringForColumn:@"addtime"];
+                    oneSong.bihua = [rs stringForColumn:@"bihua"];
+                    oneSong.channel = [rs stringForColumn:@"channel"];
+                    oneSong.language = [rs stringForColumn:@"language"];
+                    oneSong.movie = [rs stringForColumn:@"movie"];
+                    oneSong.newsong = [rs stringForColumn:@"newsong"];
+                    oneSong.number = [rs stringForColumn:@"number"];
+                    oneSong.pathid = [rs stringForColumn:@"pathid"];
+                    oneSong.sex = [rs stringForColumn:@"sex"];
+                    oneSong.singer = [rs stringForColumn:@"singer"];
+                    oneSong.singer1 = [rs stringForColumn:@"singer1"];
+                    oneSong.songname = [rs stringForColumn:@"songname"];
+                    oneSong.songpiy = [rs stringForColumn:@"songpiy"];
+                    oneSong.spath = [rs stringForColumn:@"spath"];
+                    oneSong.stype = [rs stringForColumn:@"stype"];
+                    oneSong.volume = [rs stringForColumn:@"volume"];
+                    oneSong.word = [rs stringForColumn:@"word"];
+                    NSLog(@"%@",oneSong.songname);
+                    [_dataSrc addObject:oneSong];
                 }
             }
             
-            for (NSDictionary *dict in _yidianArray) {
-                for (NSString *number in dict.allValues) {
-                    NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where number='%@'",[number encodeBase64]];
-                    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
-                    while ([rs next]) {
-                        Song *oneSong=[[Song alloc]init];
-                        oneSong.addtime = [rs stringForColumn:@"addtime"];
-                        oneSong.bihua = [rs stringForColumn:@"bihua"];
-                        oneSong.channel = [rs stringForColumn:@"channel"];
-                        oneSong.language = [rs stringForColumn:@"language"];
-                        oneSong.movie = [rs stringForColumn:@"movie"];
-                        oneSong.newsong = [rs stringForColumn:@"newsong"];
-                        oneSong.number = [rs stringForColumn:@"number"];
-                        oneSong.pathid = [rs stringForColumn:@"pathid"];
-                        oneSong.sex = [rs stringForColumn:@"sex"];
-                        oneSong.singer = [rs stringForColumn:@"singer"];
-                        oneSong.singer1 = [rs stringForColumn:@"singer1"];
-                        oneSong.songname = [rs stringForColumn:@"songname"];
-                        oneSong.songpiy = [rs stringForColumn:@"songpiy"];
-                        oneSong.spath = [rs stringForColumn:@"spath"];
-                        oneSong.stype = [rs stringForColumn:@"stype"];
-                        oneSong.volume = [rs stringForColumn:@"volume"];
-                        oneSong.word = [rs stringForColumn:@"word"];
-                        NSLog(@"%@",oneSong.songname);
-                        [_dataSrc addObject:oneSong];
-                    }
-                }
-                
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-            });
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
     }];
 }
 
@@ -198,7 +196,7 @@
             [cell setPlayStatusToHide:NO];
         }
         cell.backgroundColor=[UIColor clearColor];
-
+        
         if (cell.opened) {
             cell.sanjiaoxing.hidden=NO;
         } else {
@@ -301,20 +299,20 @@
     }
     [_dataSrc removeAllObjects];
     [_yidianArray removeAllObjects];
-//    [self.tableView reloadData];
+    //    [self.tableView reloadData];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self initializeTableContent];
         [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
-
+        
     });
-//    [_dataSrc removeObjectAtIndex:_previousRow+1];
-//    [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//    _previousRow=-1;
+    //    [_dataSrc removeObjectAtIndex:_previousRow+1];
+    //    [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    //    _previousRow=-1;
     //TODO::
 }
 
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
-//    [myToast dissmiss];
+    //    [myToast dissmiss];
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     YiDianTopViewCell *cell=(YiDianTopViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
@@ -326,7 +324,7 @@
     [_dataSrc removeObjectAtIndex:_previousRow+1];
     [self initializeTableContent];
     [myToast setToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
-
+    
     //cut song
 }
 
@@ -340,7 +338,7 @@
         cell.sanjiaoxing.hidden=YES;
     }
     [_dataSrc removeObjectAtIndex:_previousRow+1];
-//    [self performSelector:@selector(initializeTableContent) withObject:nil afterDelay:1];
+    //    [self performSelector:@selector(initializeTableContent) withObject:nil afterDelay:1];
     [self initializeTableContent];
 }
 

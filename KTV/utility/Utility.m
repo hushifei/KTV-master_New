@@ -118,10 +118,8 @@ static Utility *shareInstance=nil;
     NSURL *url=[NSURL URLWithString:@"http://192.168.43.1:8080/puze/"];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:2];
     NSURLSessionDataTask *dataTask = [shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSHTTPURLResponse *httpResponse=(NSHTTPURLResponse*)response;
-        NSInteger statuscode=httpResponse.statusCode;
         if (error==nil) {
-            if (statuscode ==200 ) {
+            if ([self httpsStatuCode:response] ==200 ) {
                 [self setValue:[NSNumber numberWithBool:YES] forKey:@"netWorkStatus"];
             } else {
                 [self setValue:[NSNumber numberWithBool:NO] forKey:@"netWorkStatus"];
@@ -161,6 +159,11 @@ static Utility *shareInstance=nil;
         return YES;
     }
     return NO;
+}
+
+- (NSInteger)httpsStatuCode:(NSURLResponse*)response {
+    NSHTTPURLResponse *httpResponse=(NSHTTPURLResponse*)response;
+   return httpResponse.statusCode;
 }
 
 - (void)dealloc {

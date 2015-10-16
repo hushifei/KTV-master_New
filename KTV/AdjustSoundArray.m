@@ -41,7 +41,11 @@
                         NSLog(@"---->%@",value);
                         break ;
                     }
-                    [cmd sendCmd_soundAdjust:anObject];
+                    [cmd sendCmd_soundAdjust:anObject completed:^(BOOL completed, NSError *error) {
+                        if (completed) {
+                            NSLog(@"ok");
+                        }
+                    }];
                 }
                 break;
                 case 1: {

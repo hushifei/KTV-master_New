@@ -98,8 +98,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
         case 0: {
-            [cmd sendCmd_restartDevice:^(BOOL secusse) {
-                if (secusse) {
+            [cmd sendCmd_restartDevice:^(BOOL completed, NSError *error) {
+                if (completed) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                        [myToast setToastWithMessage:NSLocalizedString(@"restartsuccess", nil) WithTimeDismiss:@"2" messageType:KMessageSuccess];
                     });
@@ -113,8 +113,8 @@
             break;
         }
         case 1: {
-            [cmd sendCmd_shutdownDevice:^(BOOL secusse) {
-                if (secusse) {
+            [cmd sendCmd_shutdownDevice:^(BOOL completed, NSError *error) {
+                if (completed) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                        [myToast setToastWithMessage:NSLocalizedString(@"shutdownsuccess", nil)  WithTimeDismiss:@"2" messageType:KMessageSuccess];
                     });

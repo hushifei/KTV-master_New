@@ -91,7 +91,7 @@
 
 
 - (void)insertSongToCollectionTable {
-    __weak __block typeof (self) weakSelf=self;
+   __block __weak typeof (self) weakSelf=self;
     NSString *querySqlStr=[NSString stringWithFormat:@"select * from CollectionTable where number='%@'",[_number encodeBase64]];
     FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:querySqlStr];
     while ([rs next]) {
@@ -131,45 +131,63 @@
 - (void)cutSong {
     if (_number.length>0) {
         CommandControler *cmd=[[CommandControler alloc]init];
-        [cmd sendCmd_switchSong];
         __weak __block typeof (self) weakSelf=self;
-        if ([self.delegate respondsToSelector:@selector(cutSongFromCollection:result:)]) {
-            [self.delegate cutSongFromCollection:weakSelf result:KMessageSuccess];
-        }
+        [cmd sendCmd_switchSong:^(BOOL completed, NSError *error) {
+            if (completed) {
+                if ([self.delegate respondsToSelector:@selector(cutSongFromCollection:result:)]) {
+                    [self.delegate cutSongFromCollection:weakSelf result:KMessageSuccess];
+                }
+            } else {
+                
+            }
+        }];
+
     }
 }
 
 - (void)prioritySong {
     CommandControler *cmd=[[CommandControler alloc]init];
-    [cmd sendCmd_get_yiDianList:^(NSArray *list) {
-        for (NSString *tmpNumber in list) {
-            NSLog(@"%@-->",tmpNumber);
-            if  ([tmpNumber isEqualToString:_number]) {
-                [cmd sendCmd_moveSongToTop:_number];
-                __weak __block typeof (self) weakSelf=self;
-                if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
-                    [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
+    __weak __block typeof (self) weakSelf=self;
+    [cmd sendCmd_get_yiDianList:^(BOOL completed, NSArray *list) {
+        if (completed) {
+            if (list.count > 0) {
+                for (NSString *tmpNumber in list) {
+//                    NSLog(@"%@-->",tmpNumber);
+                    if  ([tmpNumber isEqualToString:_number]) {
+                        [cmd sendCmd_moveSongToTop:_number completed:^(BOOL completed, NSError *error) {
+                            if (completed) {
+                                if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
+                                    [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
+                                }
+                                return;
+                            } else {
+                                //error
+                                return;
+                            }
+                        }];
+                        return;
+                    }
                 }
-                return;
             }
+        } else {
+            //no data or network issue
         }
     }];
+
 }
 
 
 - (void)diangeToTop {
-    CommandControler *cmd=[[CommandControler alloc]init];
-    [cmd sendCmd_DiangeToTop:_number];
-    
- ffff 要延迟
-    [self performSelector:@selector(gogo) withObject:self afterDelay:5];
-
-}
-
-- (void)gogo {
     __weak __block typeof (self) weakSelf=self;
-    if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
-        [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
-    }
+    CommandControler *cmd=[[CommandControler alloc]init];
+    [cmd sendCmd_DiangeToTop:_number completed:^(BOOL completed, NSError *error) {
+        if (completed) {
+            if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
+                [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
+            }
+        } else {
+            //network error
+        }
+    }];
 }
 @end

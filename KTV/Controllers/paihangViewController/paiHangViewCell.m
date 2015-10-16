@@ -24,8 +24,11 @@
 - (IBAction)addSong:(id)sender {
     if (self.buttonitem && self.oneSong.number.length > 0) {
         CommandControler *cmd=[[CommandControler alloc]init];
-        [cmd sendCmd_Diange:self.oneSong.number];
-        [self.numberStr shakeAndFlyAnimationToView:self.buttonitem];
+        [cmd sendCmd_Diange:_oneSong.number completed:^(BOOL completed, NSError *error) {
+            if (completed) {
+                [self.numberStr shakeAndFlyAnimationToView:self.buttonitem];
+            }
+        }];
     }
 }
 
