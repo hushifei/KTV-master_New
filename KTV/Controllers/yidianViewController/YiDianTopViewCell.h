@@ -16,4 +16,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *headerImageView;
 @property(nonatomic,weak)Song *oneSong;
 
+-(void)setPlayStatusToHide:(BOOL)status;
+
 @end

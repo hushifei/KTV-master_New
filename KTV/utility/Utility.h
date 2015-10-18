@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FMDB.h"
+@class AppDelegate;
 extern NSString *const HReachabilityChangedNotification;
-
+#define netWorkTimeInterval  10
 //
 #define SCREENSIZE  [UIScreen mainScreen].bounds.size
 
@@ -53,7 +53,8 @@ extern NSString *const HReachabilityChangedNotification;
  *  MainViewController
  
  */
-//#define NOTIFICATION_YIDIAN_INCREASION @"NOTIFICATION_YIDIAN_INCREASION"
+extern NSString * const YiDian_Update_DidChangeNotification;
+
 //
 //
 //@protocol yidianDelegate <NSObject>
@@ -73,26 +74,22 @@ typedef enum {
 
 typedef void(^OperationResult)(NSError* error);
 typedef void(^Completed)(BOOL Completed);
-@interface Utility : NSObject
+@interface Utility : NSObject 
 @property (nonatomic,assign)iphoneModel myIphoneModel;
-@property (readonly, strong, nonatomic) NSOperationQueue *queue;
-@property (readonly ,strong, nonatomic) NSManagedObjectContext *bgObjectContext;
-@property (readonly, strong, nonatomic) NSManagedObjectContext *mainObjectContext;
+@property (nonatomic,readonly,assign)BOOL netWorkStatus;
+
 //tools
 + (instancetype)instanceShare;
 + (float)user_iosVersion;
-+ (UIImage *)imageWithColor:(UIColor *)color;
 + (BOOL)isIncludeChineseInString:(NSString*)str;
 + (NSString*)shouZiFu:(NSString*)string;
-+ (UIColor *)colorWithHexString:(NSString *)stringToConvert;
-// DabaBase
-- (NSManagedObjectContext*)createPrivateObjectContext;
-- (NSError*)save:(OperationResult)handler;
-
 //network
-- (void)networkStatus:(void(^)(BOOL isSecucess))block;
-- (BOOL)networkStatus;
+- (void)starToMonitorNetowrkConnection;
+- (void)stopToMonitorNetworkConnection;
++ (void)checkNetworkStatusImmediately:(void(^)(BOOL isConnected,NSError *error))block;
 //nsstring handle
 + (CGSize)sizeWithString:(NSString *)string font:(UIFont *)font;
 + (BOOL)isChineseLanguge;
++ (AppDelegate*)readAppDelegate;
+
 @end

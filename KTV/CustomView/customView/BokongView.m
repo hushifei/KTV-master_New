@@ -134,19 +134,27 @@ static BokongView *shareInstance=nil;
     UIButton *btn=(UIButton*)sender;
     switch (btn.tag) {
         case 0: {
-            [cmdController sendCmd_yuanChang_pangChang];
+            [cmdController sendCmd_yuanChang_pangChang:^(BOOL completed, NSError *error) {
+                
+            }];
             break;
         }
         case 1: {
-            [cmdController sendCmd_switchSong];
+            [cmdController sendCmd_switchSong:^(BOOL completed, NSError *error) {
+                
+            }];
             break;
         }
         case 2: {
-            [cmdController sendCmd_rePlay];
+            [cmdController sendCmd_rePlay:^(BOOL completed, NSError *error) {
+                
+            }];
             break;
         }
         case 3: {
-            [cmdController sendCmd_stopPlay];
+            [cmdController sendCmd_stopPlay:^(BOOL completed, NSError *error) {
+                
+            }];
             break;
         }
         default:

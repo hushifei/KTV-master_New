@@ -14,6 +14,8 @@
 #import "AboutViewController.h"
 #import "CommandControler.h"
 #import "HuToast.h"
+#import "UIImageView+WebCache.h"
+#import "SDWebImageManager.h"
 @interface SettingViewController () {
     CommandControler *cmd;
     HuToast *myToast;
@@ -34,9 +36,12 @@
     self.tableView.layer.backgroundColor=[UIColor whiteColor].CGColor;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
     self.tableView.rowHeight=60.0f;
+    //    self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"geshou_area_bg"]];
+   
     self.tableView.scrollEnabled=NO;
-    
-    
+    UIImage *image=[UIImage imageNamed:@"songsList_bg"];
+    self.tableView.backgroundColor=[UIColor colorWithPatternImage:[image stretchableImageWithLeftCapWidth:100 topCapHeight:100 ]];
+
 
 //    self.dataSrc = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"restartHost", nil),NSLocalizedString(@"shutdownHost", nil), NSLocalizedString(@"clearCachedata", nil),NSLocalizedString(@"about", nil), nil];
         self.dataSrc = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"restartHost", nil),NSLocalizedString(@"shutdownHost", nil), NSLocalizedString(@"clearCachedata", nil),nil];
@@ -76,6 +81,7 @@
         cell.selectionStyle=UITableViewCellSelectionStyleDefault;
         cell.backgroundColor=[UIColor groupTableViewBackgroundColor];
     }
+
     switch (indexPath.row) {
         case 0:
         case 1:
@@ -90,15 +96,17 @@
         default:
             break;
     }
-    
+    cell.backgroundColor=[UIColor clearColor];
+    cell.textLabel.textColor=[UIColor whiteColor];
+    [cell.textLabel sizeToFit];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.row) {
         case 0: {
-            [cmd sendCmd_restartDevice:^(BOOL secusse) {
-                if (secusse) {
+            [cmd sendCmd_restartDevice:^(BOOL completed, NSError *error) {
+                if (completed) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                        [myToast setToastWithMessage:NSLocalizedString(@"restartsuccess", nil) WithTimeDismiss:@"2" messageType:KMessageSuccess];
                     });
@@ -112,8 +120,8 @@
             break;
         }
         case 1: {
-            [cmd sendCmd_shutdownDevice:^(BOOL secusse) {
-                if (secusse) {
+            [cmd sendCmd_shutdownDevice:^(BOOL completed, NSError *error) {
+                if (completed) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                        [myToast setToastWithMessage:NSLocalizedString(@"shutdownsuccess", nil)  WithTimeDismiss:@"2" messageType:KMessageSuccess];
                     });
@@ -128,7 +136,9 @@
             break;
         }
         case 2: {
-            //clear tmp file and so on; 
+            //clear tmp file and so on;
+            [[SDWebImageManager sharedManager].imageCache clearMemory];
+            [[SDWebImageManager sharedManager].imageCache clearDisk];
             [myToast setToastWithMessage:NSLocalizedString(@"clearcachedatasuccess", nil)  WithTimeDismiss:@"2" messageType:KMessageSuccess];
             break;
         }

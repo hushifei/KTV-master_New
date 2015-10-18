@@ -24,6 +24,10 @@
 "songs"          ="歌曲";
 "hud_text_init"   ="初始化数据";
 "hud_detail_wait" ="请耐心等待......";
+"scancodeerror" ="二维码格式错误";
+
+"username" = "用户名";
+"password" = "密码";
 
 /** playController*/
 "vocalonoff" = "原/伴";
@@ -65,11 +69,18 @@
 
 /** binding Host */
 "networkError" = "网络连接失败";
+"error" ="错误"
 "confirm"  =  "确定";
 "connectnetwork" = "连接网络";
-"connectNetContent" = "进入设置界面连接无线网络";
+"connectNetContent" = "请进入设置界面连接无线网络->Puze";
+"connectNetOK"  = "客官您已经连接到我了奥";
+"playing"="正在播放";
+
+//** new song VC **/
+"collect" = "收藏";
 
 
+"jumpSetting" = "进入设置";
 
 
 

@@ -9,6 +9,7 @@
 #import "CommandControler.h"
 #import "NSString+Utility.h"
 #import "DataMananager.h"
+#import "AppDelegate.h"
 @implementation Song
 
 -(void)setAddtime:(NSString *)addtime {
@@ -91,7 +92,7 @@
 
 
 - (void)insertSongToCollectionTable {
-    __weak __block typeof (self) weakSelf=self;
+    __block __weak typeof (self) weakSelf=self;
     NSString *querySqlStr=[NSString stringWithFormat:@"select * from CollectionTable where number='%@'",[_number encodeBase64]];
     FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:querySqlStr];
     while ([rs next]) {
@@ -115,7 +116,7 @@
 
 - (void)deleteSongFromCollectionTable {
     NSString *insertSql1= [NSString stringWithFormat:@"delete from CollectionTable where number='%@'",[_number encodeBase64]];
-   __block __weak typeof (self) weakSelf=self;
+    __block __weak typeof (self) weakSelf=self;
     if (![[DataMananager instanceShare].db executeUpdate:insertSql1]) {
         NSLog(@"取消收藏失败");
         if ([self.delegate respondsToSelector:@selector(deleteCollectionSong:result:)]) {
@@ -129,33 +130,77 @@
 }
 
 - (void)cutSong {
+    if ([Utility instanceShare].netWorkStatus) {
     if (_number.length>0) {
         CommandControler *cmd=[[CommandControler alloc]init];
-        [cmd sendCmd_switchSong];
         __weak __block typeof (self) weakSelf=self;
-        if ([self.delegate respondsToSelector:@selector(cutSongFromCollection:result:)]) {
-            [self.delegate cutSongFromCollection:weakSelf result:KMessageSuccess];
-        }
+        [cmd sendCmd_switchSong:^(BOOL completed, NSError *error) {
+            if (completed) {
+                if ([self.delegate respondsToSelector:@selector(cutSongFromCollection:result:)]) {
+                    [self.delegate cutSongFromCollection:weakSelf result:KMessageSuccess];
+                }
+            } else {
+                
+            }
+        }];
+     }
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
     }
 }
 
 - (void)prioritySong {
+    if ([Utility instanceShare].netWorkStatus) {
     CommandControler *cmd=[[CommandControler alloc]init];
-    [cmd sendCmd_get_yiDianList:^(NSArray *list) {
-        for (NSString *tmpNumber in list) {
-            NSLog(@"%@-->",tmpNumber);
-            if  ([tmpNumber isEqualToString:_number]) {
-                [cmd sendCmd_moveSongToTop:_number];
-                __weak __block typeof (self) weakSelf=self;
-                if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
-                    [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
+    __weak __block typeof (self) weakSelf=self;
+    [cmd sendCmd_get_yiDianList:^(BOOL completed, NSArray *list) {
+        if (completed) {
+            if (list.count > 0) {
+                for (NSString *tmpNumber in list) {
+                    //                    NSLog(@"%@-->",tmpNumber);
+                    if  ([tmpNumber isEqualToString:_number]) {
+                        [cmd sendCmd_moveSongToTop:_number completed:^(BOOL completed, NSError *error) {
+                            if (completed) {
+                                if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
+                                    [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
+                                }
+                                return;
+                            } else {
+                                //error
+                                return;
+                            }
+                        }];
+                        return;
+                    }
                 }
-                return;
             }
+        } else {
+            //no data or network issue
         }
     }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
+    
 }
 
 
-
+- (void)diangeToTop {
+    if ([Utility instanceShare].netWorkStatus) {
+        __weak __block typeof (self) weakSelf=self;
+        CommandControler *cmd=[[CommandControler alloc]init];
+        [cmd sendCmd_DiangeToTop:_number completed:^(BOOL completed, NSError *error) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                if (completed) {
+                    if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
+                        [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];
+                    }
+                } else {
+                    //network error
+                }
+            });}];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
+}
 @end

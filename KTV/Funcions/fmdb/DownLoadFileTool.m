@@ -10,6 +10,7 @@
 #import "CommandControler.h"
 #import "Utility.h"
 #import "DataMananager.h"
+#import "SDWebImageManager.h"
 #define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
 #define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
@@ -24,6 +25,7 @@
     NSMutableArray *downloadStatus;
     NSString *newDatabaseVer;
     DataMananager *dataManager;
+    dispatch_group_t group;
 }
 
 @end
@@ -38,7 +40,7 @@ static DownLoadFileTool *instance=nil;
     return instance;
 }
 
-+ (id)allocWithZone:(NSZone *)zone {
++ (instancetype)allocWithZone:(NSZone *)zone {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
     instance = [super allocWithZone:zone];
@@ -46,7 +48,7 @@ static DownLoadFileTool *instance=nil;
     return instance;
 }
 
-- (id)copyWithZone:(NSZone *)zone {
+- (instancetype)copyWithZone:(NSZone *)zone {
     return self;
 }
 
@@ -76,11 +78,12 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     [self isNeedToUpdate_Database_version:^(S_Actions action, BOOL completed) {
             if (action==S_Can_Donload && completed) {
                 [self startDownloadFiles];
+                [[SDWebImageManager sharedManager].imageCache cleanDisk];
             } else if (action ==S_Can_ImportData && completed) {
                 //check txt files exist
                 if ([dataManager databaseAlready]) {
                     if (_completed) {
-                        _completed(YES);
+                        _completed(YES,nil);
                     }
                     return;
                 }
@@ -92,38 +95,33 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
                     }
                 }
                 //import data;
-                if (willImportArray.count >0) {
+                if (willImportArray.count ==4) {
                   [self importTxtFilesToDataBase:willImportArray];
                 } else {
                     if (_completed) {
-                        _completed(YES);
+                        _completed(YES,nil);
                         return;
                     }
                 }
             } else {
                 //return error information
                 if (_completed) {
-                    _completed(YES);
+                    _completed(YES,[NSError errorWithDomain:@"9999" code:9999 userInfo:@{@"errorDescript":@"network error"}]);
                 }
             }
     }];
 }
 
 - (void)startDownloadFiles {
-    dispatch_queue_t queue=dispatch_get_global_queue(2, 0);
-    dispatch_group_t group=dispatch_group_create();
+    group=dispatch_group_create();
     for (NSString *fileName in allTXTFiles) {
-        dispatch_group_async(group, queue, ^{
+            dispatch_group_enter(group);
             [self downLoadFile:fileName];
-        });
     }
     //等group里的task都执行完后执行notify方法里的内容,相当于把wait方法及之后要执行的代码合到一起了
-    //    dispatch_group_notify(group, queue, ^{
-    //        if (_completed) {
-    //            //import data
-    //            _completed(YES);
-    //        }
-    //    });
+        dispatch_group_notify(group,dispatch_get_global_queue(0, 0), ^{
+                [self importTxtFilesToDataBase:downloadStatus];
+        });
 }
 //下载文件
 //typelist.txt  songlist.txt orderdata.txt singlist.txt
@@ -144,12 +142,7 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
         } else {
             NSLog(@"download file eror -->%@",fileName);
         }
-        
-        if (downloadStatus.count==4) {
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                [self importTxtFilesToDataBase:downloadStatus];
-            });
-        }
+        dispatch_group_leave(group);
     }];
     [dataTask resume];
 }
@@ -164,7 +157,7 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
                 [defaults setObject:newDatabaseVer forKey:@"CURRENT_DATABASE_VERSION"];
                 [defaults synchronize];
                 [self remove_downloadedTxtFiles];
-                _completed(YES);
+                _completed(YES,nil);
             }
             NSLog(@"import data done!");
         }

@@ -5,7 +5,6 @@
 //  Created by stevenhu on 15/4/17.
 //  Copyright (c) 2015年 stevenhu. All rights reserved.
 //
-#import "DownLoadFileTool.h"
 #import "MainViewController.h"
 #import "huSearchBar.h"
 #import "SettingViewController.h"
@@ -18,9 +17,6 @@
 #import "CollectionViewController.h"
 #import "SoundViewController.h"
 #import "Utility.h"
-#import "BokongView.h"
-#import "MBProgressHUD.h"
-#import "HuToast.h"
 #import "BaseNavigationController.h"
 @interface MainViewController ()<UISearchBarDelegate,ScanCodeDelegate> {
     UIButton *geshouBtn;
@@ -31,9 +27,6 @@
     UIButton *conHostBtn;
     UIBarButtonItem *kege;
     UIBarButtonItem *bokong;
-    MBProgressHUD *HUD;
-    HuToast *myToast;
-    NSURLConnection *connection;
 }
 
 @end
@@ -42,33 +35,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    myToast=[[HuToast alloc]init];
     self.automaticallyAdjustsScrollViewInsets=YES;
     [self createContextUI];
-//    [self copyFile];
-    [self performSelector:@selector(initData) withObject:nil afterDelay:6];
-}
-
-- (void)initData {
-    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
-    [self.navigationController.view addSubview:HUD];
-    HUD.labelText =NSLocalizedString(@"hud_text_init", nil);
-    HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait", nil);
-    HUD.square = YES;
-    HUD.dimBackground=YES;
-    HUD.detailsLabelColor=[UIColor greenColor];
-    [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [HUD hide:YES];
-            if (Completed) {
-                NSLog(@"download file done!");
-                
-            } else {
-                NSLog(@"download file Error!");
-            }
-        });
-    }];
-    [HUD show:YES];
+    //    [self copyFile];
 }
 
 - (void)copyFile {
@@ -289,22 +258,44 @@
 
 #pragma mark- ScanCodeDelegate
 - (void)didFinishedScanCode:(NSError *)error withString:(NSString *)string {
-    NSArray *scanArray=[string componentsSeparatedByString:@","];
-    if (scanArray && [scanArray count]==2) {
-        NSString *wifiName=scanArray[0];
-        NSString *wifiPassWord=scanArray[1];
-        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetContent", nil) preferredStyle:UIAlertControllerStyleAlert];
+    //check network status
+    if ([Utility instanceShare].netWorkStatus) {
+        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetOK", nil) preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }];
         [alVC addAction:action];
     } else {
-        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetContent", nil) preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-        }];
-        [alVC addAction:action];
-        
+        NSArray *scanArray=[string componentsSeparatedByString:@","];
+        if (scanArray && [scanArray count]==2) {
+            NSString *wifiName=scanArray[0];
+            NSString *wifiPassWord=scanArray[1];
+            UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetContent", nil) preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction=[UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [alVC dismissViewControllerAnimated:YES completion:nil];
+            }];
+            UIAlertAction *confirmaction=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            }];
+            [alVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                textField.text=[NSString stringWithFormat:@"%@:%@",NSLocalizedString(@"username", nil),wifiName];
+                textField.enabled=NO;
+            }];
+            [alVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                textField.text=[NSString stringWithFormat:@"%@:%@",NSLocalizedString(@"password", nil),wifiPassWord];
+                textField.enabled=NO;
+            }];
+            
+            [alVC addAction:cancelAction];
+            [alVC addAction:confirmaction];
+        } else {
+            UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"scancodeerror", nil) preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [alVC addAction:action];
+            
+        }
     }
 }
 

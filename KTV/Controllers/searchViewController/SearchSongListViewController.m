@@ -12,9 +12,10 @@
 #import "PinYinForObjc.h"
 #import "BBBadgeBarButtonItem.h"
 #import "Song.h"
-#import "NSManagedObject+helper.h"
+#import "Singer.h"
 #import "SFSelectView.h"
-#import "SongResultTableViewController.h"
+//#import "SongResultTableViewController.h"
+#import "SongListViewController.h"
 #import "UIImage+Utility.h"
 @interface SearchSongListViewController ()<searchSongDelegate>{
     NSInteger _previousRow;
@@ -136,13 +137,21 @@
     promtView.hidden=YES;
 }
 
-- (void)clickSingerWithSingerName:(NSString*)singerName {
+- (void)clickSinger:(Singer*)singer {
     [self dismissViewControllerAnimated:NO completion:^{
-        SongResultTableViewController *songVC=[[SongResultTableViewController alloc]init];
-        songVC.singerName=singerName;
-        UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:songVC];
-        [self presentViewController:nav animated:YES completion:nil];
-        NSLog(@"111");
+        SongListViewController *songVC=[[SongListViewController alloc]init];
+        songVC.singerName=singer.singer;
+        songVC.needLoadData=YES;
+        [self.navigationController pushViewController:songVC animated:YES];
+    }];
+}
+
+- (void)clickSong:(Song *)song {
+    [self dismissViewControllerAnimated:NO completion:^{
+        SongListViewController *songVC=[[SongListViewController alloc]init];
+        songVC.needLoadData=NO;
+        [songVC setDataList:song];
+        [self.navigationController pushViewController:songVC animated:YES];
     }];
 }
 

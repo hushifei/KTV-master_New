@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+typedef NS_ENUM(NSUInteger,SliderType) {
+    IS_MIC_TYPE = 0,
+    is_MUSIC_TYPE
+};
+
+
 @class ZVolumeSlide;
 @protocol ZVolumeSlideDelegate <NSObject>
-
-- (void) slideValueChange:(NSNumber*) value slider:(ZVolumeSlide*)slider;
-
+- (void)sliderDidEndDrag:(NSNumber*)value slider:(ZVolumeSlide*)slider;
 @end
 
 
@@ -21,9 +25,10 @@
 @property (strong, nonatomic) UIView    *processView;
 @property (nonatomic,assign)  CGFloat width;
 @property (nonatomic,assign)  CGFloat height;
+@property (nonatomic,strong) CAShapeLayer *processLayer;
 
 
-- (void) setSlideValue:(NSNumber*) value;
+
 - (void) slideValueChanged;
-- (id)initWithFrame:(CGRect)frame;
+- (instancetype)initWithFrame:(CGRect)frame type:(SliderType)sliderType;
 @end

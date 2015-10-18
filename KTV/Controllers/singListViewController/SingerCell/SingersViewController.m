@@ -10,7 +10,6 @@
 #import "SingerAreaTypeCell.h"
 #import "SongListViewController.h"
 #import "Singer.h"
-#import "NSManagedObject+helper.h"
 #define CELLIDENTIFY @"SingerAreaTypeCell"
 #import "YiDianViewController.h"
 #import "BBBadgeBarButtonItem.h"
@@ -85,8 +84,9 @@
     [super viewWillAppear:animated];
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [CommandControler setYidianBadgeWidth:weakBarButton];
-}
+    [CommandControler setYidianBadgeWidth:weakBarButton completed:^(BOOL completed, NSError *error) {
+        
+    }];}
 
 
 - (void)didReceiveMemoryWarning {
@@ -149,6 +149,7 @@
     SongListViewController *vc=[[SongListViewController alloc]init];
     Singer *oneSinger=dataList[indexPath.row];
     vc.singerName=oneSinger.singer;
+    vc.needLoadData=YES;
    [self.navigationController pushViewController:vc animated:YES];
 }
 @end

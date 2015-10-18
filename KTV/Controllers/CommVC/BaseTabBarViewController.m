@@ -23,9 +23,6 @@
 @implementation BaseTabBarViewController
 
 - (void)viewDidLoad {
-    
-
-    
     MainViewController *mainVC=[[MainViewController alloc]init];
     mainVC.title=NSLocalizedString(@"mainvctitle", nil);
     BaseNavigationController *navC1=[[BaseNavigationController alloc]initWithRootViewController:mainVC];

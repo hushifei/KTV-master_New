@@ -9,7 +9,6 @@
 #import "jinxuanViewController.h"
 #import "jingXuanTableViewCell.h"
 #define CELLIDENTIFY @"jingXuanTableViewCell"
-#import "NSManagedObject+helper.h"
 #import "Typelist.h"
 #import "SingersViewController.h"
 #import "SingerAreaViewController.h"
@@ -63,7 +62,9 @@
     [super viewWillAppear:animated];
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [CommandControler setYidianBadgeWidth:weakBarButton];
+    [CommandControler setYidianBadgeWidth:weakBarButton completed:^(BOOL completed, NSError *error) {
+        
+    }];
 }
 
 

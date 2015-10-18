@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "SFSelectView.h"
-
+@class Song;
+@class Singer;
 @protocol searchSongDelegate <NSObject>
 - (void)searching;
 - (void)searchDone;
-- (void)clickSingerWithSingerName:(NSString*)singerName;
+- (void)clickSinger:(Singer*)singer;
+- (void)clickSong:(Song*)song;
+
 @end
 
 enum selectSearchType{

@@ -18,7 +18,7 @@
 @implementation SongBottomCell
 
 - (void)awakeFromNib {
-    [_collectionrec setTitle:NSLocalizedString(@"house", nil) forState:UIControlStateNormal];
+    [_collectionrec setTitle:NSLocalizedString(@"collect", nil) forState:UIControlStateNormal];
     [_priority setTitle:NSLocalizedString(@"top", nil) forState:UIControlStateNormal];
 
     
@@ -35,7 +35,8 @@
 
 
 - (IBAction)clicked_priority:(id)sender {
-    [_oneSong prioritySong];
+    
+    [_oneSong diangeToTop];
 }
 
 - (IBAction)clicked_cutsong:(id)sender {

@@ -9,6 +9,7 @@
 #import "paiHangViewCell.h"
 #import "UILabel+Animation.h"
 #import "CommandControler.h"
+#import "AppDelegate.h"
 @implementation paiHangViewCell
 
 - (void)awakeFromNib {
@@ -17,15 +18,22 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 
 - (IBAction)addSong:(id)sender {
-    if (self.buttonitem && self.oneSong.number.length > 0) {
-        CommandControler *cmd=[[CommandControler alloc]init];
-        [cmd sendCmd_Diange:self.oneSong.number];
-        [self.numberStr shakeAndFlyAnimationToView:self.buttonitem];
+    if ([Utility instanceShare].netWorkStatus) {
+        if (self.buttonitem && self.oneSong.number.length > 0) {
+            CommandControler *cmd=[[CommandControler alloc]init];
+            [cmd sendCmd_Diange:_oneSong.number completed:^(BOOL completed, NSError *error) {
+                if (completed) {
+                    [self.numberStr shakeAndFlyAnimationToView:self.buttonitem];
+                }
+            }];
+        }
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
     }
 }
 

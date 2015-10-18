@@ -90,8 +90,9 @@ static BBBadgeBarButtonItem *barItem=nil;
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     NSLog(@"animationDidStopGroup------>");
-    [CommandControler setYidianBadgeWidth:barItem];
-//    [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_YIDIAN_INCREASION object:nil];
+    [CommandControler setYidianBadgeWidth:barItem completed:^(BOOL completed, NSError *error) {
+        
+    }];
 }
 
 

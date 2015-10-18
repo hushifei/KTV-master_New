@@ -7,11 +7,14 @@
 //
 #import "Utility.h"
 #import "UIImageView+Animation.h"
+#import "CommandControler.h"
+static BBBadgeBarButtonItem *barItem=nil;
 //#define SCREEN_WIDTH  [UIScreen mainScreen].bounds.size.width
 //#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 @implementation UIImageView (Animation)
 - (void)shakeAndFlyAnimationToView:(UIBarButtonItem*)item{
     //－－－－>shake
+    barItem=(BBBadgeBarButtonItem*)item;
     CABasicAnimation *shake=[CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     shake.fromValue=[NSNumber numberWithFloat:-0.2];
     shake.toValue=[NSNumber numberWithFloat:0.4];
@@ -88,6 +91,9 @@
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     NSLog(@"animationDidStopGroup------>");
+    [CommandControler setYidianBadgeWidth:barItem completed:^(BOOL completed, NSError *error) {
+        
+    }];
 }
 /**
  *  自动移除layer

@@ -6,7 +6,6 @@
 //  Copyright (c) 2015年 stevenhu. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 @interface MainViewController : BaseViewController
 

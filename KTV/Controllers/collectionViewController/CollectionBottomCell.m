@@ -7,11 +7,13 @@
 //
 
 #import "CollectionBottomCell.h"
-#import "NSManagedObject+helper.h"
 #import "CommandControler.h"
 @implementation CollectionBottomCell
 
 - (void)awakeFromNib {
+    _collectBtn.titleLabel.text=NSLocalizedString(@"collect", nil);
+    _cancelBtn.titleLabel.text=NSLocalizedString(@"cancel", nil);
+
     // Initialization code
 }
 
@@ -25,7 +27,7 @@
 }
 
 - (IBAction)clicked_priory:(id)sender {
-    [_oneSong prioritySong];
+    [_oneSong diangeToTop];
 }
 
 - (IBAction)clicked_cutSong:(id)sender {

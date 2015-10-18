@@ -37,25 +37,28 @@ static  int limit=1000;
     return shareInstance;
 }
 
-- (id)init {
-    if (self=[super init]) {
+- (instancetype)init {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         _db=[[FMDatabase alloc]initWithPath:DBPATH];
         NSLog(@"%@",DBPATH);
         userDefaults=[NSUserDefaults standardUserDefaults];
         if ([_db open]) {
             NSLog(@"DataBase is open ok");
-            if (DEBUG) {
-                if (![userDefaults objectForKey:@"DATABASE_ALREADY"]) {
-                    [self copyDBFile];
-                }
-            } else {
-                 [self createTables];
+            if (![userDefaults objectForKey:@"DATABASE_ALREADY"]) {
+                [self createTables];
             }
         } else {
             [_db close];
             NSAssert1(0, @"Failed to open database file with message '%@'.", [_db lastErrorMessage]);
         }
-    }
+        shareInstance=[super init];
+    });
+    return shareInstance;
+}
+
+
+- (instancetype)copyWithZone:(NSZone *)zone {
     return self;
 }
 
@@ -86,7 +89,7 @@ static  int limit=1000;
 }
 
 - (BOOL)databaseAlready {
-   return [userDefaults objectForKey:DATABASE_ALREADY];
+    return [userDefaults objectForKey:DATABASE_ALREADY];
 }
 
 - (void)setDatabaseAlready:(BOOL)already {
@@ -140,7 +143,7 @@ static  int limit=1000;
             NSLog(@"success to creating SongTable table");
         }
     }
-
+    
     //2.check and create SingerTable
     if (![self isTableOK:@"SingerTable"]) {
         sqlCreateTable =@"CREATE TABLE IF NOT EXISTS SingerTable (sid TEXT,singer TEXT,pingyin TEXT,s_bi_hua TEXT,area TEXT)";
@@ -152,7 +155,7 @@ static  int limit=1000;
             NSLog(@"success to creating SingerTable table");
         }
     }
-
+    
     //3.check and create TypeTable
     if (![self isTableOK:@"TypeTable"]) {
         sqlCreateTable =@"CREATE TABLE IF NOT EXISTS TypeTable (typeid TEXT,type TEXT,typename TEXT)";
@@ -187,7 +190,7 @@ static  int limit=1000;
             NSLog(@"success to creating TypeTable table");
         }
     }
-   
+    
 }
 
 - (void)eraserTables:(NSArray*)fileArray{
@@ -202,10 +205,10 @@ static  int limit=1000;
         } else if ([fileName isEqualToString:@"orderdata.txt"]) {
             [self eraseTable:@"OrderTable"];
         }
-//        //删除表 CollectionTable
-//        sqlDeleteRecord =@"DROP TABLE IF EXISTS CollectionTable";
-//        [_db executeUpdate:sqlDeleteRecord];
-
+        //        //删除表 CollectionTable
+        //        sqlDeleteRecord =@"DROP TABLE IF EXISTS CollectionTable";
+        //        [_db executeUpdate:sqlDeleteRecord];
+        
     }
 }
 
@@ -231,7 +234,7 @@ static  int limit=1000;
     }
     [self setDatabaseAlready:YES];
     _completed(YES);
-
+    
 }
 
 - (NSError*)importDataForSongs:(NSString*)txtFilePath {
@@ -475,7 +478,7 @@ static  int limit=1000;
     if ([_db open]) {
         FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:statment];
         while ([rs next]) {
-          return [rs intForColumnIndex:0];
+            return [rs intForColumnIndex:0];
         }
     }
     return 0;

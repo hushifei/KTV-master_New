@@ -17,7 +17,7 @@
 @property(nonatomic,weak)Song *oneSong;
 @property (weak, nonatomic) IBOutlet UIButton *selecteBtn;
 
-//- (IBAction)addSong:(id)sender;
+- (IBAction)addSong:(id)sender;
 
 @end
 

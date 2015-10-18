@@ -7,25 +7,22 @@
 //
 //fmdb
 #import "Utility.h"
-#import "CommandControler.h"
 #import "NSString+Utility.h"
-#import <SystemConfiguration/SystemConfiguration.h>
-//#define tmpDBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"tmpDB.sqlite"]
+#import "AppDelegate.h"
+#import "FMDB.h"
+#import "CommandControler.h"
 #define DBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB.sqlite"]
 
 #define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-NSString *const HReachabilityChangedNotification=@"HReachabilityChangedNotification";
+NSString * const YiDian_Update_DidChangeNotification=@"YiDian_Update_DidChangeNotification";
 @interface Utility() {
     NSString* savePath_TxtDir;
     int hasCount;
     NSTimer *networkTimer;
-    NSURLSession *shareSession;
     BOOL netWorkStatus;
 }
--(void)reachabilityChanged:(NSNotification*)note;
-@property (nonatomic, copy)NSString *modelName;
-@property (nonatomic, copy)NSString *dbFileName;
+@property(nonatomic,strong)NSURLSession *shareSession;
 @end
 static Utility *shareInstance=nil;
 @implementation Utility
@@ -39,18 +36,14 @@ static Utility *shareInstance=nil;
     return shareInstance;
 }
 
-- (id)init {
-    if (self=[super init]) {
+- (instancetype)init {
+    static  dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         [self checkIphoneDevice];
-        shareSession=[NSURLSession sharedSession];
-        netWorkStatus=NO;
-    }
-    networkTimer=[NSTimer scheduledTimerWithTimeInterval:5 target:shareInstance selector:@selector(checkNetworkStatus) userInfo:nil repeats:YES];
-    return self;
-}
-
-- (NSError *)save:(OperationResult)handler {
-    return nil;
+        _shareSession=[NSURLSession sharedSession];
+        shareInstance= [super init];
+    });
+    return shareInstance;
 }
 
 - (void)checkIphoneDevice {
@@ -101,55 +94,57 @@ static Utility *shareInstance=nil;
     return  [[Utility chineseToPinYin:string]substringToIndex:1];
 }
 
-- (void)networkStatus:(void(^)(BOOL isSecucess))block {
+- (void)starToMonitorNetowrkConnection {
+    networkTimer=[NSTimer scheduledTimerWithTimeInterval:netWorkTimeInterval target:shareInstance selector:@selector(checkNetworkStatus:) userInfo:nil repeats:YES];
+}
+
+- (void)stopToMonitorNetworkConnection {
+    [networkTimer invalidate];
+}
+
+
++ (void)checkNetworkStatusImmediately:(void(^)(BOOL isConnected,NSError *error))block {
+    if (!block) return;
     NSURL *url=[NSURL URLWithString:@"http://192.168.43.1:8080/puze/"];
-    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:2];
-    NSURLSessionDataTask *dataTask =[shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3];
+    NSURLSessionDataTask *dataTask =[shareInstance.shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse=(NSHTTPURLResponse*)response;
         NSInteger statuscode=httpResponse.statusCode;
-        if (error==nil) {
-            if (statuscode ==200 ) {
-                netWorkStatus=YES;
-            } else {
-                netWorkStatus=NO;
-            }
+        if (statuscode ==200 && error ==nil ) {
+            block(YES,nil);
         } else {
-            netWorkStatus=NO;
-        }
-        if (block) {
-            block(netWorkStatus);
+            NSDictionary* errorMessage = [NSDictionary dictionaryWithObject:@"NetWork Error" forKey:NSLocalizedDescriptionKey];
+            block(NO,[NSError errorWithDomain:@"SEND_COMMAND" code:999 userInfo:errorMessage]);
         }
     }];
     [dataTask resume];
 }
 
-- (void)checkNetworkStatus {
+- (void)checkNetworkStatus:(NSTimer*)oneTimer {
     NSURL *url=[NSURL URLWithString:@"http://192.168.43.1:8080/puze/"];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:2];
-    NSURLSessionDataTask *dataTask = [shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSHTTPURLResponse *httpResponse=(NSHTTPURLResponse*)response;
-        NSInteger statuscode=httpResponse.statusCode;
-        if (error==nil) {
-            if (statuscode ==200 ) {
-                netWorkStatus=YES;
-            } else {
-                netWorkStatus=NO;
-                NSLog(@"network connection error");
-            }
+    NSURLSessionDataTask *dataTask = [_shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if ([self httpsStatuCode:response] ==200 && error==nil) {
+            [self setValue:[NSNumber numberWithBool:YES] forKey:@"netWorkStatus"];
+            [self updateYiDianStatus];
         } else {
-            netWorkStatus=NO;
+            [self setValue:[NSNumber numberWithBool:NO] forKey:@"netWorkStatus"];
             NSLog(@"network connection error");
         }
-        
-        if (netWorkStatus==NO) {
-            [[NSNotificationCenter defaultCenter]postNotificationName:HReachabilityChangedNotification object:shareInstance userInfo:@{@"networkStatus":@NO}];
-        }
-        
     }];
     [dataTask resume];
 }
 
-- (BOOL)networkStatus {
+- (void)updateYiDianStatus {
+    CommandControler *cmdC=[[CommandControler alloc]init];
+    [cmdC sendCmd_get_yiDianList:^(BOOL completed, NSArray *list) {
+        if (completed && list.count > 0) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:YiDian_Update_DidChangeNotification object:@{@"count":[NSNumber numberWithUnsignedInteger:list.count]}];
+        }
+    }];
+}
+
+- (BOOL)netWorkStatus {
     return netWorkStatus;
 }
 
@@ -171,8 +166,19 @@ static Utility *shareInstance=nil;
     return NO;
 }
 
+- (NSInteger)httpsStatuCode:(NSURLResponse*)response {
+    NSHTTPURLResponse *httpResponse=(NSHTTPURLResponse*)response;
+    return httpResponse.statusCode;
+}
+
++ (AppDelegate *)readAppDelegate {
+    return (AppDelegate*)[UIApplication sharedApplication].delegate;
+    
+}
+
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [networkTimer invalidate];
+    networkTimer=nil;
 }
 @end
 

@@ -43,5 +43,6 @@
 - (void)deleteSongFromCollectionTable;
 - (void)cutSong;
 - (void)prioritySong;
+- (void)diangeToTop;
 
 @end

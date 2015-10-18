@@ -26,6 +26,7 @@
     NSInteger _previousRow;
     HuToast *myToast;
     NSInteger offset;
+    Song *searchSong;
 }
 @end
 
@@ -42,20 +43,37 @@
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
     self.tableView.backgroundView=bgImageView;
     self.tableView.rowHeight=50;
-    [self initializeTableContent];
+    if (self.needLoadData) {
+        [self initializeTableContent];
+    } else {
+        if (searchSong) {
+            [dataList addObject:searchSong];
+            [self.tableView reloadData];
+            self.needLoadData=YES;
+        }
+    }
+}
+
+-(void)setDataList:(Song*)oneSong {
+    if (![oneSong isKindOfClass:[Song class]] || oneSong==nil) return;
+    searchSong=oneSong;
 }
 
 - (void)viewWillAppear:(BOOL)animated  {
     [super viewWillAppear:animated];
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [CommandControler setYidianBadgeWidth:weakBarButton];
+    [CommandControler setYidianBadgeWidth:weakBarButton completed:^(BOOL completed, NSError *error) {
+        
+    }];
 }
 
 - (void)updateYidanBadge {
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
-    [CommandControler setYidianBadgeWidth:weakBarButton];
+    [CommandControler setYidianBadgeWidth:weakBarButton completed:^(BOOL completed, NSError *error) {
+        
+    }];
 }
 
 - (void)initializeTableContent {
@@ -314,6 +332,16 @@
     //cut song
 }
 
+//-(UIStatusBarStyle)preferredStatusBarStyle {
+//    return UIStatusBarStyleLightContent;
+//}
+
+- (BOOL)prefersStatusBarHidden {
+    if (searchSong) {
+        return NO;
+    }
+    return YES;
+}
 #pragma mark -#########################################################
 
 @end
