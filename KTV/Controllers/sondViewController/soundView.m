@@ -173,7 +173,6 @@
     slider1.backgroundColor=[UIColor clearColor];
     slider1.layer.transform=CATransform3DMakeRotation(M_PI_2+M_PI, 0, 0, 1);
     slider1.delegate = self;
-    slider1.tag=1;
 
     //    //给图层添加一个有色边
       //imageview
@@ -205,9 +204,7 @@
 
     slider2.backgroundColor=[UIColor clearColor];
     slider2.delegate = self;
-    slider2.tag=2;
     slider2.layer.transform=CATransform3DMakeRotation(M_PI_2+M_PI, 0, 0, 1);
-    
     
     UILabel *micLabel=[[UILabel alloc]initWithFrame:CGRectMake(slider1.frame.origin.x/2, CGRectGetMaxY(slider1.frame), 80, 22)];
     if ([Utility instanceShare].myIphoneModel==isiPhone4s) {
@@ -500,11 +497,13 @@
 //    NSLog(@"========%@=========",value);
     if ([Utility instanceShare].netWorkStatus) {
         CommandControler *cmd=[[CommandControler alloc]init];
-        if (slider.tag==1) {
+        if (slider.type==0) {
             [cmd sendCmd_yingDiaoAdjustToObject:2 value:value completed:^(BOOL completed, NSError *error) {
                 if (completed && error==nil) {
                     [userDefaults setObject:value forKey:@"Mic_soundAdjust"];
                     [userDefaults synchronize];
+                } else {
+                    [slider resumeSliderValue];
                 }
             }];
         } else {
@@ -512,10 +511,13 @@
                 if (completed && error==nil) {
                     [userDefaults setObject:value forKey:@"Music_soundAdjust"];
                     [userDefaults synchronize];
+                } else {
+                    [slider resumeSliderValue];
                 }
             }];
         }
     } else {
+        [slider resumeSliderValue];
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
     }
 }

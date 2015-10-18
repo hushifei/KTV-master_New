@@ -20,7 +20,9 @@ typedef NS_ENUM(NSUInteger,ViewType) {
 
 /*
  ----.cell 更改成纯代码
- ----.国际化 检查
+ ----.networkstatus monitor use background session
+ --- 已点切歌放到导航栏
+ ---排行榜 重写
 */
 
 

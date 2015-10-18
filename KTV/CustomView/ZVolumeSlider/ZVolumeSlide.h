@@ -25,10 +25,12 @@ typedef NS_ENUM(NSUInteger,SliderType) {
 @property (strong, nonatomic) UIView    *processView;
 @property (nonatomic,assign)  CGFloat width;
 @property (nonatomic,assign)  CGFloat height;
-@property (nonatomic,strong) CAShapeLayer *processLayer;
+@property (nonatomic,strong)  CAShapeLayer *processLayer;
+@property (nonatomic,readonly)SliderType type;
 
 
 
 - (void) slideValueChanged;
 - (instancetype)initWithFrame:(CGRect)frame type:(SliderType)sliderType;
+- (void)resumeSliderValue;
 @end

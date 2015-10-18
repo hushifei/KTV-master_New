@@ -116,6 +116,7 @@
                       [myToast setToastWithMessage:NSLocalizedString(@"restartfailure", nil)  WithTimeDismiss:@"2" messageType:KMessageStyleError];
                     });
                 }
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
             }];
             break;
         }
@@ -132,6 +133,7 @@
                     });
 
                 }
+                [tableView deselectRowAtIndexPath:indexPath animated:YES];
             }];
             break;
         }
@@ -139,7 +141,8 @@
             //clear tmp file and so on;
             [[SDWebImageManager sharedManager].imageCache clearMemory];
             [[SDWebImageManager sharedManager].imageCache clearDisk];
-            [myToast setToastWithMessage:NSLocalizedString(@"clearcachedatasuccess", nil)  WithTimeDismiss:@"2" messageType:KMessageSuccess];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [myToast setToastWithMessage:NSLocalizedString(@"clearcachedatasuccess", nil)  WithTimeDismiss:@"1" messageType:KMessageSuccess];
             break;
         }
         case 3: {

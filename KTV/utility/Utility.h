@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class AppDelegate;
 extern NSString *const HReachabilityChangedNotification;
-#define netWorkTimeInterval  10
+#define netWorkTimeInterval  5
 //
 #define SCREENSIZE  [UIScreen mainScreen].bounds.size
 

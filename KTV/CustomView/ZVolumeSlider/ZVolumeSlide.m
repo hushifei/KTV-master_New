@@ -8,17 +8,12 @@
 
 #import "ZVolumeSlide.h"
 
-@interface ZVolumeSlide () {
-    SliderType type;
-}
-@end
-
 @implementation ZVolumeSlide
 
 - (instancetype)initWithFrame:(CGRect)frame type:(SliderType)sliderType;
 {
     if (self=[super initWithFrame:frame]) {
-        type=sliderType;
+        _type=sliderType;
         self.backgroundColor = [UIColor clearColor]; //背景颜色设置，设置为clearColor 背景透明
         _width = frame.size.width;
         _height= frame.size.height;
@@ -40,7 +35,7 @@
         
         [_slideView setMaximumTrackImage:[UIImage imageNamed:@"ZVolumeSlide_clearBack"] forState:UIControlStateNormal];
         [_slideView setMinimumTrackImage:[UIImage imageNamed:@"ZVolumeSlide_clearBack"] forState:UIControlStateNormal];
-        if (type==IS_MIC_TYPE) {
+        if (_type==IS_MIC_TYPE) {
             [self initSlideValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"Mic_soundAdjust"]];
         } else {
             [self initSlideValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"Music_soundAdjust"]];
@@ -55,19 +50,31 @@
 - (void)initSlideValue:(NSNumber*) value{
     if (value==nil) {
         value=[NSNumber numberWithFloat:0.0];
-        if (type==IS_MIC_TYPE) {
+        if (_slideView==IS_MIC_TYPE) {
             [[NSUserDefaults standardUserDefaults] setObject:value forKey:@"Mic_soundAdjust"];
         } else {
              [[NSUserDefaults standardUserDefaults] setObject:value forKey:@"Music_soundAdjust"];
         }
     } else {
-        if (type==IS_MIC_TYPE) {
+        if (_slideView==IS_MIC_TYPE) {
             _slideView.value=[[[NSUserDefaults standardUserDefaults]objectForKey:@"Mic_soundAdjust"]floatValue]/15;
         } else {
             _slideView.value=[[[NSUserDefaults standardUserDefaults]objectForKey:@"Music_soundAdjust"]floatValue]/15;
         }
 
     }
+    _processView.frame = CGRectMake(0, 0, _width * _slideView.value, _height);
+}
+
+
+- (void)resumeSliderValue {
+    float value=0.0f;
+    if (_slideView==IS_MIC_TYPE) {
+        value=[[[NSUserDefaults standardUserDefaults]objectForKey:@"Mic_soundAdjust"]floatValue]/15;
+    } else {
+        value=[[[NSUserDefaults standardUserDefaults]objectForKey:@"Music_soundAdjust"]floatValue]/15;
+    }
+    _slideView.value=value;
     _processView.frame = CGRectMake(0, 0, _width * _slideView.value, _height);
 }
 
