@@ -96,6 +96,7 @@
 		D13D66B61B31B6D900928457 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D13D66B41B31B6D900928457 /* AboutViewController.m */; };
 		D13D66B71B31B6D900928457 /* AboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D13D66B51B31B6D900928457 /* AboutViewController.xib */; };
 		D13D66BA1B31B8AA00928457 /* companyLog.png in Resources */ = {isa = PBXBuildFile; fileRef = D13D66B91B31B8AA00928457 /* companyLog.png */; };
+		D13F93F41BD3D264008086BB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D13F93F61BD3D264008086BB /* InfoPlist.strings */; };
 		D14488301AF0F96B00D65CE6 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D144882F1AF0F96B00D65CE6 /* SettingViewController.m */; };
 		D14F1CA41AFB969800EA6E50 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D14F1CA31AFB969800EA6E50 /* MBProgressHUD.m */; };
 		D14F1CAA1AFBACD300EA6E50 /* NMBottomTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = D14F1CA71AFBACD300EA6E50 /* NMBottomTabBar.m */; };
@@ -314,7 +315,6 @@
 		D19936F81B38028500C57622 /* placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D19936F61B38028500C57622 /* placeholder@2x.png */; };
 		D19994B01AEA87D200CEC16D /* SongTopCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D19994AE1AEA87D200CEC16D /* SongTopCell.m */; };
 		D1ACF5791B0563CC00666D6D /* HuToast.m in Sources */ = {isa = PBXBuildFile; fileRef = D1ACF5781B0563CB00666D6D /* HuToast.m */; };
-		D1CAD4681B84D33D00F22DB1 /* 指令格式.pages in Resources */ = {isa = PBXBuildFile; fileRef = D1CAD4671B84D33D00F22DB1 /* 指令格式.pages */; };
 		D1E39F0B1AFDDD9800E739F9 /* newsong_header.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E39F0A1AFDDD9800E739F9 /* newsong_header.png */; };
 		D1E39F0D1AFDDF4500E739F9 /* cancel_bt_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E39F0C1AFDDF4500E739F9 /* cancel_bt_bg.png */; };
 		D1E39F0F1AFDE11B00E739F9 /* brt.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E39F0E1AFDE11B00E739F9 /* brt.png */; };
@@ -489,6 +489,8 @@
 		D13D66B41B31B6D900928457 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		D13D66B51B31B6D900928457 /* AboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
 		D13D66B91B31B8AA00928457 /* companyLog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = companyLog.png; sourceTree = "<group>"; };
+		D13F93F51BD3D264008086BB /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		D13F93F71BD3D266008086BB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D144882E1AF0F96B00D65CE6 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		D144882F1AF0F96B00D65CE6 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		D14F1CA21AFB969800EA6E50 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
@@ -796,7 +798,6 @@
 		D19994AE1AEA87D200CEC16D /* SongTopCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongTopCell.m; sourceTree = "<group>"; };
 		D1ACF5771B0563CB00666D6D /* HuToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HuToast.h; sourceTree = "<group>"; };
 		D1ACF5781B0563CB00666D6D /* HuToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HuToast.m; sourceTree = "<group>"; };
-		D1CAD4671B84D33D00F22DB1 /* 指令格式.pages */ = {isa = PBXFileReference; lastKnownFileType = file; path = "指令格式.pages"; sourceTree = "<group>"; };
 		D1E39F0A1AFDDD9800E739F9 /* newsong_header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newsong_header.png; sourceTree = "<group>"; };
 		D1E39F0C1AFDDF4500E739F9 /* cancel_bt_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel_bt_bg.png; sourceTree = "<group>"; };
 		D1E39F0E1AFDE11B00E739F9 /* brt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brt.png; sourceTree = "<group>"; };
@@ -1482,7 +1483,6 @@
 			children = (
 				20D8380E1BA1330100FB6AE3 /* zh-Hans.lproj */,
 				20D838041BA132F000FB6AE3 /* en.lproj */,
-				D1CAD4671B84D33D00F22DB1 /* 指令格式.pages */,
 				D19936ED1B367FAA00C57622 /* introduce@2x.png */,
 				D1586B521AE14CBF00AF3EDB /* LaunchScreen.xib */,
 				D1586B4D1AE14CBF00AF3EDB /* Main.storyboard */,
@@ -1495,6 +1495,7 @@
 				D156A3E91AECE1720091C419 /* Frameworks */,
 				D1586B441AE14CBF00AF3EDB /* Info.plist */,
 				D1586B451AE14CBF00AF3EDB /* main.m */,
+				D13F93F61BD3D264008086BB /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1962,7 +1963,7 @@
 				TargetAttributes = {
 					D1586B3F1AE14CBF00AF3EDB = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 277ZS7Z8W4;
+						DevelopmentTeam = D69H8VACW4;
 						SystemCapabilities = {
 							com.apple.WAC = {
 								enabled = 0;
@@ -2001,6 +2002,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1E39F0F1AFDE11B00E739F9 /* brt.png in Resources */,
+				D13F93F41BD3D264008086BB /* InfoPlist.strings in Resources */,
 				D12374641B2D795D00902361 /* close_1.png in Resources */,
 				D154302C1AFDDCD600522DE1 /* bokong4.png in Resources */,
 				D15430301AFDDCD600522DE1 /* bokong_shouqi2.png in Resources */,
@@ -2126,7 +2128,6 @@
 				D15430851AFDDCD600522DE1 /* paihang_flag4.png in Resources */,
 				D17E67B61B4D712900FA2E72 /* remove_yidian@2x.png in Resources */,
 				D15430811AFDDCD600522DE1 /* paihang_flag1.png in Resources */,
-				D1CAD4681B84D33D00F22DB1 /* 指令格式.pages in Resources */,
 				D12374651B2D795D00902361 /* close_2.png in Resources */,
 				C3AAC0BA1BCC8C22009582D1 /* songlist.txt in Resources */,
 				D175E8CD1B024C99003449A6 /* collection_bt.png in Resources */,
@@ -2396,6 +2397,15 @@
 			name = Main.strings;
 			sourceTree = "<group>";
 		};
+		D13F93F61BD3D264008086BB /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D13F93F51BD3D264008086BB /* zh-Hans */,
+				D13F93F71BD3D266008086BB /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		D1586B4D1AE14CBF00AF3EDB /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2501,7 +2511,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: ZENG ZEBIN (D69H8VACW4)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = KTV/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2511,9 +2521,9 @@
 					"$(PROJECT_DIR)/KTV/Controllers/ScanCode/Framework/ZBarSDK",
 					"$(PROJECT_DIR)/KTV/Controllers/ScanCodeController/Framework/ZBarSDK",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.huawei.zz.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.puzehouse.ktv;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4ab74b11-a29c-4c6b-a675-67f835ae2111";
 			};
 			name = Debug;
 		};
@@ -2522,7 +2532,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: ZENG ZEBIN (D69H8VACW4)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = KTV/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2532,9 +2542,9 @@
 					"$(PROJECT_DIR)/KTV/Controllers/ScanCode/Framework/ZBarSDK",
 					"$(PROJECT_DIR)/KTV/Controllers/ScanCodeController/Framework/ZBarSDK",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.huawei.zz.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.puzehouse.ktv;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4ab74b11-a29c-4c6b-a675-67f835ae2111";
 			};
 			name = Release;
 		};

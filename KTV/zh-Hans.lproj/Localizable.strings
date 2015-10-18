@@ -69,7 +69,7 @@
 
 /** binding Host */
 "networkError" = "网络连接失败";
-"error" ="错误"
+"error" ="错误";
 "confirm"  =  "确定";
 "connectnetwork" = "连接网络";
 "connectNetContent" = "请进入设置界面连接无线网络->Puze";

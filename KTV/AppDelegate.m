@@ -93,6 +93,8 @@
         });
     }];
     [HUD show:YES];
+//    po [[self view] recursiveDescription]
+//     po [[[[UIApplication sharedApplication] windows] objectAtIndex:0] recursiveDescription]
 }
 //networkError connectnetwork
 - (void)showMessageTitle:(NSString*)title message:(NSString*)message showType:(ViewType)type {
@@ -112,7 +114,7 @@
         }];
     } else {
         UIAlertController *alVC=[UIAlertController alertControllerWithTitle:localTitle message:localMessage preferredStyle:UIAlertControllerStyleAlert];
-        
+        alVC.view.backgroundColor=[UIColor clearColor];
         
         UIAlertAction *cancelAction=[UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             [alVC dismissViewControllerAnimated:YES completion:nil];
