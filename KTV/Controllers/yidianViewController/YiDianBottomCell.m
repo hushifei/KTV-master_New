@@ -10,6 +10,7 @@
 #import "CommandControler.h"
 #import "Order.h"
 #import "DataMananager.h"
+#import "AppDelegate.h"
 @interface YiDianBottomCell ()
 
 @end
@@ -42,6 +43,7 @@
 
 - (IBAction)clicked_priority:(id)sender {
     //1.search order table
+    if ([Utility instanceShare].netWorkStatus) {
     if (self.orderID==nil) return;
     CommandControler *cmd=[[CommandControler alloc]init];
      [cmd sendCmd_moveSongToTop:_orderID completed:^(BOOL completed, NSError *error) {
@@ -51,6 +53,9 @@
              }
          }
      }];
+} else {
+    [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+}
 }
 
 
@@ -59,6 +64,7 @@
 }
 
 - (IBAction)removeSong:(id)sender {
+    if ([Utility instanceShare].netWorkStatus) {
     CommandControler *cmd=[[CommandControler alloc]init];
     [cmd sendCmd_remove_yidian:_orderID completed:^(BOOL completed, NSError *error) {
         if (completed) {
@@ -69,6 +75,9 @@
             //network error
         }
     }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
 }
 
 

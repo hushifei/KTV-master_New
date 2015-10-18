@@ -24,7 +24,7 @@ typedef void(^yiDianCompleted)(BOOL completed,NSArray *list);
 //祝福（图片）(最大512*512)数据流
 - (void)sendCmd_zhuFuWithPicture:(UIImage*)image  completed:(sendCompleted)completed;
 //静音/放音
-- (void)sendCmd_mute:(BOOL)mute completed:(sendCompleted)completed;
+- (void)sendCmd_mute_unmute:(sendCompleted)completed;
 //音量(-+)
 - (void)sendCmd_soundAdjust:(NSNumber*)value completed:(sendCompleted)completed;
 //调音(1麦克风 2 音乐 3 功放 4音调 ) & value

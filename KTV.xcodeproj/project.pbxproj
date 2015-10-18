@@ -1391,9 +1391,9 @@
 				D155C69D1AF466F40085CDCB /* YiDianTopViewCell.h */,
 				D155C69E1AF466F40085CDCB /* YiDianTopViewCell.m */,
 				D16735981BA4542D0057CA0A /* YiDianTopViewCell.xib */,
-				D16735971BA4542D0057CA0A /* YiDianBottomCell.xib */,
 				D15201201B07547400217F1C /* YiDianBottomCell.h */,
 				D15201211B07547400217F1C /* YiDianBottomCell.m */,
+				D16735971BA4542D0057CA0A /* YiDianBottomCell.xib */,
 			);
 			path = yidianViewController;
 			sourceTree = "<group>";

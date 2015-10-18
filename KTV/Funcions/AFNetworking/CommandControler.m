@@ -28,6 +28,7 @@
 
 - (instancetype)init {
     if (self=[super init]) {
+        accountDefaults=[NSUserDefaults standardUserDefaults];
         queue=[[NSOperationQueue alloc]init];
         configuration=[NSURLSessionConfiguration ephemeralSessionConfiguration];
         session=[NSURLSession sessionWithConfiguration:configuration];
@@ -127,14 +128,19 @@
 }
 
 //静音/放音
-- (void)sendCmd_mute:(BOOL)mute completed:(sendCompleted)completed {
+- (void)sendCmd_mute_unmute:(sendCompleted)completed {
     //    http://192.168.43.1:8080/puze?cmd=0xb6&ID=(1静音 2=放音)
-    int value;
-    value= mute?1:2;
+    int value=([accountDefaults boolForKey:@"MUTE_SOUND"])?2:1;
     NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xb6&ID=%d",value];
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if ([self httpsStatuCode:response]==200 && !error) {
+            if (value==1) {
+                [accountDefaults setBool:YES forKey:@"MUTE_SOUND"];
+            } else {
+                [accountDefaults setBool:NO forKey:@"MUTE_SOUND"];
+            }
+            [accountDefaults synchronize];
             if (completed) {
                 completed(YES,nil);
             }
@@ -148,24 +154,40 @@
     [dataTask resume];
 }
 
+
 //音量(-+) ::TODO
 - (void)sendCmd_soundAdjust:(NSNumber *)value completed:(sendCompleted)completed {
-    //http://192.168.43.1:8080/puze?cmd=0xb7&vol=音量
-    NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xb7&vol=%@",value];
-    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3];
-    NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if ([self httpsStatuCode:response]==200 && !error) {
-            if (completed) {
-                completed(YES,nil);
+    sendCompleted commingCompleted=completed;
+    [accountDefaults setBool:YES forKey:@"MUTE_SOUND"];
+    [accountDefaults synchronize];
+    [self sendCmd_mute_unmute:^(BOOL completed, NSError *error) {
+        if (!completed || error ) {
+            if (commingCompleted) {
+                commingCompleted(YES,nil);
             }
-        } else {
-            if (completed) {
-                completed(NO,[CommandControler errorWithMessage:error.description]);
-            }
+            return;
         }
+         //http://192.168.43.1:8080/puze?cmd=0xb7&vol=音量
+        NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xb7&vol=%@",value];
+        NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3];
+        NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if ([self httpsStatuCode:response]==200 && !error) {
+                if (commingCompleted) {
+                    [accountDefaults setObject:value forKey:@"Music_soundAdjust"];
+                    [accountDefaults synchronize];
+                    commingCompleted(YES,nil);
+                }
+            } else {
+                if (commingCompleted) {
+                    commingCompleted(NO,[CommandControler errorWithMessage:error.description]);
+                }
+            }
+        }];
+        dataTask.priority=NSURLSessionTaskPriorityHigh;
+        [dataTask resume];
     }];
-    dataTask.priority=NSURLSessionTaskPriorityHigh;
-    [dataTask resume];
+   
+  
 }
 //need to cancel session
 //调音(1麦克风 2 音乐 3 功放 4音调 ) & value
@@ -176,6 +198,8 @@
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if ([self httpsStatuCode:response]==200 && !error) {
             if (completed) {
+                [accountDefaults setObject:value forKey:@"Mic_soundAdjust"];
+                [accountDefaults synchronize];
                 completed(YES,nil);
             }
         } else {
@@ -232,12 +256,7 @@
 //暂停/播放
 - (void)sendCmd_stopPlay:(sendCompleted)completed {
     // http://192.168.43.1:8080/puze?cmd=0xba&ID=(1暂停 2 播放)
-    int value;
-    if ([accountDefaults boolForKey:@"PLAYING"]) {
-        value=1;
-    } else {
-        value=2;
-    }
+    int value =([accountDefaults boolForKey:@"PLAYING"])?1:2;
     NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xba&ID=%d",value];
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -253,7 +272,7 @@
             }
         } else {
             if (completed) {
-                completed(YES,[CommandControler errorWithMessage:error.description]);
+                completed(NO,[CommandControler errorWithMessage:error.description]);
             }
         }
     }];
@@ -263,13 +282,7 @@
 //原唱/伴唱
 - (void)sendCmd_yuanChang_pangChang:(sendCompleted)completed {
     //http://192.168.43.1:8080/puze?cmd=0xbb&ID=(1原唱2伴唱)
-    int value;
-    if ([accountDefaults boolForKey:@"PANGYING"]) {
-        value=1;
-    } else {
-        value=2;
-    }
-    
+    int value=([accountDefaults boolForKey:@"PANGYING"])?1:2;
     NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xbb&ID=%d",value];
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -521,7 +534,7 @@
 + (void)setYidianBadgeWidth:(BBBadgeBarButtonItem *)item completed:(sendCompleted)completed {
     if (![Utility instanceShare].netWorkStatus) return;
     NSString *urlStr=[[@"http://192.168.43.1:8080/puze/?cmd=" stringByAppendingFormat:@"0xbc"]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSLog(@"query:%@",urlStr);
+//    NSLog(@"query:%@",urlStr);
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     NSURLSession *session=[NSURLSession sharedSession];
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -552,6 +565,9 @@
 }
 
 + (NSError*)errorWithMessage:(NSString*)message {
+    if (message==nil || message.length ==0) {
+        message =@"Remote host no been support the command";
+    }
     NSDictionary* errorMessage = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
     return [NSError errorWithDomain:@"SEND_COMMAND" code:999 userInfo:errorMessage];
 }

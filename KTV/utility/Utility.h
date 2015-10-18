@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+@class AppDelegate;
 extern NSString *const HReachabilityChangedNotification;
-
+#define netWorkTimeInterval  10
 //
 #define SCREENSIZE  [UIScreen mainScreen].bounds.size
 
@@ -52,7 +53,8 @@ extern NSString *const HReachabilityChangedNotification;
  *  MainViewController
  
  */
-//#define NOTIFICATION_YIDIAN_INCREASION @"NOTIFICATION_YIDIAN_INCREASION"
+extern NSString * const YiDian_Update_DidChangeNotification;
+
 //
 //
 //@protocol yidianDelegate <NSObject>
@@ -82,8 +84,12 @@ typedef void(^Completed)(BOOL Completed);
 + (BOOL)isIncludeChineseInString:(NSString*)str;
 + (NSString*)shouZiFu:(NSString*)string;
 //network
-//- (void)networkStatus:(void(^)(BOOL isSecucess))block;
+- (void)starToMonitorNetowrkConnection;
+- (void)stopToMonitorNetworkConnection;
++ (void)checkNetworkStatusImmediately:(void(^)(BOOL isConnected,NSError *error))block;
 //nsstring handle
 + (CGSize)sizeWithString:(NSString *)string font:(UIFont *)font;
 + (BOOL)isChineseLanguge;
++ (AppDelegate*)readAppDelegate;
+
 @end

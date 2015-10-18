@@ -15,6 +15,7 @@
 #import "CommandControler.h"
 #import "HuToast.h"
 #import "UIImageView+WebCache.h"
+#import "SDWebImageManager.h"
 @interface SettingViewController () {
     CommandControler *cmd;
     HuToast *myToast;
@@ -35,9 +36,12 @@
     self.tableView.layer.backgroundColor=[UIColor whiteColor].CGColor;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
     self.tableView.rowHeight=60.0f;
+    //    self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"geshou_area_bg"]];
+   
     self.tableView.scrollEnabled=NO;
-    
-    
+    UIImage *image=[UIImage imageNamed:@"songsList_bg"];
+    self.tableView.backgroundColor=[UIColor colorWithPatternImage:[image stretchableImageWithLeftCapWidth:100 topCapHeight:100 ]];
+
 
 //    self.dataSrc = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"restartHost", nil),NSLocalizedString(@"shutdownHost", nil), NSLocalizedString(@"clearCachedata", nil),NSLocalizedString(@"about", nil), nil];
         self.dataSrc = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"restartHost", nil),NSLocalizedString(@"shutdownHost", nil), NSLocalizedString(@"clearCachedata", nil),nil];
@@ -77,6 +81,7 @@
         cell.selectionStyle=UITableViewCellSelectionStyleDefault;
         cell.backgroundColor=[UIColor groupTableViewBackgroundColor];
     }
+
     switch (indexPath.row) {
         case 0:
         case 1:
@@ -91,7 +96,9 @@
         default:
             break;
     }
-    
+    cell.backgroundColor=[UIColor clearColor];
+    cell.textLabel.textColor=[UIColor whiteColor];
+    [cell.textLabel sizeToFit];
     return cell;
 }
 
@@ -130,7 +137,8 @@
         }
         case 2: {
             //clear tmp file and so on;
-            
+            [[SDWebImageManager sharedManager].imageCache clearMemory];
+            [[SDWebImageManager sharedManager].imageCache clearDisk];
             [myToast setToastWithMessage:NSLocalizedString(@"clearcachedatasuccess", nil)  WithTimeDismiss:@"2" messageType:KMessageSuccess];
             break;
         }

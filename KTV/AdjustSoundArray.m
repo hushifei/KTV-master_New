@@ -28,7 +28,7 @@
 }
 
 - (void)addObject:(id)anObject  {
-    NSLog(@"<--->%@",anObject);
+//    NSLog(@"<--->%@",anObject);
    __block NSNumber *value=[[NSNumber alloc]init];
     if (anObject) {
         NSBlockOperation *operation=[NSBlockOperation blockOperationWithBlock:^{
@@ -38,12 +38,12 @@
             switch (_type) {
                 case 0: {
                     if (value==anObject) {
-                        NSLog(@"---->%@",value);
+//                        NSLog(@"---->%@",value);
                         break ;
                     }
                     [cmd sendCmd_soundAdjust:anObject completed:^(BOOL completed, NSError *error) {
                         if (completed) {
-                            NSLog(@"ok");
+//                            NSLog(@"ok");
                         }
                     }];
                 }
@@ -58,7 +58,7 @@
         
         }];
      
-        NSLog(@"<----%@",value);
+//        NSLog(@"<----%@",value);
         [operationQueue addOperation:operation];
     }
 //    [super addObject:anObject];

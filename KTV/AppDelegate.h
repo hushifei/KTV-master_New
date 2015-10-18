@@ -7,17 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+typedef NS_ENUM(NSUInteger,ViewType) {
+    Show_HUD = 0,
+    Show_Alert
+};
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate,UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
+- (void)showMessageTitle:(NSString*)title message:(NSString*)message showType:(ViewType)type;
 @end
 
 /*
  ----.cell 更改成纯代码
- ----.播控
-    1.原／伴 
-    2.播／停
-    3.mic/sound
-    4.mute/unmute
+ ----.国际化 检查
 */
+
+

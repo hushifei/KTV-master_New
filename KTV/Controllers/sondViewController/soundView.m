@@ -157,7 +157,7 @@
         [btnArray addObject:lable];
         
     }
-    slider1=[[ZVolumeSlide alloc]initWithFrame:CGRectMake(-12,(topChuckSize.height-60)/2,topChuckSize.height-60, 23)];
+    slider1=[[ZVolumeSlide alloc]initWithFrame:CGRectMake(-12,(topChuckSize.height-60)/2,topChuckSize.height-60, 23)type:0];
     CGRect newRect=slider1.frame;
     if (IS_IPHONE_4_OR_LESS) {
         newRect.origin.x+=32;
@@ -184,14 +184,12 @@
     
     //静音／正常
     playBtn.frame = CGRectMake(topChuckSize.width/3+(topChuckSize.width/3-(ImageViewmaxWidth-15))/2, topChuckSize.height/2-ImageViewmaxWidth/2, CGRectGetWidth(playStopImageV.frame)/2-5,CGRectGetHeight(playStopImageV.frame));
-    [playBtn addTarget:self action:@selector(mute_clicked:) forControlEvents:UIControlEventTouchUpInside];
+//    [playBtn addTarget:self action:@selector(mute_clicked:) forControlEvents:UIControlEventTouchUpInside];
     
     stopbtn.frame = CGRectMake(CGRectGetMaxX(playBtn.frame)+15, topChuckSize.height/2-ImageViewmaxWidth/2, CGRectGetWidth(playStopImageV.frame)/2-10,CGRectGetHeight(playStopImageV.frame));
-    [stopbtn addTarget:self action:@selector(unmute_clicked:) forControlEvents:UIControlEventTouchUpInside];
-   
+//    [stopbtn addTarget:self action:@selector(unmute_clicked:) forControlEvents:UIControlEventTouchUpInside];
     
-    
-    slider2=[[ZVolumeSlide alloc]initWithFrame:CGRectMake(CGRectGetMinX([[btnArray lastObject] frame])-40, (topChuckSize.height-60)/2,topChuckSize.height-60, 23)];
+    slider2=[[ZVolumeSlide alloc]initWithFrame:CGRectMake(CGRectGetMinX([[btnArray lastObject] frame])-40, (topChuckSize.height-60)/2,topChuckSize.height-60, 23) type:1];
     if (IS_IPHONE_4_OR_LESS) {
         CGRect newRect=slider2.frame;
         newRect.origin.x+=25;
@@ -286,14 +284,19 @@
     serviceBtn.titleEdgeInsets=UIEdgeInsetsMake(0, serviceBtn.bounds.size.width/2, 0, 0);
     [bottomChunckbView addSubview:serviceBtn];//服务
   
-    [slider1 setSlideValue:[userDefaults objectForKey:@"Mic_soundAdjust"]];
-    [slider2 setSlideValue:[userDefaults objectForKey:@"Music_soundAdjust"]];
+
     [centerChunckView addSubview:slider1];
     [centerChunckView addSubview:slider2];
 
     [centerChunckView addSubview:playStopImageV];
-    [centerChunckView addSubview:playBtn];
-    [centerChunckView addSubview:stopbtn];
+    [playStopImageV addSubview:playBtn];
+    [playStopImageV addSubview:stopbtn];
+    UIButton *play_stop_btn=[[UIButton alloc]initWithFrame:CGRectMake(0, 0, ImageViewmaxWidth, ImageViewmaxWidth)];
+    play_stop_btn.layer.cornerRadius=ImageViewmaxWidth/2;
+    [play_stop_btn addTarget:self action:@selector(mute_unmute_clicked:) forControlEvents:UIControlEventTouchUpInside];
+    [playStopImageV addSubview:play_stop_btn];
+    playStopImageV.clipsToBounds=YES;
+    playStopImageV.userInteractionEnabled=YES;
     [bottomChunckbView addSubview:heCaiBtn];
     [bottomChunckbView addSubview:daoCaiBtn];
     [bottomChunckbView addSubview:rouHeBtn];
@@ -318,150 +321,132 @@
     [serviceBtn addTarget:self action:@selector(fuwu_clicked:) forControlEvents:UIControlEventTouchUpInside];
 }
 #pragma mark - Events
-
-//- (void)mic_clicked:(id)sender {
-//    调音(1麦克风 2 音乐 3 功放 4音调 ) & value
-//    [cmdController sendCmd_yingDiaoAdjustToObject:1 value:20];
-//    NSLog(@"%s",__FUNCTION__);
-//    slider1 = [[ZVolumeSlide alloc]initWithFrame:CGRectMake(15, 200, 165, 23)];
-//    slider1.delegate = self;
-//    [self addSubview:slider1];
-//}
-
-//- (void)music_clicked:(id)sender {
-//    [cmdController sendCmd_yingDiaoAdjustToObject:2 value:20];
-//    NSLog(@"%s",__FUNCTION__);
-//
-//}
 //(1静音 2=放音)
-- (void)mute_clicked:(id)sender {
-    [cmdController sendCmd_mute:YES completed:^(BOOL completed, NSError *error) {
-        if (completed) {
-            NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-        } else {
-            NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-        }
-    }];
-
+- (void)mute_unmute_clicked:(id)sender {
+    if ([Utility instanceShare].netWorkStatus) {
+        [cmdController sendCmd_mute_unmute:^(BOOL completed, NSError *error) {
+//            if (completed) {
+//                NSLog(@"%s___OK",__PRETTY_FUNCTION__);
+//            } else {
+//                NSLog(@"%s___NO",__PRETTY_FUNCTION__);
+//            }
+        }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
 }
 
-- (void)unmute_clicked:(id)sender {
-    [cmdController sendCmd_mute:NO completed:^(BOOL completed, NSError *error) {
-        if (completed) {
-            NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-        } else {
-            NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-        }
-    }];
-
-}
 
 - (void)hecai_clicked:(id)sender {
     //气氛(1,喝彩 2，倒彩 3，明亮 4，柔和 5 动感 6 开关)
-    [cmdController sendCmd_qiFen:1 completed:^(BOOL completed, NSError *error) {
-        if (completed) {
-            NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-        } else {
-            NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-        }
-    }];
-
+    if ([Utility instanceShare].netWorkStatus) {
+        [cmdController sendCmd_qiFen:1 completed:^(BOOL completed, NSError *error) {
+//            if (completed) {
+//                NSLog(@"%s___OK",__PRETTY_FUNCTION__);
+//            } else {
+//                NSLog(@"%s___NO",__PRETTY_FUNCTION__);
+//            }
+        }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
 }
 
 - (void)daocai_clicked:(id)sender {
-    [cmdController sendCmd_qiFen:2 completed:^(BOOL completed, NSError *error) {
-        if (completed) {
-            NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-        } else {
-            NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-        }
-    }];
+    if ([Utility instanceShare].netWorkStatus) {
+        [cmdController sendCmd_qiFen:2 completed:^(BOOL completed, NSError *error) {
+        }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
 }
 
 - (void)rouhe_clicked:(id)sender {
-    [cmdController sendCmd_qiFen:4 completed:^(BOOL completed, NSError *error) {
-        if (completed) {
-            NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-        } else {
-            NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-        }
-    }];
+    if ([Utility instanceShare].netWorkStatus) {
+        [cmdController sendCmd_qiFen:4 completed:^(BOOL completed, NSError *error) {
+        }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
 }
 
 - (void)mingliang_clicked:(id)sender {
-    [cmdController sendCmd_qiFen:3 completed:^(BOOL completed, NSError *error) {
-        if (completed) {
-            NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-        } else {
-            NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-        }
-    }];
+    if ([Utility instanceShare].netWorkStatus) {
+        [cmdController sendCmd_qiFen:3 completed:^(BOOL completed, NSError *error) {
+        }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
 }
 
 - (void)donggang_clicked:(id)sender {
-    [cmdController sendCmd_qiFen:5 completed:^(BOOL completed, NSError *error) {
-        if (completed) {
-            NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-        } else {
-            NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-        }
-    }];
-
-
+    if ([Utility instanceShare].netWorkStatus) {
+        [cmdController sendCmd_qiFen:5 completed:^(BOOL completed, NSError *error) {
+        }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
 }
 
 - (void)kaiguang_clicked:(id)sender {
-    [cmdController sendCmd_qiFen:6 completed:^(BOOL completed, NSError *error) {
-        if (completed) {
-            NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-        } else {
-            NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-        }
-    }];
+    if ([Utility instanceShare].netWorkStatus) {
+        [cmdController sendCmd_qiFen:6 completed:^(BOOL completed, NSError *error) {
+        }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
 }
 
 - (void)fuwu_clicked:(id)sender {
-    [cmdController sendCmd_FUWU:^(BOOL completed, NSError *error) {
-        if (completed) {
-            NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-        } else {
-            NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-        }
-    }];
+    if ([Utility instanceShare].netWorkStatus) {
+        [cmdController sendCmd_qiFen:2 completed:^(BOOL completed, NSError *error) {
+            [cmdController sendCmd_FUWU:^(BOOL completed, NSError *error) {
+                if (completed) {
+//                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
+                } else {
+//                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
+                }
+            }];
+        }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
+
 }
 
 - (void)bokongBtn_clicked:(id)sender {
     UIButton *btn=(UIButton*)sender;
+    if ([Utility instanceShare].netWorkStatus) {
     switch (btn.tag) {
         case 0: {
-            NSLog(@"点击原音");
+//            NSLog(@"点击原音");
             [cmdController sendCmd_yuanChang_pangChang:^(BOOL completed, NSError *error) {
                 if (completed) {
-                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
+//                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
                 } else {
-                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
+//                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
                 }
             }];
             break;
         }
         case 1: {
-            NSLog(@"点击切歌");
+//            NSLog(@"点击切歌");
             [cmdController sendCmd_switchSong:^(BOOL completed, NSError *error) {
                 if (completed) {
-                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
+//                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
                 } else {
-                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
+//                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
                 }
             }];
             break;
         }
         case 2: {
-            NSLog(@"点击播放");
+//            NSLog(@"点击播放");
             [cmdController sendCmd_stopPlay:^(BOOL completed, NSError *error) {
                 if (completed) {
-                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
+//                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
                 } else {
-                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
+//                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
                 }
             }];
             break;
@@ -478,6 +463,9 @@
         }
         default:
             break;
+    }
+    }else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
     }
 }
 
@@ -501,65 +489,35 @@
 }
 
 #pragma mark - ZVolumeSlideDelegate
-- (void)slideValueChange:(NSNumber*)value slider:(ZVolumeSlide *)slider {
-    NSLog(@"%@",value);
-    [self handSendSoundMessageCommandWithValue:value View:slider];
-}
 
 - (void)sliderDidEndDrag:(NSNumber *)value slider:(ZVolumeSlide *)slider {
-    
+    NSLog(@"%@",value);
+    [self handSendSoundMessageCommandWithValue:value View:slider];
+
 }
 
 - (void)handSendSoundMessageCommandWithValue:(NSNumber*)value View:(ZVolumeSlide*)slider {
-//    if ([Utility instanceShare].netWorkStatus) {
-//        CommandControler *cmd=[[CommandControler alloc]init];
-//        if (slider.tag==1) {
-//            [cmd sendCmd_yingDiaoAdjustToObject:0 value:value completed:^(BOOL completed, NSError *error) {
-//                
-//            }];
-//            NSBlockOperation *mic_operation=[NSBlockOperation blockOperationWithBlock:^{
-//                if ([cmd sendCmd_yingDiaoAdjustToObject:0 value:value]) {
-//                    dispatch_sync(dispatch_get_main_queue(), ^{
-//                        slider.processView.frame = CGRectMake(0, 0, slider.width * slider.slideView.value, slider.height);
-//                        [userDefaults setObject:value forKey:@"Mic_soundAdjust"];
-//                        [userDefaults synchronize];
-//                    });
-//                } else {
-//                    HuToast *toast=[[HuToast alloc]init];
-//                    [toast setToastWithMessage:@"主机没有链接" WithTimeDismiss:@"2" messageType:KMessageStyleError];
-//                    
-//                }
-//            }];
-//            if ([mic_Queue operationCount]>0) {
-//                [mic_operation addDependency:[mic_Queue operations].lastObject];
-//            }
-//            [mic_Queue addOperation:mic_operation];
-//        } else {
-//            NSBlockOperation *music_operation=[NSBlockOperation blockOperationWithBlock:^{
-//                if ([cmd sendCmd_soundAdjust:value]) {
-//                    dispatch_sync(dispatch_get_main_queue(), ^{
-//                        slider.processView.frame = CGRectMake(0, 0, slider.width * slider.slideView.value, slider.height);
-//                        [userDefaults setObject:value forKey:@"Mic_soundAdjust"];
-//                        [userDefaults synchronize];
-//                    });
-//                    
-//                } else {
-//                    HuToast *toast=[[HuToast alloc]init];
-//                    [toast setToastWithMessage:@"主机没有链接" WithTimeDismiss:@"2" messageType:KMessageStyleError];
-//                    
-//                }
-//            }];
-//            if ([music_Queue operationCount]>0) {
-//                [music_operation addDependency:[music_Queue operations].lastObject];
-//            }
-//            [music_Queue addOperation:music_operation];
-//            
-//        }
-//    } else {
-//        [slider setSlideValue:@0];
-//        HuToast *toast=[[HuToast alloc]init];
-//        [toast setToastWithMessage:NSLocalizedString(@"networkError", nil) WithTimeDismiss:@"2" messageType:KMessageStyleError];
-//    }
+//    NSLog(@"========%@=========",value);
+    if ([Utility instanceShare].netWorkStatus) {
+        CommandControler *cmd=[[CommandControler alloc]init];
+        if (slider.tag==1) {
+            [cmd sendCmd_yingDiaoAdjustToObject:2 value:value completed:^(BOOL completed, NSError *error) {
+                if (completed && error==nil) {
+                    [userDefaults setObject:value forKey:@"Mic_soundAdjust"];
+                    [userDefaults synchronize];
+                }
+            }];
+        } else {
+            [cmd sendCmd_soundAdjust:value completed:^(BOOL completed, NSError *error) {
+                if (completed && error==nil) {
+                    [userDefaults setObject:value forKey:@"Music_soundAdjust"];
+                    [userDefaults synchronize];
+                }
+            }];
+        }
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
 }
 
 @end

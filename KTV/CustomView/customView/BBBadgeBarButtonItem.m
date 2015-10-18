@@ -37,24 +37,26 @@ static int const BBoriginY = 0;
     self = [self initWithCustomView:customButton];
     if (self) {
         [self initializer];
-       
+        [self registNofification];
     }
     
     return self;
 }
 
 
-//- (void)notification_refreshBadge {
-//    __weak __typeof(self)weakSelf = self;
-//    [CommandControler setYidianBadgeWidth:weakSelf];
-//}
-//
-//- (void)registNofification {
-//      [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notification_refreshBadge) name:NOTIFICATION_YIDIAN_INCREASION object:nil];
-//}
-//- (void)removeNotification {
-//    [[NSNotificationCenter defaultCenter]removeObserver:self name:NOTIFICATION_YIDIAN_INCREASION object:nil];
-//}
+- (void)notification_refreshBadge {
+    __weak __typeof(self)weakSelf = self;
+    [CommandControler setYidianBadgeWidth:weakSelf completed:^(BOOL completed, NSError *error) {
+    }];
+}
+
+- (void)registNofification {
+      [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(notification_refreshBadge) name:YiDian_Update_DidChangeNotification object:nil];
+}
+
+- (void)removeNotification {
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:YiDian_Update_DidChangeNotification object:nil];
+}
 
 - (void)initializer
 {
@@ -186,5 +188,7 @@ static int const BBoriginY = 0;
         [self refreshBadge];
     }
 }
-
+- (void)dealloc {
+    [self removeNotification];
+}
 @end

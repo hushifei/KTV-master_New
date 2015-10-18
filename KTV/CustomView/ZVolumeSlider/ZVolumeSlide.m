@@ -8,15 +8,18 @@
 
 #import "ZVolumeSlide.h"
 
+@interface ZVolumeSlide () {
+    SliderType type;
+}
+@end
+
 @implementation ZVolumeSlide
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame type:(SliderType)sliderType;
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        
+    if (self=[super initWithFrame:frame]) {
+        type=sliderType;
         self.backgroundColor = [UIColor clearColor]; //背景颜色设置，设置为clearColor 背景透明
-        
         _width = frame.size.width;
         _height= frame.size.height;
         _processView = [[UIView alloc]init];
@@ -37,37 +40,48 @@
         
         [_slideView setMaximumTrackImage:[UIImage imageNamed:@"ZVolumeSlide_clearBack"] forState:UIControlStateNormal];
         [_slideView setMinimumTrackImage:[UIImage imageNamed:@"ZVolumeSlide_clearBack"] forState:UIControlStateNormal];
+        if (type==IS_MIC_TYPE) {
+            [self initSlideValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"Mic_soundAdjust"]];
+        } else {
+            [self initSlideValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"Music_soundAdjust"]];
+        }
         _slideView.continuous = NO;
-        
-//        [_slideView setThumbImage:[UIImage imageNamed:@"yuan"] forState:UIControlStateNormal];
-//        [_slideView setThumbImage:[UIImage imageNamed:@"yuan"] forState:UIControlStateHighlighted];
-//
-//        [_slideView addTarget:self action:@selector(slideValueChanged) forControlEvents:UIControlEventTouchUpOutside]; //sliderDragEnd slideValueChanged
         [_slideView addTarget:self action:@selector(slideValueChanged) forControlEvents:UIControlEventValueChanged];
-//  ;
-      
         [self addSubview:_slideView];
     }
     return self;
 }
 
-- (void)setSlideValue:(NSNumber*) value{
-    _slideView.value = [value floatValue];
-    [self slideValueChanged];
+- (void)initSlideValue:(NSNumber*) value{
+    if (value==nil) {
+        value=[NSNumber numberWithFloat:0.0];
+        if (type==IS_MIC_TYPE) {
+            [[NSUserDefaults standardUserDefaults] setObject:value forKey:@"Mic_soundAdjust"];
+        } else {
+             [[NSUserDefaults standardUserDefaults] setObject:value forKey:@"Music_soundAdjust"];
+        }
+    } else {
+        if (type==IS_MIC_TYPE) {
+            _slideView.value=[[[NSUserDefaults standardUserDefaults]objectForKey:@"Mic_soundAdjust"]floatValue]/15;
+        } else {
+            _slideView.value=[[[NSUserDefaults standardUserDefaults]objectForKey:@"Music_soundAdjust"]floatValue]/15;
+        }
+
+    }
+    _processView.frame = CGRectMake(0, 0, _width * _slideView.value, _height);
 }
 
 - (void)slideValueChanged {
     __weak __typeof(self) weakSelf=self;
     _processView.frame = CGRectMake(0, 0, _width * _slideView.value, _height);
     if ([_delegate respondsToSelector:@selector(sliderDidEndDrag:slider:)]) {
-        [_delegate sliderDidEndDrag:[NSNumber numberWithFloat:_slideView.value] slider:weakSelf];
+        [_delegate sliderDidEndDrag:[NSNumber numberWithFloat:ceilf(_slideView.value*15)] slider:weakSelf];
     }
-//    NSLog(@"%s",__PRETTY_FUNCTION__);
 }
 
-- (void)sliderDragEnd {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-}
+//- (void)sliderDragEnd {
+//    NSLog(@"%s",__PRETTY_FUNCTION__);
+//}
 
 //- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event  {
 //    NSLog(@"begin_________________");

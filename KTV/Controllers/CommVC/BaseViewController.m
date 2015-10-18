@@ -73,7 +73,6 @@
     [CommandControler setYidianBadgeWidth:weakBarButton completed:^(BOOL completed, NSError *error) {
         
     }];
-
 }
 /*
 #pragma mark - Navigation

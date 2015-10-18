@@ -26,7 +26,10 @@
 
 "hud_text_init"   ="Initializing Data";
 "hud_detail_wait" ="Please Be Waiting......";
+"scancodeerror" ="Two dimensional code format error";
 
+"username" = "UserName";
+"password" = "PassWord";
 /** playController*/
 
 "vocalonoff" = "Vocal On/Off";
@@ -68,11 +71,14 @@
 
 /** binding Host */
 "networkError" = "No been connected to device";
+"error" = "Error";
 "confirm"  =  "Confirm";
 "connectnetwork" = "Connect WIFI";
-"connectNetContent" = "Setting-WIFI Network";
+"connectNetContent" = "Please Connect to WIFI -> Puze";
+"connectNetOK"  =  "Network has been connected";
 "playing"="onPlaying";
 
 
 //** new song VC **/
 "collect" = "Collect";
+"jumpSetting" = "Go Setting";

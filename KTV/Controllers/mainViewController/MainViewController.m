@@ -37,7 +37,7 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets=YES;
     [self createContextUI];
-//    [self copyFile];
+    //    [self copyFile];
 }
 
 - (void)copyFile {
@@ -258,22 +258,44 @@
 
 #pragma mark- ScanCodeDelegate
 - (void)didFinishedScanCode:(NSError *)error withString:(NSString *)string {
-    NSArray *scanArray=[string componentsSeparatedByString:@","];
-    if (scanArray && [scanArray count]==2) {
-        NSString *wifiName=scanArray[0];
-        NSString *wifiPassWord=scanArray[1];
-        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetContent", nil) preferredStyle:UIAlertControllerStyleAlert];
+    //check network status
+    if ([Utility instanceShare].netWorkStatus) {
+        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetOK", nil) preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }];
         [alVC addAction:action];
     } else {
-        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetContent", nil) preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-        }];
-        [alVC addAction:action];
-        
+        NSArray *scanArray=[string componentsSeparatedByString:@","];
+        if (scanArray && [scanArray count]==2) {
+            NSString *wifiName=scanArray[0];
+            NSString *wifiPassWord=scanArray[1];
+            UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetContent", nil) preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction=[UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [alVC dismissViewControllerAnimated:YES completion:nil];
+            }];
+            UIAlertAction *confirmaction=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+            }];
+            [alVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                textField.text=[NSString stringWithFormat:@"%@:%@",NSLocalizedString(@"username", nil),wifiName];
+                textField.enabled=NO;
+            }];
+            [alVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                textField.text=[NSString stringWithFormat:@"%@:%@",NSLocalizedString(@"password", nil),wifiPassWord];
+                textField.enabled=NO;
+            }];
+            
+            [alVC addAction:cancelAction];
+            [alVC addAction:confirmaction];
+        } else {
+            UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"scancodeerror", nil) preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            [alVC addAction:action];
+            
+        }
     }
 }
 
