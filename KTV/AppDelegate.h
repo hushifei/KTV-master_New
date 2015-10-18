@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger,ViewType) {
  ----.networkstatus monitor use background session
  --- 已点切歌放到导航栏
  ---排行榜 重写
+ －－替换HUBprogress
 */
 
 
