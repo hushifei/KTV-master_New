@@ -11,10 +11,12 @@
 #import "Utility.h"
 #import "SDWebImageManager.h"
 #import "MBProgressHUD.h"
+#import "DataMananager.h"
 #import "DownLoadFileTool.h"
 @interface AppDelegate () {
     MBProgressHUD *HUD;
     Utility *utilityTool;
+    DataMananager *dataManager;
 }
 
 @end
@@ -23,6 +25,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     utilityTool=[Utility instanceShare];
+    dataManager=[DataMananager instanceShare];
     [Utility checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
         if (isConnected && error==nil) {
             dispatch_sync(dispatch_get_main_queue(), ^{

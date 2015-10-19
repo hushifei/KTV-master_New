@@ -18,6 +18,7 @@
 #import "SoundViewController.h"
 #import "Utility.h"
 #import "BaseNavigationController.h"
+#import "DataMananager.h"
 @interface MainViewController ()<UISearchBarDelegate,ScanCodeDelegate> {
     UIButton *geshouBtn;
     UIButton *paihangBtn;
@@ -47,6 +48,23 @@
         NSString *distancePath=[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"KTV_Master.zip"];
         [fileManager copyItemAtPath:sourcePath toPath:distancePath error:nil];
     }
+}
+
+- (void)initNavigationItem {
+        //navigation item
+    [super initNavigationItem];
+    UIButton *button=[[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    [button setTitle:NSLocalizedString(@"demo", nil) forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
+    [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    [button sizeToFit];
+    [button addTarget:self action:@selector(openDemoDB) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:button];
+}
+
+- (void)openDemoDB {
+    [[DataMananager instanceShare]openDB:1];
 }
 
 - (void)didReceiveMemoryWarning {

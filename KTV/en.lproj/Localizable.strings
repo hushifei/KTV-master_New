@@ -30,6 +30,9 @@
 
 "username" = "UserName";
 "password" = "PassWord";
+
+"demo"  = "Demo";
+
 /** playController*/
 
 "vocalonoff" = "Vocal On/Off";

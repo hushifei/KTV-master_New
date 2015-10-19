@@ -29,6 +29,8 @@
 "username" = "用户名";
 "password" = "密码";
 
+"demo"  = "演示";
+
 /** playController*/
 "vocalonoff" = "原/伴";
 "nextsong" = "切歌";
