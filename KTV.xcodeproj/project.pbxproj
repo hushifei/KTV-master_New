@@ -28,6 +28,9 @@
 		C344DB621BCB4AAB00F1325D /* UINavigationBar+customBar.m in Sources */ = {isa = PBXBuildFile; fileRef = C344DB5D1BCB4AAB00F1325D /* UINavigationBar+customBar.m */; settings = {ASSET_TAGS = (); }; };
 		C344DB651BCB4B9F00F1325D /* NSString+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = C344DB641BCB4B9F00F1325D /* NSString+Utility.m */; settings = {ASSET_TAGS = (); }; };
 		C344DB681BCB5CEA00F1325D /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C344DB671BCB5CEA00F1325D /* BaseNavigationController.m */; settings = {ASSET_TAGS = (); }; };
+		C3558C551BD4BFE3005D2F48 /* NewPaiHangViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3558C541BD4BFE3005D2F48 /* NewPaiHangViewController.m */; settings = {ASSET_TAGS = (); }; };
+		C3558C581BD4CBCB005D2F48 /* downAccessory.png in Resources */ = {isa = PBXBuildFile; fileRef = C3558C561BD4CBCB005D2F48 /* downAccessory.png */; settings = {ASSET_TAGS = (); }; };
+		C3558C591BD4CBCB005D2F48 /* upAccessory.png in Resources */ = {isa = PBXBuildFile; fileRef = C3558C571BD4CBCB005D2F48 /* upAccessory.png */; settings = {ASSET_TAGS = (); }; };
 		C389FE501BD47E450017ECBF /* DemoDB.sqlite.zip in Resources */ = {isa = PBXBuildFile; fileRef = C389FE4F1BD47E450017ECBF /* DemoDB.sqlite.zip */; settings = {ASSET_TAGS = (); }; };
 		C389FE721BD489830017ECBF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C389FE711BD489830017ECBF /* libz.tbd */; };
 		C389FE9C1BD491B80017ECBF /* ZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = C389FE8F1BD491B80017ECBF /* ZipArchive.m */; settings = {ASSET_TAGS = (); }; };
@@ -381,6 +384,10 @@
 		C344DB641BCB4B9F00F1325D /* NSString+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utility.m"; sourceTree = "<group>"; };
 		C344DB661BCB5CEA00F1325D /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseNavigationController.h; path = CommVC/BaseNavigationController.h; sourceTree = "<group>"; };
 		C344DB671BCB5CEA00F1325D /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseNavigationController.m; path = CommVC/BaseNavigationController.m; sourceTree = "<group>"; };
+		C3558C531BD4BFE3005D2F48 /* NewPaiHangViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewPaiHangViewController.h; sourceTree = "<group>"; };
+		C3558C541BD4BFE3005D2F48 /* NewPaiHangViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewPaiHangViewController.m; sourceTree = "<group>"; };
+		C3558C561BD4CBCB005D2F48 /* downAccessory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = downAccessory.png; sourceTree = "<group>"; };
+		C3558C571BD4CBCB005D2F48 /* upAccessory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upAccessory.png; sourceTree = "<group>"; };
 		C389FE4F1BD47E450017ECBF /* DemoDB.sqlite.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = DemoDB.sqlite.zip; sourceTree = "<group>"; };
 		C389FE711BD489830017ECBF /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		C389FE8E1BD491B80017ECBF /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
@@ -1213,6 +1220,8 @@
 		D1542FBE1AFDDCD600522DE1 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				C3558C561BD4CBCB005D2F48 /* downAccessory.png */,
+				C3558C571BD4CBCB005D2F48 /* upAccessory.png */,
 				D15C03BF1BCA5A5500F4F112 /* yidian@2x.png */,
 				D15C03C11BCA5ADC00F4F112 /* yidian.png */,
 				D161A5461B483F910029AC19 /* ip4.png */,
@@ -1659,6 +1668,8 @@
 		D16E521F1AE6755F00E57011 /* paihangViewController */ = {
 			isa = PBXGroup;
 			children = (
+				C3558C531BD4BFE3005D2F48 /* NewPaiHangViewController.h */,
+				C3558C541BD4BFE3005D2F48 /* NewPaiHangViewController.m */,
 				D15E2AAE1AEBD0260093C773 /* paiHangViewController.h */,
 				D15E2AAF1AEBD0260093C773 /* paiHangViewController.m */,
 				D156A3DD1AEC981D0091C419 /* paiHangViewCell.h */,
@@ -2059,6 +2070,7 @@
 				D15430881AFDDCD600522DE1 /* paihang_nav_bg.png in Resources */,
 				D15C03C21BCA5ADC00F4F112 /* yidian.png in Resources */,
 				D175F1141AE15F78004E3B9A /* unicode_to_hanyu_pinyin.txt in Resources */,
+				C3558C591BD4CBCB005D2F48 /* upAccessory.png in Resources */,
 				D14F1CC01AFBACE400EA6E50 /* selected@2x.jpeg in Resources */,
 				D15430901AFDDCD600522DE1 /* jiajian.png in Resources */,
 				D14F1CBA1AFBACE400EA6E50 /* calendar.png in Resources */,
@@ -2190,6 +2202,7 @@
 				D15430421AFDDCD600522DE1 /* nav_top_bg.png in Resources */,
 				D13D66BA1B31B8AA00928457 /* companyLog.png in Resources */,
 				D167359D1BA4544C0057CA0A /* SongBottomCell.xib in Resources */,
+				C3558C581BD4CBCB005D2F48 /* downAccessory.png in Resources */,
 				D19936F71B38028500C57622 /* placeholder.png in Resources */,
 				C3AAC0CC1BCC953C009582D1 /* password_ok_down@3x.png in Resources */,
 				D15430861AFDDCD600522DE1 /* paihang_flag5.png in Resources */,
@@ -2343,6 +2356,7 @@
 				D175F0851AE15F46004E3B9A /* Utility.m in Sources */,
 				D12374541B2D163500902361 /* SDWebImageCompat.m in Sources */,
 				D14F1CAA1AFBACD300EA6E50 /* NMBottomTabBar.m in Sources */,
+				C3558C551BD4BFE3005D2F48 /* NewPaiHangViewController.m in Sources */,
 				D1F6C0311B2C95640018C96F /* FMDatabase.m in Sources */,
 				2041A8E51AEB994000D377B1 /* SongBottomCell.m in Sources */,
 				C344DB601BCB4AAB00F1325D /* UIImageView+Animation.m in Sources */,

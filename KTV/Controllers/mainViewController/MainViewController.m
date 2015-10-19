@@ -19,6 +19,9 @@
 #import "Utility.h"
 #import "BaseNavigationController.h"
 #import "DataMananager.h"
+
+#import "NewPaiHangViewController.h"
+
 @interface MainViewController ()<UISearchBarDelegate,ScanCodeDelegate> {
     UIButton *geshouBtn;
     UIButton *paihangBtn;
@@ -84,7 +87,10 @@
 }
 
 - (void)clicked_paihangBtn:(id)sender {
-    paiHangViewController *vc=[[paiHangViewController alloc]init];
+//    paiHangViewController *vc=[[paiHangViewController alloc]init];
+    
+    NewPaiHangViewController *vc=[[NewPaiHangViewController alloc]init];
+
     [self.navigationController pushViewController:vc animated:YES];
 }
 
