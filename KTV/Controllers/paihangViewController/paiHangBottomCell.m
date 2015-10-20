@@ -7,6 +7,10 @@
 //
 
 #import "paiHangBottomCell.h"
+#import "CommandControler.h"
+#import "NSString+Utility.h"
+#import "DataMananager.h"
+#import "AppDelegate.h"
 @interface paiHangBottomCell ()
 @property (strong, nonatomic)UIButton *collectionrec;
 @property (strong, nonatomic)UIButton *priority;
@@ -46,7 +50,6 @@
     
     
     [_collectionrec addTarget:self action:@selector(clicked_collection:) forControlEvents:UIControlEventTouchUpInside];
-    
     [_priority addTarget:self action:@selector(clicked_priority:) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:_collectionrec];
@@ -55,14 +58,67 @@
 
 
 - (void)clicked_collection:(id)sender {
-    _collectionrec.enabled=NO;
-    [_oneSong insertSongToCollectionTable];
+//    [_oneSong insertSongToCollectionTable:^(BOOL actionCompleted) {
+//        if (actionCompleted) {
+//            _collectionrec.enabled=YES;
+//        }
+//    }];
+        __block __weak typeof (self) weakSelf=self;
+        NSString *querySqlStr=[NSString stringWithFormat:@"select * from CollectionTable where number='%@'",[_oneSong.number encodeBase64]];
+        FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:querySqlStr];
+        while ([rs next]) {
+            if ([_delegate respondsToSelector:@selector(addSongToCollectionResult:)]) {
+                [_delegate addSongToCollectionResultKMessageStyleInfo];
+            }
+            if (actionCompleted) {
+                actionCompleted(YES);
+            }
+            return;
+        }
+
+}
+
+- (void)insertSongToCollectionTable:(void(^)(BOOL actionCompleted))actionCompleted{
+//    __block __weak typeof (self) weakSelf=self;
+//    NSString *querySqlStr=[NSString stringWithFormat:@"select * from CollectionTable where number='%@'",[_oneSong.number encodeBase64]];
+//    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:querySqlStr];
+//    while ([rs next]) {
+//        if ([_delegate respondsToSelector:@selector(addSongToCollection:result:)]) {
+//            [_delegate addSongToCollection:weakSelf result:KMessageStyleInfo];
+//        }
+//        if (actionCompleted) {
+//            actionCompleted(YES);
+//        }
+//        return;
+//    }
+//    NSString *insertSql1= [NSString stringWithFormat:@"INSERT INTO CollectionTable (number,songname,singer,singer1,songpiy,word,language,volume,channel,sex,stype,newsong,movie,pathid,bihua,addtime,spath)VALUES ('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",[_number encodeBase64],[_songname encodeBase64],[_singer encodeBase64],[_singer1 encodeBase64],[_songpiy encodeBase64],[_word encodeBase64],[_language encodeBase64],[_volume encodeBase64],[_channel encodeBase64],[_sex encodeBase64],[_stype encodeBase64],[_newsong encodeBase64],[_movie encodeBase64],[_pathid encodeBase64],[_bihua encodeBase64],[_addtime encodeBase64],[_spath encodeBase64]];
+//    if (![[DataMananager instanceShare].db executeUpdate:insertSql1]) {
+//        NSLog(@"插入失败1");
+//        if ([self.delegate respondsToSelector:@selector(addSongToCollection:result:)]) {
+//            [self.delegate addSongToCollection:weakSelf result:KMessageWarning];
+//        }
+//    } else {
+//        if ([self.delegate respondsToSelector:@selector(addSongToCollection:result:)]) {
+//            [self.delegate addSongToCollection:weakSelf result:KMessageSuccess];
+//        }
+//    }
+//    if (actionCompleted) {
+//        actionCompleted(YES);
+//    }
 }
 
 
+
 - (void)clicked_priority:(id)sender {
-    
-    [_oneSong diangeToTop];
+    if (_priority.enabled) {
+        _priority.enabled=NO;
+        [_oneSong diangeToTop:^(BOOL actionCompleted) {
+            if (actionCompleted) {
+                _priority.enabled=YES;
+            }
+        }];
+    }
+
 }
 
 @end

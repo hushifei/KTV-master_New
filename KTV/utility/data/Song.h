@@ -39,10 +39,10 @@
 @property (nonatomic, copy) NSString * word;
 @property(nonatomic,weak)id<SongDelegate> delegate;
 
-- (void)insertSongToCollectionTable:(void(^)(BOOL complete))actionCompleted;
-- (void)deleteSongFromCollectionTable:(void(^)(BOOL complete))actionCompleted;
-- (void)cutSong:(void(^)(BOOL complete))actionCompleted;
-- (void)prioritySong:(void(^)(BOOL complete))actionCompleted;
-- (void)diangeToTop:(void(^)(BOOL complete))actionCompleted;
+- (void)insertSongToCollectionTable:(void(^)(BOOL actionCompleted))actionCompleted;
+- (void)deleteSongFromCollectionTable:(void(^)(BOOL actionCompleted))actionCompleted;
+- (void)cutSong:(void(^)(BOOL actionCompleted))actionCompleted;
+- (void)prioritySong:(void(^)(BOOL actionCompleted))actionCompleted;
+- (void)diangeToTop:(void(^)(BOOL actionCompleted))actionCompleted;
 
 @end
