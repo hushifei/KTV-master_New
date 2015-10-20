@@ -6,13 +6,14 @@
 //  Copyright (c) 2015年 stevenhu. All rights reserved.
 //
 
-#import "paiHangViewCell.h"
+#import "paiHangTopCell.h"
 #import "UILabel+Animation.h"
 #import "CommandControler.h"
 #import "AppDelegate.h"
-@implementation paiHangViewCell
+@implementation paiHangTopCell
 
 - (void)awakeFromNib {
+        _opened=NO;
     // Initialization code
 }
 

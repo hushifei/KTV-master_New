@@ -101,6 +101,7 @@
             cell.oneSong=dataList[_previousRow];
             cell.oneSong.delegate=self;
         }
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
         return cell;
     } else {
         SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
@@ -115,7 +116,7 @@
         } else {
             cell.sanjiaoxing.hidden=YES;
         }
-        
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
         return cell;
         
     }
@@ -219,50 +220,46 @@
 
 #pragma mark - SongBottom delegate
 - (void)addSongToCollection:(Song *)oneSong result:(KMessageStyle)result {
-    [myToast dissmiss];
-    switch (result) {
-        case KMessageSuccess: {
-            NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-            SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-            cell.opened=!cell.opened;
-            if (cell.opened) {
-                cell.sanjiaoxing.hidden=NO;
-            } else {
-                cell.sanjiaoxing.hidden=YES;
+        switch (result) {
+            case KMessageSuccess: {
+                NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
+                SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+                cell.opened=!cell.opened;
+                if (cell.opened) {
+                    cell.sanjiaoxing.hidden=NO;
+                } else {
+                    cell.sanjiaoxing.hidden=YES;
+                }
+                [dataList removeObjectAtIndex:_previousRow+1];
+                [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                _previousRow=-1;
+                [HuToast showToastWithMessage:@"成功收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
+                break;
             }
-            [dataList removeObjectAtIndex:_previousRow+1];
-            [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-            _previousRow=-1;
-            [myToast setToastWithMessage:@"成功收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
-            break;
+            case KMessageStyleError: {
+                [HuToast showToastWithMessage:@"收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+                
+                break;
+            }
+            case KMessageWarning: {
+                [HuToast showToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+                break;
+            }
+            case KMessageStyleInfo: {
+                [HuToast showToastWithMessage:@"此歌已收藏"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
+                break;
+            }
+            case KMessageStyleDefault: {
+                break;
+            }
+            default:
+                break;
         }
-        case KMessageStyleError: {
-            [myToast setToastWithMessage:@"收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
-            
-            break;
-        }
-        case KMessageWarning: {
-            [myToast setToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
-            
-            break;
-        }
-        case KMessageStyleInfo: {
-            [myToast setToastWithMessage:@"此歌已收藏"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
-            
-            break;
-        }
-        case KMessageStyleDefault: {
-            break;
-        }
-        default:
-            break;
-    }
     
 }
 
 - (void)dingGeFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     //ding ge
-    [myToast dissmiss];
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
@@ -274,16 +271,15 @@
     [dataList removeObjectAtIndex:_previousRow+1];
     [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     _previousRow=-1;
-    [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
+    [HuToast showToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     //TODO::
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;
     [CommandControler setYidianBadgeWidth:weakBarButton completed:^(BOOL completed, NSError *error) {
-        
-    }];}
+    }];
+}
 
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
-    [myToast dissmiss];
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
@@ -295,8 +291,7 @@
     [dataList removeObjectAtIndex:_previousRow+1];
     [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     _previousRow=-1;
-    [myToast setToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
-    //TODO::
+    [HuToast showToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     [self performSelector:@selector(updateYidanBadge) withObject:self afterDelay:0.5];
 }
 

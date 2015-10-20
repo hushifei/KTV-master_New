@@ -111,7 +111,7 @@
 
         [collectionBtn addTarget:self action:@selector(collection_clicked:) forControlEvents:UIControlEventTouchUpInside];
         [priorityBtn addTarget:self action:@selector(priority_clicked:) forControlEvents:UIControlEventTouchUpInside];
-        
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
         [cell addSubview:collectionBtn];
         [cell addSubview:priorityBtn];
 
@@ -162,17 +162,15 @@
     labelLine.backgroundColor = [UIColor colorWithRed:0.50196081399917603 green:0.0 blue:0.25098040699958801 alpha:1.0f];
     [button addSubview:labelLine];
     
-    UIButton *selectedBtn=[[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width-80, (SESSIONHEIGHT-30)/2, 50, 22)];
+    UIButton *selectedBtn=[[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width-60, (SESSIONHEIGHT-22)/2, 50, 22)];
     [selectedBtn setBackgroundImage:[UIImage imageNamed:@"diange_icon"] forState:UIControlStateNormal];
 //    [selectedBtn setImage:[UIImage imageNamed:@"diange_icon"] forState:UIControlStateNormal];
     [selectedBtn setTitle:NSLocalizedString(@"select", nil) forState:UIControlStateNormal];
     selectedBtn.titleLabel.font=[UIFont systemFontOfSize:12];
     selectedBtn.tag=section;
-    [selectedBtn addTarget:selectedBtn action:@selector(addSongToHost:) forControlEvents:UIControlEventTouchUpInside];
+    [selectedBtn addTarget:self action:@selector(addSongToHost:) forControlEvents:UIControlEventTouchUpInside];
     [button addSubview:selectedBtn];
 
-    
-    
     UIImageView *iamgeView=[[UIImageView alloc]init];
     iamgeView.frame=CGRectMake(numberlabel.center.x, SESSIONHEIGHT-9, 20, 9);
     if (section == ClickButtonCount) {
@@ -183,8 +181,6 @@
     } else {
         iamgeView.hidden=YES;
         labelLine.hidden=NO;
-//        UIImage *image=[UIImage imageNamed:@"downAccessory"];
-//        iamgeView.image=image;
     }
     [button addSubview:iamgeView];
     
@@ -213,11 +209,15 @@
     }
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return SESSIONHEIGHT;
 }
 
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section  {
+    return 0.0f;
+}
 
 -(void)showChild:(UIButton *)sender
 {
@@ -270,23 +270,22 @@
 #pragma mark - SongBottom delegate
 - (void)addSongToCollection:(Song *)oneSong result:(KMessageStyle)result {
     ClickButtonCount=-1;
-    NSIndexSet *indexset=[[NSIndexSet alloc]initWithIndex:ClickButtonCount];
+    [self.tableView reloadData];
     switch (result) {
         case KMessageSuccess: {
-            
-            [myToast setToastWithMessage:@"成功收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
+            [HuToast showToastWithMessage:@"成功收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
             break;
         }
         case KMessageStyleError: {
-            [myToast setToastWithMessage:@"收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+            [HuToast showToastWithMessage:@"收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
             break;
         }
         case KMessageWarning: {
-            [myToast setToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+            [HuToast showToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
             break;
         }
         case KMessageStyleInfo: {
-            [myToast setToastWithMessage:@"此歌已收藏"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
+            [HuToast showToastWithMessage:@"此歌已收藏"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
             break;
         }
         case KMessageStyleDefault: {
@@ -300,21 +299,12 @@
 
 - (void)dingGeFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     //ding ge
-    [myToast dissmiss];
-    NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-    paiHangViewCell *cell=(paiHangViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-    cell.opened=!cell.opened;
-    if (cell.opened) {
-        cell.sanjiaoxing.hidden=NO;
-    } else {
-        cell.sanjiaoxing.hidden=YES;
-    }
-    [dataList removeObjectAtIndex:_previousRow+1];
-    [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    _previousRow=-1;
-    [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
+    ClickButtonCount=-1;
+    [self.tableView reloadData];
+    [HuToast showToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     [self performSelector:@selector(updateYidanBadge) withObject:self afterDelay:0.5];
 }
+
 
 - (void)updateYidanBadge {
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
@@ -328,6 +318,4 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-
 @end

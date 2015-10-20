@@ -14,9 +14,6 @@
 #import "YiDianViewController.h"
 #import "Utility.h"
 #import "BBBadgeBarButtonItem.h"
-#import "SettingViewController.h"
-#import "BokongView.h"
-#import "SoundViewController.h"
 #import "MBProgressHUD.h"
 #import "Song.h"
 #import "DataMananager.h"
@@ -219,28 +216,28 @@
 
 #pragma mark - CollectionBottomCell delegate
 - (void)deleteCollectionSong:(Song *)oneSong result:(KMessageStyle)result {
-    [myToast dissmiss];
+//    [myToast dissmiss];
     switch (result) {
         case KMessageSuccess: {
             [dataList removeObjectAtIndex:_previousRow+1];
             [dataList removeObjectAtIndex:_previousRow];
             [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0],[NSIndexPath indexPathForRow:_previousRow inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow=-1;
-            [myToast setToastWithMessage:@"成功取消收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
+//            [myToast setToastWithMessage:@"成功取消收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
             break;
         }
         case KMessageStyleError: {
-            [myToast setToastWithMessage:@"取消收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+//            [myToast setToastWithMessage:@"取消收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
             
             break;
         }
         case KMessageWarning: {
-            [myToast setToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+//            [myToast setToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
             
             break;
         }
         case KMessageStyleInfo: {
-            [myToast setToastWithMessage:@"没有此收藏的歌曲"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
+//            [myToast setToastWithMessage:@"没有此收藏的歌曲"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
             
             break;
         }
@@ -255,7 +252,7 @@
 
 - (void)dingGeFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     //ding ge
-    [myToast dissmiss];
+//    [myToast dissmiss];
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     CollectionViewCell *cell=(CollectionViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
@@ -267,7 +264,7 @@
     [dataList removeObjectAtIndex:_previousRow+1];
     [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     _previousRow=-1;
-    [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
+//    [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     [self performSelector:@selector(updateYidanBadge) withObject:self afterDelay:0.5];
 }
 
@@ -280,7 +277,7 @@
 }
 
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
-    [myToast dissmiss];
+//    [myToast dissmiss];
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     CollectionViewCell *cell=(CollectionViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
@@ -292,7 +289,7 @@
     [dataList removeObjectAtIndex:_previousRow+1];
     [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     _previousRow=-1;
-    [myToast setToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
+//    [myToast setToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     //TODO::
 
     //cut song

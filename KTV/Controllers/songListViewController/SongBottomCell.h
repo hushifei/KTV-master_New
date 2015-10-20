@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "Song.h"
-#import "HuToast.h"
 @interface SongBottomCell : UITableViewCell
 @property(nonatomic,weak)Song *oneSong;
 

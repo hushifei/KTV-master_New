@@ -87,9 +87,9 @@
 }
 
 - (void)clicked_paihangBtn:(id)sender {
-//    paiHangViewController *vc=[[paiHangViewController alloc]init];
+    paiHangViewController *vc=[[paiHangViewController alloc]init];
     
-    NewPaiHangViewController *vc=[[NewPaiHangViewController alloc]init];
+//    NewPaiHangViewController *vc=[[NewPaiHangViewController alloc]init];
 
     [self.navigationController pushViewController:vc animated:YES];
 }

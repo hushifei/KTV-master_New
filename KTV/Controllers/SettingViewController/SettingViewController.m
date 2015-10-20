@@ -108,12 +108,12 @@
             [cmd sendCmd_restartDevice:^(BOOL completed, NSError *error) {
                 if (completed) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                       [myToast setToastWithMessage:NSLocalizedString(@"restartsuccess", nil) WithTimeDismiss:@"2" messageType:KMessageSuccess];
+//                       [myToast setToastWithMessage:NSLocalizedString(@"restartsuccess", nil) WithTimeDismiss:@"2" messageType:KMessageSuccess];
                     });
 
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                      [myToast setToastWithMessage:NSLocalizedString(@"restartfailure", nil)  WithTimeDismiss:@"2" messageType:KMessageStyleError];
+//                      [myToast setToastWithMessage:NSLocalizedString(@"restartfailure", nil)  WithTimeDismiss:@"2" messageType:KMessageStyleError];
                     });
                 }
                 [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -124,12 +124,12 @@
             [cmd sendCmd_shutdownDevice:^(BOOL completed, NSError *error) {
                 if (completed) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                       [myToast setToastWithMessage:NSLocalizedString(@"shutdownsuccess", nil)  WithTimeDismiss:@"2" messageType:KMessageSuccess];
+//                       [myToast setToastWithMessage:NSLocalizedString(@"shutdownsuccess", nil)  WithTimeDismiss:@"2" messageType:KMessageSuccess];
                     });
                  
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                                   [myToast setToastWithMessage:NSLocalizedString(@"shutdownfailure", nil)  WithTimeDismiss:@"2" messageType:KMessageStyleError];
+//                                   [myToast setToastWithMessage:NSLocalizedString(@"shutdownfailure", nil)  WithTimeDismiss:@"2" messageType:KMessageStyleError];
                     });
 
                 }
@@ -142,7 +142,7 @@
             [[SDWebImageManager sharedManager].imageCache clearMemory];
             [[SDWebImageManager sharedManager].imageCache clearDisk];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
-            [myToast setToastWithMessage:NSLocalizedString(@"clearcachedatasuccess", nil)  WithTimeDismiss:@"1" messageType:KMessageSuccess];
+//            [myToast setToastWithMessage:NSLocalizedString(@"clearcachedatasuccess", nil)  WithTimeDismiss:@"1" messageType:KMessageSuccess];
             break;
         }
         case 3: {

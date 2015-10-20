@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Song.h"
-@interface paiHangViewCell : UITableViewCell
+@interface paiHangTopCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *numberStr;
 @property (weak, nonatomic) IBOutlet UILabel *songName;
 @property (weak, nonatomic) IBOutlet UILabel *singer;
