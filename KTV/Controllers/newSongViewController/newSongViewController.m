@@ -8,9 +8,9 @@
 
 #import "newSongViewController.h"
 #define TOPCELLIDENTIFY @"SongTopCell"
+#define BOTTOMCELLIDENTIFY @"newSongBottomCell"
 #import "SongTopCell.h"
-#define BOTTOMCELLIDENTIFY @"SongBottomCell"
-#import "SongBottomCell.h"
+#import "newSongBottomCell.h"
 #import "YiDianViewController.h"
 #import "BBBadgeBarButtonItem.h"
 #import "MBProgressHUD.h"
@@ -92,16 +92,15 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (_previousRow >= 0 && _previousRow+1==indexPath.row) {
-        SongBottomCell *cell=[tableView dequeueReusableCellWithIdentifier:BOTTOMCELLIDENTIFY];
+        newSongBottomCell *cell=[tableView dequeueReusableCellWithIdentifier:BOTTOMCELLIDENTIFY];
         if (!cell) {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:BOTTOMCELLIDENTIFY owner:self options:nil];
-            cell = [nib objectAtIndex:0];
+            cell = [[newSongBottomCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:BOTTOMCELLIDENTIFY];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"song_bt_bg"]];
             cell.oneSong=dataList[_previousRow];
             cell.oneSong.delegate=self;
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
         }
-        cell.selectionStyle=UITableViewCellSelectionStyleNone;
         return cell;
     } else {
         SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
@@ -220,6 +219,7 @@
 
 #pragma mark - SongBottom delegate
 - (void)addSongToCollection:(Song *)oneSong result:(KMessageStyle)result {
+    if(_previousRow<=-1) return;
         switch (result) {
             case KMessageSuccess: {
                 NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
@@ -246,6 +246,17 @@
                 break;
             }
             case KMessageStyleInfo: {
+                NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
+                SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+                cell.opened=!cell.opened;
+                if (cell.opened) {
+                    cell.sanjiaoxing.hidden=NO;
+                } else {
+                    cell.sanjiaoxing.hidden=YES;
+                }
+                [dataList removeObjectAtIndex:_previousRow+1];
+                [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                _previousRow=-1;
                 [HuToast showToastWithMessage:@"此歌已收藏"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
                 break;
             }
@@ -260,6 +271,7 @@
 
 - (void)dingGeFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     //ding ge
+    if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
@@ -280,6 +292,7 @@
 }
 
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
+    if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;

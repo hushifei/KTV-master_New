@@ -1,23 +1,21 @@
 //
-//  paiHangBottomCell.m
+//  newSongBottomCell.m
 //  KTV
 //
-//  Created by admin on 15/10/20.
+//  Created by admin on 15/10/21.
 //  Copyright © 2015年 stevenhu. All rights reserved.
 //
 
-#import "paiHangBottomCell.h"
-@interface paiHangBottomCell ()
+#import "newSongBottomCell.h"
+@interface newSongBottomCell ()
 @property (strong, nonatomic)UIButton *collectionrec;
 @property (strong, nonatomic)UIButton *priority;
 @end
-
-@implementation paiHangBottomCell
-
+@implementation newSongBottomCell
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-            [self initViewContent];
+        [self initViewContent];
     }
     return self;
 }
@@ -51,7 +49,7 @@
     
     _collectionrec.titleLabel.font=[UIFont systemFontOfSize:14];
     _priority.titleLabel.font=[UIFont systemFontOfSize:14];
-
+    
     [self addSubview:_collectionrec];
     [self addSubview:_priority];
 }

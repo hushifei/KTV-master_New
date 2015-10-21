@@ -222,7 +222,7 @@
 
 #pragma mark - SongBottom delegate
 - (void)addSongToCollection:(Song *)oneSong result:(KMessageStyle)result {
-    [self.tableView beginUpdates];
+    if(_previousRow<=-1) return;
         switch (result) {
             case KMessageSuccess: {
                 NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
@@ -236,11 +236,11 @@
                 [dataList removeObjectAtIndex:_previousRow+1];
                 [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
                 _previousRow=-1;
-                [HuToast showToastWithMessage:@"成功收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
+                [HuToast showToastWithMessage:NSLocalizedString(@"collectionsuccess", nil)  WithTimeDismiss:nil messageType:KMessageSuccess];
                 break;
             }
             case KMessageStyleError: {
-                [HuToast showToastWithMessage:@"收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+                [HuToast showToastWithMessage:NSLocalizedString(@"collectionerror", nil)  WithTimeDismiss:nil messageType:KMessageStyleError];
                 
                 break;
             }
@@ -260,7 +260,7 @@
                 [dataList removeObjectAtIndex:_previousRow+1];
                 [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
                 _previousRow=-1;
-                [HuToast showToastWithMessage:@"此歌已收藏"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
+                [HuToast showToastWithMessage:NSLocalizedString(@"collectioninfo", nil)  WithTimeDismiss:nil messageType:KMessageStyleInfo];
                 break;
             }
             case KMessageStyleDefault: {
@@ -269,12 +269,11 @@
             default:
                 break;
         }
-    [self.tableView endUpdates];
-
 }
 
 - (void)dingGeFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     //ding ge
+       if(_previousRow<=-1) return;
         NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
         paiHangTopCell *cell=(paiHangTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
         cell.opened=!cell.opened;
@@ -299,6 +298,7 @@
 }
 
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
+    if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     paiHangTopCell *cell=(paiHangTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;

@@ -175,6 +175,7 @@
             //cancel collection
             cell.oneSong=dataList[_previousRow];
             cell.oneSong.delegate=self;
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
         }
         return cell;
     } else {
@@ -216,28 +217,28 @@
 
 #pragma mark - CollectionBottomCell delegate
 - (void)deleteCollectionSong:(Song *)oneSong result:(KMessageStyle)result {
-//    [myToast dissmiss];
+    if(_previousRow<=-1) return;
     switch (result) {
         case KMessageSuccess: {
             [dataList removeObjectAtIndex:_previousRow+1];
             [dataList removeObjectAtIndex:_previousRow];
             [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0],[NSIndexPath indexPathForRow:_previousRow inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow=-1;
-//            [myToast setToastWithMessage:@"成功取消收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
+            [HuToast showToastWithMessage:@"成功取消收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
             break;
         }
         case KMessageStyleError: {
-//            [myToast setToastWithMessage:@"取消收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+            [HuToast showToastWithMessage:@"取消收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
             
             break;
         }
         case KMessageWarning: {
-//            [myToast setToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+            [HuToast showToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
             
             break;
         }
         case KMessageStyleInfo: {
-//            [myToast setToastWithMessage:@"没有此收藏的歌曲"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
+            [HuToast showToastWithMessage:@"没有此收藏的歌曲"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
             
             break;
         }
@@ -252,7 +253,7 @@
 
 - (void)dingGeFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     //ding ge
-//    [myToast dissmiss];
+    if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     CollectionViewCell *cell=(CollectionViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
@@ -277,7 +278,7 @@
 }
 
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
-//    [myToast dissmiss];
+    if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     CollectionViewCell *cell=(CollectionViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;

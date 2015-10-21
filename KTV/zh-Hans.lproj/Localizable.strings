@@ -80,9 +80,12 @@
 
 //** new song VC **/
 "collect" = "收藏";
-
-
 "jumpSetting" = "进入设置";
+
+//*** HuToast **/
+"collectionsuccess" = "收藏成功";
+"collectioninfo" = "此歌已收藏";
+"ceollectionerror" = "收藏失败";
 
 
 

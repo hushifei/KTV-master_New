@@ -83,6 +83,7 @@
 		C3AAC1301BCD1478009582D1 /* music_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC12F1BCD1478009582D1 /* music_icon.png */; settings = {ASSET_TAGS = (); }; };
 		C3AAC1341BCD1627009582D1 /* Default_Header.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC1331BCD1627009582D1 /* Default_Header.png */; settings = {ASSET_TAGS = (); }; };
 		C3CB01F41BCDF7FC0021B615 /* SearchResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3CB01F31BCDF7FC0021B615 /* SearchResultCell.m */; settings = {ASSET_TAGS = (); }; };
+		C3E543591BD729AE0003D734 /* newSongBottomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E543581BD729AE0003D734 /* newSongBottomCell.m */; settings = {ASSET_TAGS = (); }; };
 		D12374511B2D163500902361 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374301B2D163500902361 /* MKAnnotationView+WebCache.m */; };
 		D12374521B2D163500902361 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374321B2D163500902361 /* NSData+ImageContentType.m */; };
 		D12374531B2D163500902361 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374341B2D163500902361 /* SDImageCache.m */; };
@@ -476,6 +477,8 @@
 		C3AAC1331BCD1627009582D1 /* Default_Header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default_Header.png; sourceTree = "<group>"; };
 		C3CB01F21BCDF7FC0021B615 /* SearchResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultCell.h; sourceTree = "<group>"; };
 		C3CB01F31BCDF7FC0021B615 /* SearchResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultCell.m; sourceTree = "<group>"; };
+		C3E543571BD729AE0003D734 /* newSongBottomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newSongBottomCell.h; sourceTree = "<group>"; };
+		C3E543581BD729AE0003D734 /* newSongBottomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newSongBottomCell.m; sourceTree = "<group>"; };
 		D123742F1B2D163500902361 /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
 		D12374301B2D163500902361 /* MKAnnotationView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+WebCache.m"; sourceTree = "<group>"; };
 		D12374311B2D163500902361 /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
@@ -1425,6 +1428,8 @@
 			children = (
 				D156A3DA1AEC97AB0091C419 /* newSongViewController.h */,
 				D156A3DB1AEC97AB0091C419 /* newSongViewController.m */,
+				C3E543571BD729AE0003D734 /* newSongBottomCell.h */,
+				C3E543581BD729AE0003D734 /* newSongBottomCell.m */,
 			);
 			path = newSongViewController;
 			sourceTree = "<group>";
@@ -2284,6 +2289,7 @@
 				D12374601B2D163500902361 /* UIView+WebCacheOperation.m in Sources */,
 				D155899C1B038C52000AA4C9 /* NSInvocation+Constructors.m in Sources */,
 				D175F1121AE15F78004E3B9A /* PinYinForObjc.m in Sources */,
+				C3E543591BD729AE0003D734 /* newSongBottomCell.m in Sources */,
 				D15E2AAC1AEBB9970093C773 /* jingXuanTableViewCell.m in Sources */,
 				D16E526F1AE6755F00E57011 /* qrinput.c in Sources */,
 				D12374551B2D163500902361 /* SDWebImageDecoder.m in Sources */,

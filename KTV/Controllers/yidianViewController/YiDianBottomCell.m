@@ -60,7 +60,9 @@
 
 
 - (IBAction)clicked_cutsong:(id)sender {
-    [_oneSong cutSong];
+    [_oneSong cutSong:^(BOOL complete) {
+        
+    }];
 }
 
 - (IBAction)removeSong:(id)sender {
@@ -82,7 +84,9 @@
 
 
 - (IBAction)clicked_collection:(id)sender {
-    [_oneSong insertSongToCollectionTable];
+    [_oneSong insertSongToCollectionTable:^(BOOL complete) {
+        
+    }];
 }
 
 @end

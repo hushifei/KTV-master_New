@@ -13,6 +13,8 @@
 @implementation paiHangTopCell
 
 - (void)awakeFromNib {
+    [_songName sizeToFit];
+   [_singer sizeToFit];
         _opened=NO;
     // Initialization code
 }

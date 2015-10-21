@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger,ViewType) {
 /*
  ----.cell 更改成纯代码
  --- 已点切歌放到导航栏
- --- newpaihangbang addtohost animation
+ ----搜歌里的顶歌，显示异常
 */
 
 

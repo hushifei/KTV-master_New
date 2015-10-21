@@ -85,3 +85,8 @@
 //** new song VC **/
 "collect" = "Collect";
 "jumpSetting" = "Go Setting";
+
+//*** HuToast **/
+"collectionsuccess" = "Collection Success";
+"collectioninfo" = "Duplicate collection";
+"ceollectionerror" = "Collection failure";
