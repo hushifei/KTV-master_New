@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Song.h"
-#import "BottomCellActionsDelegate.h"
 @interface paiHangBottomCell : UITableViewCell
 @property(nonatomic,weak)Song *oneSong;
-@property(nonatomic,weak)id<BottomCellActionsDelegate> delegate;
 
 @end

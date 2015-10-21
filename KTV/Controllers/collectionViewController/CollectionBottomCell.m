@@ -23,23 +23,15 @@
     // Configure the view for the selected state
 }
 - (IBAction)clicked_cancelCollection:(id)sender {
-    [_oneSong deleteSongFromCollectionTable:^(BOOL actionCompleted) {
-        if (actionCompleted) {
-            
-        }
-    }];
+    [_oneSong deleteSongFromCollectionTable];
 }
 
 - (IBAction)clicked_priory:(id)sender {
-    [_oneSong diangeToTop:^(BOOL actionCompleted) {
-        
-    }];
+    [_oneSong diangeToTop];
 }
 
 - (IBAction)clicked_cutSong:(id)sender {
-    [_oneSong cutSong:^(BOOL actionCompleted) {
-        
-    }];
+    [_oneSong cutSong];
 }
 
 @end

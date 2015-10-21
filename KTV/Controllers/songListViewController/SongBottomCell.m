@@ -30,23 +30,17 @@
 }
 
 - (IBAction)clicked_collection:(id)sender {
-    [_oneSong insertSongToCollectionTable:^(BOOL actionCompleted) {
-        
-    }];
+    [_oneSong insertSongToCollectionTable];
 }
 
 
 - (IBAction)clicked_priority:(id)sender {
     
-    [_oneSong diangeToTop:^(BOOL actionCompleted) {
-        
-    }];
+    [_oneSong diangeToTop];
 }
 
 - (IBAction)clicked_cutsong:(id)sender {
-    [_oneSong cutSong:^(BOOL actionCompleted) {
-        
-    }];
+    [_oneSong cutSong];
 }
 
 

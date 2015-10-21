@@ -235,9 +235,7 @@
         Song *oneSong=dataList[ClickButtonCount];
         __weak typeof(self) weakSelf=self;
         oneSong.delegate=weakSelf;
-        [oneSong insertSongToCollectionTable:^(BOOL actionCompleted) {
-            
-        }];
+        [oneSong insertSongToCollectionTable];
     }
 }
 
@@ -246,9 +244,7 @@
         Song *oneSong=dataList[ClickButtonCount];
         __weak typeof(self) weakSelf=self;
         oneSong.delegate=weakSelf;
-        [oneSong diangeToTop:^(BOOL actionCompleted) {
-            
-        }];
+        [oneSong diangeToTop];
     }
 }
 
