@@ -62,6 +62,7 @@
         
         for (NSDictionary *dict in _yidianArray) {
             for (NSString *number in dict.allValues) {
+                // in
                 NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where number='%@'",[number encodeBase64]];
                 FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
                 while ([rs next]) {

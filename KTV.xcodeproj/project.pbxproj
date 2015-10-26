@@ -83,6 +83,7 @@
 		C3AAC1301BCD1478009582D1 /* music_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC12F1BCD1478009582D1 /* music_icon.png */; settings = {ASSET_TAGS = (); }; };
 		C3AAC1341BCD1627009582D1 /* Default_Header.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC1331BCD1627009582D1 /* Default_Header.png */; settings = {ASSET_TAGS = (); }; };
 		C3CB01F41BCDF7FC0021B615 /* SearchResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3CB01F31BCDF7FC0021B615 /* SearchResultCell.m */; settings = {ASSET_TAGS = (); }; };
+		C3D36E701BDA39B100B0167A /* SearchResultBottomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D36E6F1BDA39B100B0167A /* SearchResultBottomCell.m */; settings = {ASSET_TAGS = (); }; };
 		C3E543591BD729AE0003D734 /* newSongBottomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3E543581BD729AE0003D734 /* newSongBottomCell.m */; settings = {ASSET_TAGS = (); }; };
 		D12374511B2D163500902361 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374301B2D163500902361 /* MKAnnotationView+WebCache.m */; };
 		D12374521B2D163500902361 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374321B2D163500902361 /* NSData+ImageContentType.m */; };
@@ -477,6 +478,8 @@
 		C3AAC1331BCD1627009582D1 /* Default_Header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default_Header.png; sourceTree = "<group>"; };
 		C3CB01F21BCDF7FC0021B615 /* SearchResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultCell.h; sourceTree = "<group>"; };
 		C3CB01F31BCDF7FC0021B615 /* SearchResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultCell.m; sourceTree = "<group>"; };
+		C3D36E6E1BDA39B100B0167A /* SearchResultBottomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultBottomCell.h; sourceTree = "<group>"; };
+		C3D36E6F1BDA39B100B0167A /* SearchResultBottomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultBottomCell.m; sourceTree = "<group>"; };
 		C3E543571BD729AE0003D734 /* newSongBottomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newSongBottomCell.h; sourceTree = "<group>"; };
 		C3E543581BD729AE0003D734 /* newSongBottomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newSongBottomCell.m; sourceTree = "<group>"; };
 		D123742F1B2D163500902361 /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
@@ -1821,6 +1824,8 @@
 				D16E52A71AE68B8700E57011 /* SearchSongListViewController.m */,
 				D16E52A41AE68B8700E57011 /* ResultTableViewController.h */,
 				D16E52A51AE68B8700E57011 /* ResultTableViewController.m */,
+				C3D36E6E1BDA39B100B0167A /* SearchResultBottomCell.h */,
+				C3D36E6F1BDA39B100B0167A /* SearchResultBottomCell.m */,
 				C3CB01F21BCDF7FC0021B615 /* SearchResultCell.h */,
 				C3CB01F31BCDF7FC0021B615 /* SearchResultCell.m */,
 			);
@@ -2291,6 +2296,7 @@
 				D175F1121AE15F78004E3B9A /* PinYinForObjc.m in Sources */,
 				C3E543591BD729AE0003D734 /* newSongBottomCell.m in Sources */,
 				D15E2AAC1AEBB9970093C773 /* jingXuanTableViewCell.m in Sources */,
+				C3D36E701BDA39B100B0167A /* SearchResultBottomCell.m in Sources */,
 				D16E526F1AE6755F00E57011 /* qrinput.c in Sources */,
 				D12374551B2D163500902361 /* SDWebImageDecoder.m in Sources */,
 				D155C6A71AF48A1C0085CDCB /* CollectionViewCell.m in Sources */,

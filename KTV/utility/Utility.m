@@ -41,6 +41,7 @@ static Utility *shareInstance=nil;
     dispatch_once(&onceToken, ^{
         [self checkIphoneDevice];
         _shareSession=[NSURLSession sharedSession];
+        _serverIPAddress=nil;
         shareInstance= [super init];
     });
     return shareInstance;

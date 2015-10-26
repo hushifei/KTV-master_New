@@ -138,21 +138,22 @@
 }
 
 - (void)clickSinger:(Singer*)singer {
-    [self dismissViewControllerAnimated:NO completion:^{
+//    [self dismissViewControllerAnimated:NO completion:^{
         SongListViewController *songVC=[[SongListViewController alloc]init];
         songVC.singerName=singer.singer;
         songVC.needLoadData=YES;
         [self.navigationController pushViewController:songVC animated:YES];
-    }];
+//    }];
 }
 
 - (void)clickSong:(Song *)song {
-    [self dismissViewControllerAnimated:NO completion:^{
+//    [self.navigationController popToRootViewControllerAnimated:YES];
+//    [self dismissViewControllerAnimated:NO completion:^{
         SongListViewController *songVC=[[SongListViewController alloc]init];
         songVC.needLoadData=NO;
         [songVC setDataList:song];
         [self.navigationController pushViewController:songVC animated:YES];
-    }];
+//    }];
 }
 
 - (BOOL)canBecomeFirstResponder {

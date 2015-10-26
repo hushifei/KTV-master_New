@@ -289,7 +289,9 @@
             [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }];
         [alVC addAction:action];
-    } else {
+    } else if ([string hasPrefix:@"wifi->"]){
+        //wifi->U:puzeAPpan,P:123456789
+        string=[string substringFromIndex:[@"wifi->" length]];
         NSArray *scanArray=[string componentsSeparatedByString:@","];
         if (scanArray && [scanArray count]==2) {
             NSString *wifiName=scanArray[0];
@@ -312,6 +314,9 @@
             
             [alVC addAction:cancelAction];
             [alVC addAction:confirmaction];
+        } else if ([string hasPrefix:@"route->"]){
+            //route->192.168.0.90
+            [Utility instanceShare].serverIPAddress=[string substringFromIndex:[@"route->" length]];
         } else {
             UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"scancodeerror", nil) preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -327,7 +332,8 @@
     SearchSongListViewController *vc=[[SearchSongListViewController alloc]initWithStyle:UITableViewStylePlain];
     vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     BaseNavigationController *navc=[[BaseNavigationController alloc]initWithRootViewController:vc];
-    [self.navigationController presentViewController: navc animated:YES completion: nil];
+    [self presentViewController: navc animated:YES completion: nil];
+//    [self presentViewController:vc animated:YES completion:nil];
     return YES;
 }
 

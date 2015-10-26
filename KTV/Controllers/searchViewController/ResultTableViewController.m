@@ -31,7 +31,6 @@
 }
 @property (nonatomic,strong)NSIndexPath *selectedIndexPath;
 @property (nonatomic,strong)NSMutableArray *dataList;
-@property (nonatomic,strong)NSMutableArray *singerList;
 @property (nonatomic,strong)FMDatabase *searchDb;
 
 @end
@@ -44,7 +43,6 @@
     canSearch=YES;
     _searchSelectIndex = 0;
     _dataList = [[NSMutableArray alloc] init];
-    _singerList = [[NSMutableArray alloc] init];
     [self initializeSearchController];
     _searchDb = [DataMananager instanceShare].db;
     [_searchDb open];
@@ -118,37 +116,13 @@
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
     [cell configWithObject:_dataList[indexPath.row]];
-//    if (_previousRow >= 0 && _previousRow+1==indexPath.row) {
-//        SongBottomCell *cell=[tableView dequeueReusableCellWithIdentifier:BOTTOMCELLIDENTIFY];
-//        if (!cell) {
-//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:BOTTOMCELLIDENTIFY owner:self options:nil];
-//            cell = [nib objectAtIndex:0];
-//            cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"song_bt_bg"]];
-//            cell.oneSong=self.dataList[_previousRow];
-//            
-//        }
-//        return cell;
-//    } else {
-//        if (_searchSelectIndex == 0) {//查询全部
-//            if ([self.dataList[indexPath.row] isKindOfClass:[Song class]]) {
-//                return [self songCell:tableView :indexPath];
-//            }else {
-//                return [self singerCell:tableView :indexPath];
-//            }
-//            
-//        }else if(_searchSelectIndex == searchSong) {//查询单个
-//            return [self songCell:tableView :indexPath];
-//        }else {
-//            return [self singerCell:tableView :indexPath];
-//        }
-//    }
     return cell;
     
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
-//    return 45.0f;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
+    return 45.0f;
+}
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -162,72 +136,6 @@
             [_delegate clickSong:(Song*)object];
         }
       }
-    
-    //    if ([[tableView cellForRowAtIndexPath:indexPath] isKindOfClass:[SearchTableCell class]]) {
-//    SearchTableCell *cell=(SearchTableCell*)[tableView cellForRowAtIndexPath:indexPath];
-//    if (cell.opened) {
-//        cell.sanjiaoxing.hidden=NO;
-//    } else {
-//        cell.sanjiaoxing.hidden=YES;
-//    }
-//    if (_previousRow >= 0) {
-//        NSIndexPath *preIndexPath=[NSIndexPath indexPathForRow:_previousRow inSection:0];
-//        SearchTableCell *preCell=(SearchTableCell*)[tableView cellForRowAtIndexPath:preIndexPath];
-//        
-//        if (indexPath.row == _previousRow + 1) {
-//        }
-//        else if (indexPath.row == _previousRow) {
-//            cell.opened=!cell.opened;
-//            if (cell.opened) {
-//                cell.sanjiaoxing.hidden=NO;
-//            } else {
-//                cell.sanjiaoxing.hidden=YES;
-//            }
-//            [_dataList removeObjectAtIndex:_previousRow+1];
-//            [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//            _previousRow = -1;
-//        }
-//        else if (indexPath.row < _previousRow) {
-//            if (preCell.opened) {
-//                preCell.sanjiaoxing.hidden=NO;
-//            } else {
-//                preCell.sanjiaoxing.hidden=YES;
-//            }
-//            
-//            [_dataList removeObjectAtIndex:_previousRow+1];
-//            [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//            _previousRow = indexPath.row;
-//            [_dataList insertObject:@"增加的" atIndex:indexPath.row+1];
-//            [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-//        }
-//        else {
-//            if (preCell.opened) {
-//                preCell.sanjiaoxing.hidden=NO;
-//            } else {
-//                preCell.sanjiaoxing.hidden=YES;
-//            }
-//            
-//            NSInteger oler=_previousRow;
-//            _previousRow = indexPath.row;
-//            [_dataList insertObject:@"增加的" atIndex:indexPath.row+1];
-//            [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-//            [_dataList removeObjectAtIndex:oler+1];
-//            _previousRow -=1;
-//            [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:oler+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//        }
-//        
-//    } else {
-//        _previousRow = indexPath.row;
-//        [_dataList insertObject:@"增加的" atIndex:_previousRow+1];
-//        [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-//    }
-//    }else {
-//        SingsTableViewCell *cell=[self singerCell:tableView :indexPath];
-//        if ([_delegate respondsToSelector:@selector(clickSingerWithSingerName:)]) {
-//            [_delegate clickSingerWithSingerName:cell.singer.singer];
-//        }
-//    }
-//    
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -235,6 +143,10 @@
 }
 
 - (void)reloadData {
+//    if (self.dataList.count>=100) {
+//        self.dataList=[[self.dataList objectsAtIndexes:[NSIndexSet indexSetWithIndex:99]]mutableCopy];
+//    }
+    
     if (self.dataList.count > 0) {
         if ([self.delegate respondsToSelector:@selector(searching)]) {
             [self.delegate searching];
@@ -265,7 +177,7 @@
 #pragma mark - sql method
 - (void)searchSongData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
     NSString *temStr = [NSString stringWithFormat:@"%@%@",searchStr,@"%"];
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE songname LIKE '%@' OR %@ LIKE '%@'",tableName,temStr,conditionColumn,temStr];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE songname LIKE '%@' OR %@ LIKE '%@' limit=20" ,tableName,temStr,conditionColumn,temStr];
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
@@ -292,13 +204,10 @@
 }
 
 - (void)searchSingData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
-    NSString *temStr = [NSString stringWithFormat:@"%@%@",searchStr,@"%"];
+    NSString *temStr = [NSString stringWithFormat:@"%@%@%@",@"%",searchStr,@"%"];
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE singer LIKE '%@' OR  %@ LIKE '%@'",tableName,temStr,conditionColumn,temStr];
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
-//        Singer *tempSinger = [[Singer alloc] init];
-//        tempSinger.singer = [rs stringForColumn:column];
-//        [self.dataList addObject:tempSinger];
         Singer *oneSinger=[[Singer alloc]init];
         oneSinger.area = [rs stringForColumn:@"area"];
         oneSinger.pingyin = [rs stringForColumn:@"pingyin"];
@@ -313,8 +222,6 @@
 
 - (void)initializeTableContent:(NSString*)searchStr {
      NSString *enCodeSearchStr = [[searchStr uppercaseString] encodeBase64];
-    [self.dataList removeAllObjects];
-    [self.singerList removeAllObjects];
     if (_searchSelectIndex == searchAll) {
         [self searchSongData:SONGTABLE :@"songpiy" :enCodeSearchStr :@"songname"];
         [self searchSingData:SINGERTABLE :@"pingyin" :enCodeSearchStr :@"singer"];

@@ -31,18 +31,19 @@
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     CGSize size=self.contentView.bounds.size;
-    NSArray *btns=@[_collectionrec,_priority,_cutsong,_remove];
+//    NSArray *btns=@[_collectionrec,_priority,_cutsong,_remove];
+    NSArray *btns=@[_collectionrec,_priority,_remove];
     float width=size.width/btns.count;
     float x=0.0;
     for (int i=0;i<btns.count;i++) {
         UIButton *oneButton=btns[i];
         oneButton.frame=CGRectMake(x+(width*i), 0, size.width,size.height);
-        NSLog(@"%@",NSStringFromCGRect(oneButton.frame));
+//        NSLog(@"%@",NSStringFromCGRect(oneButton.frame));
     }
 }
 
 - (IBAction)clicked_priority:(id)sender {
-    //1.search order table
+    //1.search order tableDemoTableViewController
     if ([Utility instanceShare].netWorkStatus) {
     if (self.orderID==nil) return;
     CommandControler *cmd=[[CommandControler alloc]init];
@@ -61,7 +62,6 @@
 
 - (IBAction)clicked_cutsong:(id)sender {
     [_oneSong cutSong:^(BOOL complete) {
-        
     }];
 }
 

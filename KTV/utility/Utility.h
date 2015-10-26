@@ -77,6 +77,7 @@ typedef void(^Completed)(BOOL Completed);
 @interface Utility : NSObject 
 @property (nonatomic,assign)iphoneModel myIphoneModel;
 @property (nonatomic,readonly,assign)BOOL netWorkStatus;
+@property (nonatomic,copy)NSString *serverIPAddress;
 
 //tools
 + (instancetype)instanceShare;
