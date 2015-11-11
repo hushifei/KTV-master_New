@@ -11,12 +11,9 @@
 #import "Utility.h"
 #import "SDWebImageManager.h"
 #import "MBProgressHUD.h"
-#import "DataMananager.h"
 #import "DownLoadFileTool.h"
 @interface AppDelegate () {
     MBProgressHUD *HUD;
-    Utility *utilityTool;
-    DataMananager *dataManager;
     BaseTabBarViewController *_tabVC;
 }
 
@@ -25,14 +22,12 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    utilityTool=[Utility instanceShare];
-    dataManager=[DataMananager instanceShare];
-    [Utility checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
+    [[Utility instanceShare] checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
         if (isConnected && error==nil) {
             dispatch_sync(dispatch_get_main_queue(), ^{
+                [[Utility instanceShare] starToMonitorNetowrkConnection];
+                [[Utility instanceShare] addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
                 [self initData];
-                [utilityTool starToMonitorNetowrkConnection];
-                [utilityTool addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
             });
         }
     }];

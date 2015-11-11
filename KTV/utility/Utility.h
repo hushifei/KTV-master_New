@@ -87,7 +87,7 @@ typedef void(^Completed)(BOOL Completed);
 //network
 - (void)starToMonitorNetowrkConnection;
 - (void)stopToMonitorNetworkConnection;
-+ (void)checkNetworkStatusImmediately:(void(^)(BOOL isConnected,NSError *error))block;
+- (void)checkNetworkStatusImmediately:(void(^)(BOOL isConnected,NSError *error))block;
 //nsstring handle
 + (CGSize)sizeWithString:(NSString *)string font:(UIFont *)font;
 + (BOOL)isChineseLanguge;

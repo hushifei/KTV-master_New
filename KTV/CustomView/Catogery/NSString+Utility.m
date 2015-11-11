@@ -179,4 +179,10 @@
     return [self matchesPatternRegexPattern:regex caseInsensitive:NO treatAsOneLine:NO];
 }
 
+- (BOOL)isIpAddress{
+    NSString *numberReg=@"((2[0-4]\\d|25[0-5]|[01]?\\d\\d?)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d\\d?)";
+    NSPredicate *ipAddressPre=[NSPredicate predicateWithFormat:@"SELF MATCHES %@",numberReg];
+    return [ipAddressPre evaluateWithObject:self];
+}
+
 @end

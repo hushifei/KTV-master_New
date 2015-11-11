@@ -21,6 +21,8 @@
 #import "DataMananager.h"
 
 #import "NewPaiHangViewController.h"
+#import "NSString+Utility.h"
+
 
 @interface MainViewController ()<UISearchBarDelegate,ScanCodeDelegate> {
     UIButton *geshouBtn;
@@ -41,7 +43,9 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets=YES;
     [self createContextUI];
-    //    [self copyFile];
+    //[self copyFile];
+    
+    
 }
 
 - (void)copyFile {
@@ -282,18 +286,8 @@
 
 #pragma mark- ScanCodeDelegate
 - (void)didFinishedScanCode:(NSError *)error withString:(NSString *)string {
-    //check network status
-    if ([Utility instanceShare].netWorkStatus) {
-        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetOK", nil) preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-        }];
-        [alVC addAction:action];
-    } else if ([string hasPrefix:@"wifi->"]){
-        //wifi->U:puzeAPpan,P:123456789
-        string=[string substringFromIndex:[@"wifi->" length]];
-        NSArray *scanArray=[string componentsSeparatedByString:@","];
-        if (scanArray && [scanArray count]==2) {
+    if ([string hasPrefix:@"wifi->"] && [[string substringFromIndex:[@"wifi->" length]] componentsSeparatedByString:@","].count ==2){
+            NSArray *scanArray=[[string substringFromIndex:[@"wifi->" length]] componentsSeparatedByString:@","];
             NSString *wifiName=scanArray[0];
             NSString *wifiPassWord=scanArray[1];
             UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetContent", nil) preferredStyle:UIAlertControllerStyleAlert];
@@ -301,6 +295,7 @@
                 [alVC dismissViewControllerAnimated:YES completion:nil];
             }];
             UIAlertAction *confirmaction=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [Utility instanceShare].serverIPAddress=@"192.168.43.1";
                 [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
             }];
             [alVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -314,17 +309,18 @@
             
             [alVC addAction:cancelAction];
             [alVC addAction:confirmaction];
-        } else if ([string hasPrefix:@"route->"]){
-            //route->192.168.0.90
+        
+    } else if ([string hasPrefix:@"route->"] && [[string substringFromIndex:[@"route->" length]]isIpAddress]) {
+        //192.168.0.90
+        if (![[Utility instanceShare].serverIPAddress isEqualToString:[string substringFromIndex:[@"route->" length]]]) {
             [Utility instanceShare].serverIPAddress=[string substringFromIndex:[@"route->" length]];
-        } else {
-            UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"scancodeerror", nil) preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            [alVC addAction:action];
-            
         }
+    } else {
+        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"scancodeerror", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+        }];
+        [alVC addAction:action];
     }
 }
 
@@ -336,5 +332,7 @@
 //    [self presentViewController:vc animated:YES completion:nil];
     return YES;
 }
+
+
 
 @end

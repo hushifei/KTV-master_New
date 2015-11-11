@@ -111,7 +111,7 @@ static  int limit=1000;
 }
 
 - (BOOL)databaseAlready {
-    return [userDefaults objectForKey:DATABASE_ALREADY];
+    return [[userDefaults objectForKey:DATABASE_ALREADY]boolValue]?YES:NO;
 }
 
 - (void)setDatabaseAlready:(BOOL)already {
