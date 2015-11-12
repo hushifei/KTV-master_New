@@ -14,10 +14,9 @@
 #import "Song.h"
 #import "Singer.h"
 #import "SFSelectView.h"
-//#import "SongResultTableViewController.h"
 #import "SongListViewController.h"
 #import "UIImage+Utility.h"
-@interface SearchSongListViewController ()<searchSongDelegate>{
+@interface SearchSongListViewController (){
     NSInteger _previousRow;
     UIView *promtView;
     SFSelectView *_leftView;
@@ -42,14 +41,12 @@
 - (void)initializeTableContent {
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
     self.tableView.backgroundView=bgImageView;
-    self.definesPresentationContext = YES;
     self.tableView.showsHorizontalScrollIndicator=NO;
     self.tableView.showsVerticalScrollIndicator=NO;
     _previousRow = -1;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.rowHeight=50;
     _resultVC=[[ResultTableViewController alloc]init];
-    _resultVC.delegate=self;
     self.searchController=[[UISearchController alloc]initWithSearchResultsController:_resultVC];
     self.searchController.searchResultsUpdater=_resultVC;
     self.searchController.searchBar.delegate=_resultVC;
@@ -60,24 +57,25 @@
     self.navigationItem.titleView=self.searchController.searchBar;
     self.searchController.searchBar.placeholder=NSLocalizedString(@"searchhinttext_searchVC", nil);
     self.searchController.searchBar.backgroundImage=[UIImage imageWithColor:[UIColor clearColor]];
+    _resultVC.searchSongListVC=self;
     [self createDefaultView];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [self.searchController.searchBar performSelectorOnMainThread:@selector(becomeFirstResponder) withObject:self waitUntilDone:NO];
     [super viewDidAppear:animated];
+    [self.searchController.searchBar performSelectorOnMainThread:@selector(becomeFirstResponder) withObject:self waitUntilDone:NO];
 }
 
 - (void)createDefaultView {
-    promtView=[[UIView alloc]initWithFrame:CGRectMake(self.view.center.x-300/2, 10, 300, 150)];
-    UILabel *labelStr=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
-    labelStr.numberOfLines=0;
-    labelStr.textColor=[UIColor groupTableViewBackgroundColor];
-    labelStr.font=[UIFont systemFontOfSize:15];
-    labelStr.text=NSLocalizedString(@"searchcomment_searchVC", ni);
-    [labelStr sizeToFit];
-    [promtView addSubview:labelStr];
-    [self.view addSubview:promtView];
+//    promtView=[[UIView alloc]initWithFrame:CGRectMake(self.view.center.x-300/2, 10, 300, 150)];
+//    UILabel *labelStr=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
+//    labelStr.numberOfLines=0;
+//    labelStr.textColor=[UIColor groupTableViewBackgroundColor];
+//    labelStr.font=[UIFont systemFontOfSize:15];
+//    labelStr.text=NSLocalizedString(@"searchcomment_searchVC", ni);
+//    [labelStr sizeToFit];
+//    [promtView addSubview:labelStr];
+//    [self.view addSubview:promtView];
     
     //modify searchbar
     _leftView= [[SFSelectView alloc]initWithItems:@[NSLocalizedString(@"all", ni),NSLocalizedString(@"songs", ni),NSLocalizedString(@"singers", ni)]];
@@ -100,6 +98,25 @@
 
 - (void)showPromtView:(BOOL)isShow {
     promtView.hidden=isShow;
+}
+
+- (void)clickSinger:(Singer*)singer {
+    //    [self dismissViewControllerAnimated:NO completion:^{
+    SongListViewController *songVC=[[SongListViewController alloc]init];
+    songVC.singerName=singer.singer;
+    songVC.needLoadData=YES;
+    [self.navigationController pushViewController:songVC animated:YES];
+    //    }];
+}
+
+- (void)clickSong:(Song *)song {
+    //    [self.navigationController popToRootViewControllerAnimated:YES];
+    //    [self dismissViewControllerAnimated:NO completion:^{
+    SongListViewController *songVC=[[SongListViewController alloc]init];
+    songVC.needLoadData=NO;
+    [songVC setDataList:song];
+    [self.navigationController pushViewController:songVC animated:YES];
+    //    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -128,33 +145,7 @@
     return self.dataList.count;
 }
 
-- (void)searchDone {
-    NSLog(@"search Done");
-    promtView.hidden=NO;
-}
 
-- (void)searching {
-    promtView.hidden=YES;
-}
-
-- (void)clickSinger:(Singer*)singer {
-//    [self dismissViewControllerAnimated:NO completion:^{
-        SongListViewController *songVC=[[SongListViewController alloc]init];
-        songVC.singerName=singer.singer;
-        songVC.needLoadData=YES;
-        [self.navigationController pushViewController:songVC animated:YES];
-//    }];
-}
-
-- (void)clickSong:(Song *)song {
-//    [self.navigationController popToRootViewControllerAnimated:YES];
-//    [self dismissViewControllerAnimated:NO completion:^{
-        SongListViewController *songVC=[[SongListViewController alloc]init];
-        songVC.needLoadData=NO;
-        [songVC setDataList:song];
-        [self.navigationController pushViewController:songVC animated:YES];
-//    }];
-}
 
 - (BOOL)canBecomeFirstResponder {
     return YES;

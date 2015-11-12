@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
-typedef NS_ENUM(NSUInteger,DBType) {
-    Work_DB=0,
-    Demo_DB=1
-};
+//typedef NS_ENUM(NSUInteger,DBType) {
+//    Work_DB=0,
+//    Demo_DB=1
+//};
 
 typedef void(^DataImportCompleted)(BOOL Completed);
 @interface DataMananager : NSObject
@@ -26,7 +26,7 @@ typedef void(^DataImportCompleted)(BOOL Completed);
 - (int)getTableItemCount:(NSString *)tableName;
 // 清除表-清数据
 - (BOOL)eraseTable:(NSString *)tableName;
-- (BOOL)openDB:(DBType)type;
+- (BOOL)openDB;
 - (BOOL)closeDB;
 - (BOOL)databaseAlready;
 - (void)setDatabaseAlready:(BOOL)already;

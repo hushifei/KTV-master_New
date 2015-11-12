@@ -41,6 +41,13 @@ static Utility *shareInstance=nil;
         [self checkIphoneDevice];
         _shareSession=[NSURLSession sharedSession];
         _serverIPAddress=nil;
+        //TODO::
+        _serverIPAddress=[[NSUserDefaults standardUserDefaults]objectForKey:@"SERVER_IP_ADDRESS"];
+        if (![_serverIPAddress isIpAddress])    {
+           _serverIPAddress=@"192.168.43.1";
+            //提示扫🐎；
+        }
+
         shareInstance= [super init];
     });
     return shareInstance;
@@ -88,6 +95,11 @@ static Utility *shareInstance=nil;
         }
     }
     return false;
+}
+
+- (void)setServerIPAddress:(NSString *)serverIPAddress {
+    [[NSUserDefaults standardUserDefaults]setObject:serverIPAddress forKey:@"SERVER_IP_ADDRESS"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
 }
 
 + (NSString*)shouZiFu:(NSString*)string {

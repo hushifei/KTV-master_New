@@ -18,7 +18,7 @@
 @implementation YiDianBottomCell
 
 - (void)awakeFromNib {
-    // Initialization code
+//
  
 }
 
@@ -29,17 +29,15 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
     CGSize size=self.contentView.bounds.size;
-//    NSArray *btns=@[_collectionrec,_priority,_cutsong,_remove];
     NSArray *btns=@[_collectionrec,_priority,_remove];
     float width=size.width/btns.count;
-    float x=0.0;
     for (int i=0;i<btns.count;i++) {
         UIButton *oneButton=btns[i];
-        oneButton.frame=CGRectMake(x+(width*i), 0, size.width,size.height);
-//        NSLog(@"%@",NSStringFromCGRect(oneButton.frame));
+        oneButton.frame=CGRectMake(width*i, 0, width,size.height);
+        NSLog(@"%@",NSStringFromCGRect(oneButton.frame));
     }
+    [super drawRect:rect];
 }
 
 - (IBAction)clicked_priority:(id)sender {

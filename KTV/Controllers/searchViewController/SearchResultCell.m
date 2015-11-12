@@ -41,7 +41,6 @@
     CGFloat titleWidth=rect.size.width-CGRectGetMaxX(header.frame)-80;
     CGFloat titleX=CGRectGetMaxX(header.frame)+40;
     titleLabel.frame=CGRectMake(titleX, y,titleWidth,height);
-//    titleLabel.textAlignment=NSTextAlignmentCenter;
     [super drawRect:rect];
 }
 

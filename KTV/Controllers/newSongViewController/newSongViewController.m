@@ -31,8 +31,8 @@
     myToast=[[HuToast alloc]init];
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newSong_bg"]];
     self.tableView.backgroundView=bgImageView;
-    UINib *nib=[UINib nibWithNibName:@"SongTopCell" bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
+//    UINib *nib=[UINib nibWithNibName:@"SongTopCell" bundle:nil];
+//    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
     _previousRow = -1;
     UIImageView  *headerImageV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 200)];
     [headerImageV setImage:[UIImage imageNamed:@"newsong_header"]];
@@ -97,13 +97,15 @@
             cell = [[newSongBottomCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:BOTTOMCELLIDENTIFY];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"song_bt_bg"]];
-            cell.oneSong=dataList[_previousRow];
-            cell.oneSong.delegate=self;
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
         }
+        cell.oneSong=dataList[_previousRow];
+        cell.oneSong.delegate=self;
         return cell;
     } else {
-        SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
+//        SongTopCell *cell=[[SongTopCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[NSString stringWithFormat:@"%@_%d",TOPCELLIDENTIFY,(int)indexPath.row]];
+//        SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
+        SongTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"SongTopCell" owner:nil options:nil] firstObject];
         cell.numberStr.text =[NSString stringWithFormat:@"%02d",(int)indexPath.row+1];
         cell.numberStr.font=[UIFont fontWithName:@"DIN Condensed" size:22];
         cell.oneSong=dataList[indexPath.row];
@@ -128,49 +130,25 @@
 {
     SongTopCell *cell=(SongTopCell*)[tableView cellForRowAtIndexPath:indexPath];
     if (![cell isKindOfClass:[SongTopCell class]]) return;
-    if (cell.opened) {
-        cell.sanjiaoxing.hidden=NO;
-    } else {
-        cell.sanjiaoxing.hidden=YES;
-    }
     if (_previousRow >= 0) {
         NSIndexPath *preIndexPath=[NSIndexPath indexPathForRow:_previousRow inSection:0];
         SongTopCell *preCell=(SongTopCell*)[tableView cellForRowAtIndexPath:preIndexPath];
-        
-        if (indexPath.row == _previousRow + 1) {
-            //            NSLog(@"fff");
-        }
-        else if (indexPath.row == _previousRow) {
-            cell.opened=!cell.opened;
-            if (cell.opened) {
-                cell.sanjiaoxing.hidden=NO;
-            } else {
-                cell.sanjiaoxing.hidden=YES;
-            }
-            [dataList removeObjectAtIndex:_previousRow+1];
-            [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        if (indexPath.row == _previousRow) {
+            cell.sanjiaoxing.hidden=!(cell.opened=!cell.opened);
+            [dataList removeObjectAtIndex:indexPath.row +1];
+            [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row +1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow = -1;
-        }
-        else if (indexPath.row < _previousRow) {
-            if (preCell.opened) {
-                preCell.sanjiaoxing.hidden=NO;
-            } else {
-                preCell.sanjiaoxing.hidden=YES;
-            }
-            
+        }  else if (indexPath.row < _previousRow) {
+            cell.sanjiaoxing.hidden=!(cell.opened=!cell.opened);
+            preCell.sanjiaoxing.hidden=!(preCell.opened=!preCell.opened);
             [dataList removeObjectAtIndex:_previousRow+1];
             [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow = indexPath.row;
             [dataList insertObject:@"增加的" atIndex:indexPath.row+1];
             [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-        }
-        else {
-            if (preCell.opened) {
-                preCell.sanjiaoxing.hidden=NO;
-            } else {
-                preCell.sanjiaoxing.hidden=YES;
-            }
-            
+        } else {
+            cell.sanjiaoxing.hidden=!(cell.opened=!cell.opened);
+            preCell.sanjiaoxing.hidden=!(preCell.opened=!preCell.opened);
             NSInteger oler=_previousRow;
             _previousRow = indexPath.row;
             [dataList insertObject:@"增加的" atIndex:indexPath.row+1];
@@ -181,10 +159,12 @@
         }
         
     } else {
+        cell.sanjiaoxing.hidden=!(cell.opened=!cell.opened);
         _previousRow = indexPath.row;
         [dataList insertObject:@"增加的" atIndex:_previousRow+1];
         [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
     }
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

@@ -37,14 +37,14 @@
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
     self.tableView.rowHeight=60.0f;
     //    self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"geshou_area_bg"]];
-   
+    
     self.tableView.scrollEnabled=NO;
     UIImage *image=[UIImage imageNamed:@"songsList_bg"];
     self.tableView.backgroundColor=[UIColor colorWithPatternImage:[image stretchableImageWithLeftCapWidth:100 topCapHeight:100 ]];
-
-
-//    self.dataSrc = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"restartHost", nil),NSLocalizedString(@"shutdownHost", nil), NSLocalizedString(@"clearCachedata", nil),NSLocalizedString(@"about", nil), nil];
-        self.dataSrc = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"restartHost", nil),NSLocalizedString(@"shutdownHost", nil), NSLocalizedString(@"clearCachedata", nil),nil];
+    
+    
+    //    self.dataSrc = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"restartHost", nil),NSLocalizedString(@"shutdownHost", nil), NSLocalizedString(@"clearCachedata", nil),NSLocalizedString(@"about", nil), nil];
+    self.dataSrc = [[NSMutableArray alloc] initWithObjects:NSLocalizedString(@"restartHost", nil),NSLocalizedString(@"shutdownHost", nil), NSLocalizedString(@"clearCachedata", nil),nil];
     
     cmd=[[CommandControler alloc]init];
     myToast=[[HuToast alloc]init];
@@ -81,12 +81,12 @@
         cell.selectionStyle=UITableViewCellSelectionStyleDefault;
         cell.backgroundColor=[UIColor groupTableViewBackgroundColor];
     }
-
+    
     switch (indexPath.row) {
         case 0:
         case 1:
         case 2:
-        cell.textLabel.text=self.dataSrc[indexPath.row];
+            cell.textLabel.text=self.dataSrc[indexPath.row];
             break;
         case 3: {
             cell.textLabel.text=self.dataSrc[indexPath.row];
@@ -108,12 +108,12 @@
             [cmd sendCmd_restartDevice:^(BOOL completed, NSError *error) {
                 if (completed) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-//                       [myToast setToastWithMessage:NSLocalizedString(@"restartsuccess", nil) WithTimeDismiss:@"2" messageType:KMessageSuccess];
+                        [HuToast showToastWithMessage:NSLocalizedString(@"restartsuccess", nil) WithTimeDismiss:nil messageType:KMessageSuccess];
                     });
-
+                    
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
-//                      [myToast setToastWithMessage:NSLocalizedString(@"restartfailure", nil)  WithTimeDismiss:@"2" messageType:KMessageStyleError];
+                        [HuToast showToastWithMessage:NSLocalizedString(@"restartfailure", nil)  WithTimeDismiss:nil messageType:KMessageStyleError];
                     });
                 }
                 [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -124,14 +124,14 @@
             [cmd sendCmd_shutdownDevice:^(BOOL completed, NSError *error) {
                 if (completed) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-//                       [myToast setToastWithMessage:NSLocalizedString(@"shutdownsuccess", nil)  WithTimeDismiss:@"2" messageType:KMessageSuccess];
+                        [HuToast showToastWithMessage:NSLocalizedString(@"shutdownsuccess", nil)  WithTimeDismiss:nil messageType:KMessageSuccess];
                     });
-                 
+                    
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
-//                                   [myToast setToastWithMessage:NSLocalizedString(@"shutdownfailure", nil)  WithTimeDismiss:@"2" messageType:KMessageStyleError];
+                        [HuToast showToastWithMessage:NSLocalizedString(@"shutdownfailure", nil)  WithTimeDismiss:nil messageType:KMessageStyleError];
                     });
-
+                    
                 }
                 [tableView deselectRowAtIndexPath:indexPath animated:YES];
             }];
@@ -142,7 +142,7 @@
             [[SDWebImageManager sharedManager].imageCache clearMemory];
             [[SDWebImageManager sharedManager].imageCache clearDisk];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//            [myToast setToastWithMessage:NSLocalizedString(@"clearcachedatasuccess", nil)  WithTimeDismiss:@"1" messageType:KMessageSuccess];
+            [HuToast showToastWithMessage:NSLocalizedString(@"clearcachedatasuccess", nil)  WithTimeDismiss:nil messageType:KMessageSuccess];
             break;
         }
         case 3: {

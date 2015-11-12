@@ -20,9 +20,7 @@
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-    _opened=selected;
-    
+    [super setSelected:selected animated:animated];    
     // Configure the view for the selected state
 }
 

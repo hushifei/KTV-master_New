@@ -11,7 +11,6 @@
 #import "Utility.h"
 #import "SDWebImageManager.h"
 #import "MBProgressHUD.h"
-#import "DownLoadFileTool.h"
 @interface AppDelegate () {
     MBProgressHUD *HUD;
     BaseTabBarViewController *_tabVC;
@@ -22,15 +21,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[Utility instanceShare] checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
-        if (isConnected && error==nil) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [[Utility instanceShare] starToMonitorNetowrkConnection];
-                [[Utility instanceShare] addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
-                [self initData];
-            });
-        }
-    }];
+
     _tabVC=[[BaseTabBarViewController alloc]init];
     UIImage *imagebottom=[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"nav_bottom_bg" ofType:@"png"]];
     [_tabVC.tabBar setBackgroundImage:imagebottom];
@@ -66,35 +57,7 @@
     [[SDWebImageManager sharedManager].imageCache clearDisk];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"netWorkStatus"] && [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            //                NSLog(@"Network resume ok");
-        });
-    }
-}
 
-- (void)initData {
-    HUD = [[MBProgressHUD alloc] initWithView:self.window];
-    [self.window.rootViewController.view addSubview:HUD];
-    HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
-    HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
-    HUD.detailsLabelColor=[UIColor greenColor];
-    [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed,NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [HUD hide:YES];
-            if (Completed) {
-                //                NSLog(@"download file And import data done!");
-                
-            } else {
-                //                NSLog(@"download file OR import data Error!");
-            }
-        });
-    }];
-    [HUD show:YES];
-    //    po [[self view] recursiveDescription]
-    //     po [[[[UIApplication sharedApplication] windows] objectAtIndex:0] recursiveDescription]
-}
 //networkError connectnetwork
 - (void)showMessageTitle:(NSString*)title message:(NSString*)message showType:(ViewType)type {
     NSString *localTitle=NSLocalizedString(title, nil);

@@ -58,8 +58,8 @@ static DownLoadFileTool *instance=nil;
     defaults =[NSUserDefaults standardUserDefaults];
     shareSession=[NSURLSession sharedSession];
     fileManager=[NSFileManager defaultManager];
-    [DataMananager instanceShare];
-allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
+    dataManager=[DataMananager instanceShare];
+    allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     savePath_TxtDir=[DOCUMENTPATH stringByAppendingPathComponent:@"/downloadDir/txt"];
     if (![fileManager fileExistsAtPath:savePath_TxtDir]) {
         [fileManager createDirectoryAtPath:savePath_TxtDir withIntermediateDirectories:YES attributes:nil error:nil];
@@ -151,7 +151,6 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
 - (void)importTxtFilesToDataBase:(NSArray*)filePaths {
     //import data
     [dataManager setDatabaseAlready:NO];
-    [defaults synchronize];
     [[DataMananager instanceShare]addIntoDataSourceWithFileNames:filePaths completed:^(BOOL Completed) {
         if (Completed) {
             if (_completed) {

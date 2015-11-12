@@ -22,9 +22,12 @@
 
 #import "NewPaiHangViewController.h"
 #import "NSString+Utility.h"
+#import "MBProgressHUD.h"
+#import "DownLoadFileTool.h"
 
 
 @interface MainViewController ()<UISearchBarDelegate,ScanCodeDelegate> {
+    MBProgressHUD *HUD;
     UIButton *geshouBtn;
     UIButton *paihangBtn;
     UIButton *jinxuanBtn;
@@ -45,7 +48,52 @@
     [self createContextUI];
     //[self copyFile];
     
-    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if ([[DataMananager instanceShare]databaseAlready]) {
+        return;
+    }
+    [[Utility instanceShare] checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
+        if (isConnected && error==nil) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [[Utility instanceShare] starToMonitorNetowrkConnection];
+                [[Utility instanceShare] addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
+                [self initData];
+            });
+        }
+    }];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"netWorkStatus"] && [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            //                NSLog(@"Network resume ok");
+        });
+    }
+}
+
+- (void)initData {
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
+    HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
+    HUD.detailsLabelColor=[UIColor greenColor];
+    [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed,NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [HUD hide:YES];
+            if (Completed) {
+                //                NSLog(@"download file And import data done!");
+                
+            } else {
+                //                NSLog(@"download file OR import data Error!");
+            }
+        });
+    }];
+    [HUD show:YES];
+    //    po [[self view] recursiveDescription]
+    //     po [[[[UIApplication sharedApplication] windows] objectAtIndex:0] recursiveDescription]
 }
 
 - (void)copyFile {
@@ -57,22 +105,19 @@
     }
 }
 
-- (void)initNavigationItem {
-        //navigation item
-    [super initNavigationItem];
-    UIButton *button=[[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-    [button setTitle:NSLocalizedString(@"demo", nil) forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
-    [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-    [button sizeToFit];
-    [button addTarget:self action:@selector(openDemoDB) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:button];
-}
-
-- (void)openDemoDB {
-    [[DataMananager instanceShare]openDB:1];
-}
+//- (void)initNavigationItem {
+//        //navigation item
+//    [super initNavigationItem];
+//    UIButton *button=[[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+//    [button setTitle:NSLocalizedString(@"demo", nil) forState:UIControlStateNormal];
+//    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [button setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
+//    [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+//    [button sizeToFit];
+//    [button addTarget:self action:@selector(openDemoDB) forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:button];
+//}
+//
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

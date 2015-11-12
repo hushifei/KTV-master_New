@@ -44,7 +44,7 @@ static  int limit=1000;
 - (instancetype)init {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [self unArchiveDemoDbFile];
+//        [self unArchiveDemoDbFile];
         [self createTables];
         shareInstance=[super init];
     });
@@ -68,15 +68,7 @@ static  int limit=1000;
 
 // open db file
 
-- (BOOL)openDB:(DBType)type {
-    if (_db) {
-        [_db close];
-    }
-    if (type==Work_DB) {
-        _db=[[FMDatabase alloc]initWithPath:DBPATH];
-    } else {
-        _db=[[FMDatabase alloc]initWithPath:DEMODBPATH];
-    }
+- (BOOL)openDB {
     if ([_db open]) {
         NSLog(@"DataBase is open ok");
         return YES;
@@ -111,11 +103,11 @@ static  int limit=1000;
 }
 
 - (BOOL)databaseAlready {
-    return [[userDefaults objectForKey:DATABASE_ALREADY]boolValue]?YES:NO;
+    return [userDefaults boolForKey:DATABASE_ALREADY];
 }
 
 - (void)setDatabaseAlready:(BOOL)already {
-    [userDefaults objectForKey:DATABASE_ALREADY];
+    [userDefaults setBool:already forKey:DATABASE_ALREADY];
     [userDefaults synchronize];
 }
 
@@ -152,13 +144,11 @@ static  int limit=1000;
 }
 
 - (void)createTables {
+    _db=[[FMDatabase alloc]initWithPath:DBPATH];
+    NSLog(@"%@",DBPATH);
     //1.check and create SongTable
-    if (_db==nil) {
-        _db=[[FMDatabase alloc]initWithPath:DBPATH];
-        NSLog(@"%@",DBPATH);
-    }
-    if (![self openDB:Work_DB]) {
-        NSLog(@"Work DB open error %@",[_db lastErrorMessage]);
+    if (![self openDB]) {
+        NSLog(@" DB open error %@",[_db lastErrorMessage]);
         return;
     }
     NSString *sqlCreateTable=nil;
@@ -221,7 +211,6 @@ static  int limit=1000;
         }
     }
     
-    [self closeDB];
 }
 
 - (void)eraserTables:(NSArray*)fileArray{
@@ -274,7 +263,7 @@ static  int limit=1000;
     NSArray *lines=[str componentsSeparatedByString:@"\t\r\n"];
     hasCount=(int)lines.count;
     [self insertSongsData:0 toIndex:999 useTransaction:YES dataSource:lines];
-    [[NSUserDefaults standardUserDefaults]setObject:@YES forKey:fileName];
+    [userDefaults setObject:@YES forKey:fileName];
     str=nil;
     lines=nil;
     return nil;
@@ -297,7 +286,7 @@ static  int limit=1000;
                     
                     NSString *insertSql1= [NSString stringWithFormat:@"INSERT INTO SongTable (number,songname,singer,singer1,songpiy,word,language,volume,channel,sex,stype,newsong,movie,pathid,bihua,addtime,spath)VALUES ('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",[lineArry[0] encodeBase64],[lineArry[1] encodeBase64],[lineArry[2] encodeBase64],[lineArry[3] encodeBase64],[lineArry[4] encodeBase64],[lineArry[5] encodeBase64],[lineArry[6] encodeBase64],[lineArry[7] encodeBase64],[lineArry[8] encodeBase64],[lineArry[9] encodeBase64],[lineArry[10] encodeBase64],[lineArry[11] encodeBase64],[lineArry[12] encodeBase64],[lineArry[13] encodeBase64],[lineArry[14] encodeBase64],[lineArry[15] encodeBase64],[lineArry[16] encodeBase64]];
                     if (![_db executeUpdate:insertSql1]) {
-                        NSLog(@"插入失败1");
+                        NSLog(@"插入失败_SongTable");
                     }
                     
                 }
@@ -334,7 +323,7 @@ static  int limit=1000;
     NSArray *lines=[str componentsSeparatedByString:@"\r\n"];
     hasCount=(int)lines.count;
     [self insertSingersData:0 toIndex:999 useTransaction:YES dataSource:lines];
-    [[NSUserDefaults standardUserDefaults]setObject:@YES forKey:fileName];
+    [userDefaults setObject:@YES forKey:fileName];
     str=nil;
     lines=nil;
     return nil;
@@ -361,7 +350,7 @@ static  int limit=1000;
                     }
                     NSString *insertSql1=[NSString stringWithFormat:@"INSERT INTO SingerTable (singer,pingyin,s_bi_hua,area)VALUES ('%@','%@','%@','%@')",[lineArry[0] encodeBase64],[lineArry[1] encodeBase64],[lineArry[2] encodeBase64],[lineArry[3] encodeBase64]];
                     if (![_db executeUpdate:insertSql1]) {
-                        NSLog(@"插入失败1");
+                        NSLog(@"插入失败 _SingerTable");
                     }
                     
                 }
@@ -410,7 +399,7 @@ static  int limit=1000;
             
         }
     }
-    [[NSUserDefaults standardUserDefaults]setObject:@YES forKey:fileName];
+    [userDefaults setObject:@YES forKey:fileName];
     str=nil;
     lines=nil;
     return nil;
@@ -433,7 +422,7 @@ static  int limit=1000;
                     }
                     NSString *insertSql= [NSString stringWithFormat:@"INSERT INTO TypeTable (typeid,type,typename)VALUES ('%@','%@','%@')",[lineArry[0] encodeBase64],[lineArry[1] encodeBase64],[lineArry[2] encodeBase64]];
                     if (![_db executeUpdate:insertSql]) {
-                        NSLog(@"插入失败1");
+                        NSLog(@"插入失败_TypeTable");
                     }
                     
                 }
@@ -497,7 +486,9 @@ static  int limit=1000;
         }
         //        NSLog(@"\n%@\n%@\n%@",number,rcid,order);
         NSString *insertSql= [NSString stringWithFormat:@"INSERT INTO OrderTable (number,rcid,ordername)VALUES ('%@','%@','%@')",[number encodeBase64],[rcid encodeBase64],[order encodeBase64]];
-        [_db executeUpdate:insertSql];
+        if (![_db executeUpdate:insertSql]) {
+            NSLog(@"插入失败 ——OrderTable");
+        }
         free(mynumber);
     }
     fclose(fn);

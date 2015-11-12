@@ -35,8 +35,8 @@
     [super viewDidLoad];
     self.title=NSLocalizedString(@"hotest", nil);
     _previousRow = -1;
-    UINib *nib=[UINib nibWithNibName:CELLIDENTIFY bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
+//    UINib *nib=[UINib nibWithNibName:CELLIDENTIFY bundle:nil];
+//    [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
     UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.tableView.tableFooterView=backView;
     self.tableView.showsHorizontalScrollIndicator=NO;
@@ -120,8 +120,9 @@
         return cell;
     } else {
 //        paihang_flag0
-        paiHangTopCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDENTIFY forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;   
+        paiHangTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"paiHangTopCell" owner:nil options:nil] firstObject];
+//        paiHangTopCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDENTIFY forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.numberStr.text =[NSString stringWithFormat:@"%02d",(int)indexPath.row+1];
         cell.numberStr.font=[UIFont fontWithName:@"DIN Condensed" size:18];
         cell.songName.font=[UIFont systemFontOfSize:15];

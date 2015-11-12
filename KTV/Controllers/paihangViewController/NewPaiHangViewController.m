@@ -103,10 +103,12 @@
         [collectionBtn setImage:[UIImage imageNamed:@"collection_bt"] forState:UIControlStateNormal];
         [collectionBtn setTitle:NSLocalizedString(@"collect", nil) forState:UIControlStateNormal];
         [collectionBtn setTitleColor:[UIColor groupTableViewBackgroundColor] forState:UIControlStateNormal];
-        
+        collectionBtn.titleLabel.font=[UIFont systemFontOfSize:12];
+
         UIButton *priorityBtn=[[UIButton alloc]initWithFrame:CGRectMake((cellSize.width/2-80)/2+cellSize.width/2,0, 80, cellSize.height)];
         [priorityBtn setImage:[UIImage imageNamed:@"priority_bt"] forState:UIControlStateNormal];
         [priorityBtn setTitle:NSLocalizedString(@"top", nil) forState:UIControlStateNormal];
+        priorityBtn.titleLabel.font=[UIFont systemFontOfSize:12];
         [priorityBtn setTitleColor:[UIColor groupTableViewBackgroundColor] forState:UIControlStateNormal];
 
         [collectionBtn addTarget:self action:@selector(collection_clicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -172,7 +174,7 @@
     [button addSubview:selectedBtn];
 
     UIImageView *iamgeView=[[UIImageView alloc]init];
-    iamgeView.frame=CGRectMake(numberlabel.center.x, SESSIONHEIGHT-9, 20, 9);
+    iamgeView.frame=CGRectMake(numberlabel.center.x, SESSIONHEIGHT-8, 16, 8);
     if (section == ClickButtonCount) {
         UIImage *image=[UIImage imageNamed:@"brt"];
         iamgeView.image=image;

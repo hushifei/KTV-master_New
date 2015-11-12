@@ -8,15 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "SFSelectView.h"
-@class Song;
-@class Singer;
-@protocol searchSongDelegate <NSObject>
-- (void)searching;
-- (void)searchDone;
-- (void)clickSinger:(Singer*)singer;
-- (void)clickSong:(Song*)song;
-
-@end
+@class SearchSongListViewController;
+//@class Song;
+//@class Singer;
+//@protocol searchSongDelegate <NSObject>
+//- (void)searching;
+//- (void)searchDone;
+//- (void)clickSinger:(Singer*)singer;
+//- (void)clickSong:(Song*)song;
+//
+//@end
 
 enum selectSearchType{
     searchAll,
@@ -25,7 +26,9 @@ enum selectSearchType{
 };
 
 @interface ResultTableViewController : UITableViewController<UISearchResultsUpdating,UISearchBarDelegate,SelectViewOnSelectedDelegate>
-@property (nonatomic,weak) id<searchSongDelegate>delegate;
+//@property (nonatomic,weak) id<searchSongDelegate>delegate;
 @property (nonatomic,assign)enum selectSearchType searchSelectIndex;
-
+@property (nonatomic,strong)NSMutableArray *dataList;
+@property (nonatomic,weak)SearchSongListViewController *searchSongListVC;
+- (void)reloadData;
 @end

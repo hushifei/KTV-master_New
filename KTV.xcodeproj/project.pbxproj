@@ -382,7 +382,6 @@
 		C31B66531BE378A6005B2D89 /* KTVUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KTVUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31B66551BE378A6005B2D89 /* KTVUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KTVUITests.m; sourceTree = "<group>"; };
 		C31B66571BE378A6005B2D89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C31E504A1BE0658200AC1F53 /* KTV.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = KTV.entitlements; sourceTree = "<group>"; };
 		C329A2761BCB933C00E1FE3A /* DownLoadFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownLoadFileTool.h; sourceTree = "<group>"; };
 		C329A2771BCB933C00E1FE3A /* DownLoadFileTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownLoadFileTool.m; sourceTree = "<group>"; };
 		C329A2791BCBAE2000E1FE3A /* UIColor+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utility.h"; sourceTree = "<group>"; };
@@ -1554,7 +1553,6 @@
 		D1586B421AE14CBF00AF3EDB /* KTV */ = {
 			isa = PBXGroup;
 			children = (
-				C31E504A1BE0658200AC1F53 /* KTV.entitlements */,
 				D156A3EE1AECE2810091C419 /* images */,
 				D175F07B1AE15D5B004E3B9A /* CustomView */,
 				D16D116C1AE1FE85005D7719 /* Controllers */,

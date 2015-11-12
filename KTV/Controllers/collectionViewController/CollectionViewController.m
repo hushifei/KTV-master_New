@@ -166,18 +166,14 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_previousRow >= 0 && _previousRow+1==indexPath.row) {
-        CollectionBottomCell *cell=[tableView dequeueReusableCellWithIdentifier:BOTTOMCELLIDENTIFY];
-        if (!cell) {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:BOTTOMCELLIDENTIFY owner:self options:nil];
-            cell = [nib objectAtIndex:0];
+            CollectionBottomCell *cell=[[[NSBundle mainBundle] loadNibNamed:BOTTOMCELLIDENTIFY owner:self options:nil]firstObject];
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"song_bt_bg"]];
             //cancel collection
+            cell.selectionStyle=UITableViewCellSelectionStyleNone;
             cell.oneSong=dataList[_previousRow];
             cell.oneSong.delegate=self;
-            cell.selectionStyle=UITableViewCellSelectionStyleNone;
-        }
-        return cell;
+            return cell;
     } else {
         CollectionViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
         cell.oneSong=dataList[indexPath.row];

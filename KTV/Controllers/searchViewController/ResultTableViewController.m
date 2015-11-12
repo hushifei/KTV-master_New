@@ -25,12 +25,16 @@
 #define SINGERTABLE @"SingerTable"
 #import "NSString+Utility.h"
 #import "DataMananager.h"
-@interface ResultTableViewController ()<UITableViewDataSource,UITableViewDelegate,searchSongDelegate,UISearchBarDelegate> {
+
+#import "BaseNavigationController.h"
+#import "SongListViewController.h"
+#import "SearchSongListViewController.h"
+@interface ResultTableViewController ()<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate> {
     NSInteger _previousRow;
     BOOL canSearch;
+    NSMutableArray *searchArray;
 }
 @property (nonatomic,strong)NSIndexPath *selectedIndexPath;
-@property (nonatomic,strong)NSMutableArray *dataList;
 @property (nonatomic,strong)FMDatabase *searchDb;
 
 @end
@@ -43,14 +47,15 @@
     canSearch=YES;
     _searchSelectIndex = 0;
     _dataList = [[NSMutableArray alloc] init];
+    searchArray=[[NSMutableArray alloc]init];
     [self initializeSearchController];
     _searchDb = [DataMananager instanceShare].db;
     [_searchDb open];
 }
 
 - (void)initializeSearchController {
-//    UINib *nib=[UINib nibWithNibName:@"SearchTableCell" bundle:nil];
-//    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
+//    self.definesPresentationContext = YES;
+    self.edgesForExtendedLayout=UIRectEdgeNone;
     [self.tableView registerClass:[SearchResultCell class] forCellReuseIdentifier:CELL_IDENTIFY];
     _previousRow = -1;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
@@ -65,37 +70,12 @@
     
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-/*
-#pragma mark - use song cell or singer cell
-- (SearchTableCell*)songCell :(UITableView*)tableView :(NSIndexPath*)indexPath {
-    SearchTableCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.oneSong=self.dataList[indexPath.row];
-    cell.backgroundColor=[UIColor clearColor];
-    if (cell.opened) {
-        cell.sanjiaoxing.hidden=NO;
-    } else {
-        cell.sanjiaoxing.hidden=YES;
-    }
-    return cell;
-}
-- (SingsTableViewCell*)singerCell :(UITableView*)tableView :(NSIndexPath*)indexPath {
-    SingsTableViewCell *singerCell = [tableView dequeueReusableCellWithIdentifier:SINGERCELLIDENTIFY];
-    if (!singerCell) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:SINGERCELLIDENTIFY owner:self options:nil];
-        singerCell = [nib objectAtIndex:0];
-        singerCell.backgroundColor=[UIColor clearColor];
-        singerCell.singer = self.dataList[indexPath.row];
-        [singerCell.SingerLabel setTextColor:[UIColor groupTableViewBackgroundColor]];
-        return singerCell;
-    }else {
-        return nil;
-    }
-} */
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -127,57 +107,59 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     id object=_dataList[indexPath.row];
+    if (object==nil) return;
+    SongListViewController *songVC=[[SongListViewController alloc]init];
     if ([object isKindOfClass:[Singer class]]) {
-        if ([_delegate respondsToSelector:@selector(clickSinger:)]) {
-            [_delegate clickSinger:(Singer*)object];
-        }
+        songVC.singerName=[(Singer*)object singer];
+        songVC.needLoadData=YES;
     } else {
-        if ([_delegate respondsToSelector:@selector(clickSong:)]) {
-            [_delegate clickSong:(Song*)object];
-        }
-      }
+        songVC.needLoadData=NO;
+        [songVC setDataList:object];
+    }
+    [self.searchSongListVC.navigationController pushViewController:songVC animated:NO];
 }
+
+
+//- (void)viewDidAppear:(BOOL)animated {
+//    [super viewDidAppear:animated];
+//    if (self.dataList && self.dataList.count>0) {
+//        [self reloadData];
+//    }
+//}
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
 
 - (void)reloadData {
-//    if (self.dataList.count>=100) {
-//        self.dataList=[[self.dataList objectsAtIndexes:[NSIndexSet indexSetWithIndex:99]]mutableCopy];
-//    }
-    
-    if (self.dataList.count > 0) {
-        if ([self.delegate respondsToSelector:@selector(searching)]) {
-            [self.delegate searching];
-        }
-    } else {
-        if ([self.delegate respondsToSelector:@selector(searchDone)]) {
-            [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
-            [self.delegate searchDone];
-        }
+    if (self.dataList && self.dataList.count > 0) {
+            [self.tableView reloadData];
     }
-    [self.tableView reloadData];
+    canSearch = YES;
 }
-
+static NSString *olderStr=nil;
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *searchStr=[searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    [self.dataList removeAllObjects];
     if (!canSearch) return;
-    if ( searchStr && searchStr.length>0) {
+    if ( searchStr && searchStr.length>0 && ![olderStr isEqualToString:searchStr]) {
+//        if (self.dataList.count>0) {
+            [self.dataList removeAllObjects];
+//            [self.tableView reloadData];
+//        }
         canSearch=NO;
-        [self initializeTableContent:searchStr];
+//        [self initializeTableContent:searchStr];
+        olderStr=searchStr;
     } else {
         canSearch=YES;
-        [self reloadData];
     }
     
 }
 
 #pragma mark - sql method
 - (void)searchSongData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
-    NSString *temStr = [NSString stringWithFormat:@"%@%@",searchStr,@"%"];
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE songname LIKE '%@' OR %@ LIKE '%@' limit=20" ,tableName,temStr,conditionColumn,temStr];
+    NSString *temStr = [NSString stringWithFormat:@"%@%@%@",@"%",searchStr,@"%"];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE songname LIKE '%@' OR %@ LIKE '%@' limit 100" ,tableName,temStr,conditionColumn,temStr];
+//    NSLog(@"song:\n%@",sql);
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
@@ -201,11 +183,12 @@
 //        NSLog(@"%@",oneSong.songname);
         [self.dataList addObject:oneSong];
     }
-}
+} // limit 20
 
 - (void)searchSingData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
     NSString *temStr = [NSString stringWithFormat:@"%@%@%@",@"%",searchStr,@"%"];
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE singer LIKE '%@' OR  %@ LIKE '%@'",tableName,temStr,conditionColumn,temStr];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE singer LIKE '%@' OR  %@ LIKE '%@' limit 100",tableName,temStr,conditionColumn,temStr];
+//    NSLog(@"singer:\n%@",sql);
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
         Singer *oneSinger=[[Singer alloc]init];
@@ -222,6 +205,7 @@
 
 - (void)initializeTableContent:(NSString*)searchStr {
      NSString *enCodeSearchStr = [[searchStr uppercaseString] encodeBase64];
+    [searchArray addObject:enCodeSearchStr];
     if (_searchSelectIndex == searchAll) {
         [self searchSongData:SONGTABLE :@"songpiy" :enCodeSearchStr :@"songname"];
         [self searchSingData:SINGERTABLE :@"pingyin" :enCodeSearchStr :@"singer"];
@@ -231,7 +215,6 @@
     }else {
         [self searchSingData:SINGERTABLE :@"pingyin" :enCodeSearchStr :@"singer"];
     }
-    canSearch = YES;
     [self reloadData];
 
 }
@@ -306,5 +289,13 @@
         default:
             break;
     }
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 @end

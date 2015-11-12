@@ -14,6 +14,8 @@
 #import "CommandControler.h"
 #import "NSString+Utility.h"
 #import "DataMananager.h"
+#import "Utility.h"
+#import "AppDelegate.h"
 @interface YiDianViewController ()<SongDelegate,yiDianDelegate>
 {
     NSInteger _previousRow;
@@ -46,7 +48,33 @@
     self.tableView.rowHeight=UITableViewAutomaticDimension;
 }
 
+- (void)initNavigationItem {
+    //navigation item
+    UIButton *rightbtn=[[UIButton alloc]initWithFrame:CGRectMake(0, 0, 50, 30)];
+    rightbtn.titleLabel.font=[UIFont systemFontOfSize:10];
+    [rightbtn setTitle:@"切歌" forState:UIControlStateNormal];
+    [rightbtn setImage:[UIImage imageNamed:@"cutsong_bt"] forState:UIControlStateNormal];
+    [rightbtn addTarget:self action:@selector(clicked_nextSong:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:rightbtn];
+}
+
+- (void)clicked_nextSong:(id)sender {
+    if ([Utility instanceShare].netWorkStatus) {
+        __weak typeof(self) weakSelf=self;
+        [cmd sendCmd_switchSong:^(BOOL completed, NSError *error) {
+            if (completed) {
+                [weakSelf cutSongWithResult:KMessageSuccess];
+            } else {
+                [weakSelf cutSongWithResult:KMessageStyleError];
+            }
+        }];
+    } else {
+        [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+    }
+}
+
 - (void)initializeTableContent {
+    [self initNavigationItem];
     _previousRow = -1;
     _dataSrc=[[NSMutableArray alloc]init];
     _yidianArray=[[NSMutableArray alloc]init];
@@ -179,14 +207,14 @@
     if (_previousRow >= 0 && _previousRow+1==indexPath.row) {
         YiDianBottomCell *cell=[tableView dequeueReusableCellWithIdentifier:BOTTOMCELLIDENTIFY];
         if (!cell) {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:BOTTOMCELLIDENTIFY owner:self options:nil];
-            cell = [nib objectAtIndex:0];
+            cell = [[[NSBundle mainBundle] loadNibNamed:BOTTOMCELLIDENTIFY owner:nil options:nil]firstObject];
             cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"song_bt_bg"]];
-            cell.oneSong=_dataSrc[_previousRow];
-            cell.orderID=[[_yidianArray[_previousRow]allKeys]firstObject];
-            cell.delegate=self;
-            cell.oneSong.delegate=self;
         }
+        cell.orderID=[[_yidianArray[_previousRow]allKeys]firstObject];
+        cell.delegate=self;
+        cell.oneSong.delegate=self;
+        cell.oneSong=_dataSrc[_previousRow];
+        
         return cell;
     } else {
         YiDianTopViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
@@ -236,7 +264,7 @@
 
 #pragma mark - SongBottom delegate
 - (void)addSongToCollection:(Song *)oneSong result:(KMessageStyle)result {
-//    [myToast dissmiss];
+    //    [myToast dissmiss];
     switch (result) {
         case KMessageSuccess: {
             NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
@@ -250,16 +278,16 @@
             [_dataSrc removeObjectAtIndex:_previousRow+1];
             [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow=-1;
-//            [myToast setToastWithMessage:@"成功收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
+            //            [myToast setToastWithMessage:@"成功收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
             break;
         }
         case KMessageStyleError: {
-//            [myToast setToastWithMessage:@"收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+            //            [myToast setToastWithMessage:@"收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
             
             break;
         }
         case KMessageWarning: {
-//            [myToast setToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+            //            [myToast setToastWithMessage:@"查询收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
             
             break;
         }
@@ -275,7 +303,7 @@
             [_dataSrc removeObjectAtIndex:_previousRow+1];
             [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow=-1;
-//            [myToast setToastWithMessage:@"此歌已收藏"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
+            //            [myToast setToastWithMessage:@"此歌已收藏"  WithTimeDismiss:nil messageType:KMessageStyleInfo];
             
             break;
         }
@@ -290,7 +318,7 @@
 
 - (void)dingGeFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     //ding ge
-//    [myToast dissmiss];
+    //    [myToast dissmiss];
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
     YiDianTopViewCell *cell=(YiDianTopViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
@@ -304,7 +332,7 @@
     //    [self.tableView reloadData];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self initializeTableContent];
-//        [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
+        //        [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
         
     });
     //    [_dataSrc removeObjectAtIndex:_previousRow+1];
@@ -313,21 +341,21 @@
     //TODO::
 }
 
-- (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
-    //    [myToast dissmiss];
-    NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-    YiDianTopViewCell *cell=(YiDianTopViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
-    cell.opened=!cell.opened;
-    if (cell.opened) {
-        cell.sanjiaoxing.hidden=NO;
-    } else {
-        cell.sanjiaoxing.hidden=YES;
-    }
-    [_dataSrc removeObjectAtIndex:_previousRow+1];
-    [self initializeTableContent];
-//    [myToast setToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
-    
-    //cut song
+- (void)cutSongWithResult:(KMessageStyle)result {
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        switch (result) {
+            case KMessageSuccess:
+                [HuToast showToastWithMessage:@"切歌收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
+                break;
+            case KMessageStyleError:
+                [HuToast showToastWithMessage:@"切歌失败"  WithTimeDismiss:nil messageType:KMessageStyleError];
+                
+            default:
+                break;
+        }
+        [self initializeTableContent];
+    });
 }
 
 - (void)removeFromYidian:(Song *)oneSong result:(KMessageStyle)result {
