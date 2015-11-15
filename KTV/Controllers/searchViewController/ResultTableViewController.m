@@ -32,6 +32,8 @@
 @interface ResultTableViewController ()<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate> {
     NSInteger _previousRow;
     BOOL canSearch;
+    NSString *olderStr;
+
     NSMutableArray *searchArray;
 }
 @property (nonatomic,strong)NSIndexPath *selectedIndexPath;
@@ -137,17 +139,16 @@
     }
     canSearch = YES;
 }
-static NSString *olderStr=nil;
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *searchStr=[searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (!canSearch) return;
     if ( searchStr && searchStr.length>0 && ![olderStr isEqualToString:searchStr]) {
-//        if (self.dataList.count>0) {
+        if (self.dataList.count>0) {
             [self.dataList removeAllObjects];
 //            [self.tableView reloadData];
-//        }
+        }
         canSearch=NO;
-//        [self initializeTableContent:searchStr];
+        [self initializeTableContent:searchStr];
         olderStr=searchStr;
     } else {
         canSearch=YES;

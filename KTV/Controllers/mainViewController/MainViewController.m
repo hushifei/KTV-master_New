@@ -46,12 +46,6 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets=YES;
     [self createContextUI];
-    //[self copyFile];
-    
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
     if ([[DataMananager instanceShare]databaseAlready]) {
         return;
     }
@@ -64,6 +58,8 @@
             });
         }
     }];
+    //[self copyFile];
+    
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
