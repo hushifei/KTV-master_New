@@ -78,18 +78,11 @@
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self showConnectionHostMessage:NO];
         });
-//            [UIView animateWithDuration:2 animations:^{
-//                promptConnectBtn.alpha=0.0;
-//                promptConnectBtn.hidden=YES;
-//            }];
+
     } else if  ([keyPath isEqualToString:@"netWorkStatus"] && ![[change valueForKey:NSKeyValueChangeNewKey]boolValue]) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self showConnectionHostMessage:YES];
         });
-//        [UIView animateWithDuration:2 animations:^{
-//            promptConnectBtn.alpha=1.0;
-//            promptConnectBtn.hidden=NO;
-//        }];
     }
 }
 
