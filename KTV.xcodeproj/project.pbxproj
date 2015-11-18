@@ -42,6 +42,7 @@
 		C389FE9E1BD491B80017ECBF /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = C389FE941BD491B80017ECBF /* mztools.c */; };
 		C389FE9F1BD491B80017ECBF /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = C389FE961BD491B80017ECBF /* unzip.c */; };
 		C389FEA01BD491B80017ECBF /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = C389FE981BD491B80017ECBF /* zip.c */; };
+		C39D19521BFC0B09003808C9 /* DB.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = C39D19511BFC0B09003808C9 /* DB.sqlite */; };
 		C3AAC0C71BCC953C009582D1 /* password_cancel_down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0BD1BCC953C009582D1 /* password_cancel_down@2x.png */; };
 		C3AAC0C81BCC953C009582D1 /* password_cancel_down@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0BE1BCC953C009582D1 /* password_cancel_down@3x.png */; };
 		C3AAC0C91BCC953C009582D1 /* password_cancel_up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C3AAC0BF1BCC953C009582D1 /* password_cancel_up@2x.png */; };
@@ -424,6 +425,7 @@
 		C389FE981BD491B80017ECBF /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
 		C389FE991BD491B80017ECBF /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		C389FFEE1BD492FE0017ECBF /* KTV copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "KTV copy-Info.plist"; path = "/Users/kuaile/Desktop/KTV-master/KTV copy-Info.plist"; sourceTree = "<absolute>"; };
+		C39D19511BFC0B09003808C9 /* DB.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = DB.sqlite; sourceTree = "<group>"; };
 		C3AAC0BD1BCC953C009582D1 /* password_cancel_down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "password_cancel_down@2x.png"; sourceTree = "<group>"; };
 		C3AAC0BE1BCC953C009582D1 /* password_cancel_down@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "password_cancel_down@3x.png"; sourceTree = "<group>"; };
 		C3AAC0BF1BCC953C009582D1 /* password_cancel_up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "password_cancel_up@2x.png"; sourceTree = "<group>"; };
@@ -990,6 +992,7 @@
 			isa = PBXGroup;
 			children = (
 				C389FE4F1BD47E450017ECBF /* DemoDB.sqlite.zip */,
+				C39D19511BFC0B09003808C9 /* DB.sqlite */,
 			);
 			path = downloadDir;
 			sourceTree = "<group>";
@@ -2081,7 +2084,7 @@
 					};
 					D1586B3F1AE14CBF00AF3EDB = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = D69H8VACW4;
+						DevelopmentTeam = FYJBTHMSNK;
 						SystemCapabilities = {
 							com.apple.WAC = {
 								enabled = 0;
@@ -2310,6 +2313,7 @@
 				D154302A1AFDDCD600522DE1 /* bokong2.png in Resources */,
 				D15430471AFDDCD600522DE1 /* temp4@2x.png in Resources */,
 				D154305F1AFDDCD600522DE1 /* song_bt_bg.png in Resources */,
+				C39D19521BFC0B09003808C9 /* DB.sqlite in Resources */,
 				D156A3E11AEC981D0091C419 /* paiHangTopCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2691,8 +2695,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LIBRARY = "compiler-default";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: ZENG ZEBIN (FCUD3D8C9X)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = KTV/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2702,9 +2706,9 @@
 					"$(PROJECT_DIR)/KTV/Controllers/ScanCode/Framework/ZBarSDK",
 					"$(PROJECT_DIR)/KTV/Controllers/ScanCodeController/Framework/ZBarSDK",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.puzehouse.ktv;
+				PRODUCT_BUNDLE_IDENTIFIER = com.puzehouse.ktvhome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9be89ed8-79d9-4b12-a01f-14430c29fb96";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -2713,8 +2717,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LIBRARY = "compiler-default";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: ZENG ZEBIN (D69H8VACW4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = KTV/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -2724,9 +2728,9 @@
 					"$(PROJECT_DIR)/KTV/Controllers/ScanCode/Framework/ZBarSDK",
 					"$(PROJECT_DIR)/KTV/Controllers/ScanCodeController/Framework/ZBarSDK",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.puzehouse.ktv;
+				PRODUCT_BUNDLE_IDENTIFIER = com.puzehouse.ktvhome;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cd6aaaaa-3c18-4c82-8b0d-afc2f8c13216";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

@@ -97,7 +97,9 @@
     cell.backgroundColor=[UIColor clearColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    [cell configWithObject:_dataList[indexPath.row]];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [cell configWithObject:_dataList[indexPath.row]];
+    });
     return cell;
     
 }
@@ -122,13 +124,6 @@
 }
 
 
-//- (void)viewDidAppear:(BOOL)animated {
-//    [super viewDidAppear:animated];
-//    if (self.dataList && self.dataList.count>0) {
-//        [self reloadData];
-//    }
-//}
-
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
@@ -142,13 +137,14 @@
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *searchStr=[searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (!canSearch) return;
-    if ( searchStr && searchStr.length>0 && ![olderStr isEqualToString:searchStr]) {
+    if (searchStr && searchStr.length>0 && ![olderStr isEqualToString:searchStr]) {
         if (self.dataList.count>0) {
             [self.dataList removeAllObjects];
-//            [self.tableView reloadData];
         }
         canSearch=NO;
-        [self initializeTableContent:searchStr];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [self initializeTableContent:searchStr];
+        });
         olderStr=searchStr;
     } else {
         canSearch=YES;
@@ -159,7 +155,7 @@
 #pragma mark - sql method
 - (void)searchSongData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
     NSString *temStr = [NSString stringWithFormat:@"%@%@%@",@"%",searchStr,@"%"];
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE songname LIKE '%@' OR %@ LIKE '%@' limit 100" ,tableName,temStr,conditionColumn,temStr];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE songname LIKE '%@' OR %@ LIKE '%@'" ,tableName,temStr,conditionColumn,temStr];
 //    NSLog(@"song:\n%@",sql);
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
@@ -188,7 +184,7 @@
 
 - (void)searchSingData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
     NSString *temStr = [NSString stringWithFormat:@"%@%@%@",@"%",searchStr,@"%"];
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE singer LIKE '%@' OR  %@ LIKE '%@' limit 100",tableName,temStr,conditionColumn,temStr];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE singer LIKE '%@' OR  %@ LIKE '%@'",tableName,temStr,conditionColumn,temStr];
 //    NSLog(@"singer:\n%@",sql);
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
@@ -208,15 +204,18 @@
      NSString *enCodeSearchStr = [[searchStr uppercaseString] encodeBase64];
     [searchArray addObject:enCodeSearchStr];
     if (_searchSelectIndex == searchAll) {
+        
         [self searchSongData:SONGTABLE :@"songpiy" :enCodeSearchStr :@"songname"];
+        
         [self searchSingData:SINGERTABLE :@"pingyin" :enCodeSearchStr :@"singer"];
+        
         
     }else if (_searchSelectIndex == searchSong){
         [self searchSongData:SONGTABLE :@"songpiy" :enCodeSearchStr :@"songname"];
     }else {
         [self searchSingData:SINGERTABLE :@"pingyin" :enCodeSearchStr :@"singer"];
     }
-    [self reloadData];
+    [self performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 
 }
 

@@ -49,6 +49,10 @@
     if ([[DataMananager instanceShare]databaseAlready]) {
         return;
     }
+    if (DEBUG) {
+        [self copyFile];
+    }
+    
     [[Utility instanceShare] checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
         if (isConnected && error==nil) {
             dispatch_sync(dispatch_get_main_queue(), ^{
@@ -58,7 +62,7 @@
             });
         }
     }];
-    //[self copyFile];
+    ;
     
 }
 

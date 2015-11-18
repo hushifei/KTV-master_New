@@ -44,6 +44,9 @@ static  int limit=1000;
 - (instancetype)init {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        if (DEBUG) {
+            [self copyDBFile];
+        }
 //        [self unArchiveDemoDbFile];
         [self createTables];
         shareInstance=[super init];
@@ -514,7 +517,7 @@ static  int limit=1000;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         NSString *fileSourcePath=[[NSBundle mainBundle]pathForResource:@"DemoDB.sqlite" ofType:@"zip"];
         if  (fileSourcePath==nil || fileSourcePath.length==0) return ;
-        NSString *savaPath=[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"demoDB"];
+        NSString *savaPath=[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB"];
         if ([ZipArchive unzipFileAtPath:fileSourcePath toDestination:savaPath overwrite:YES password:nil error:nil delegate:nil]) {
             NSFileManager *manager=[NSFileManager defaultManager];
             [manager moveItemAtPath:[savaPath stringByAppendingPathComponent:@"DemoDB.sqlite"] toPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DemoDB.sqlite"] error:nil];

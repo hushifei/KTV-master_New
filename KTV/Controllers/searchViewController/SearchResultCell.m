@@ -47,16 +47,23 @@
 - (void)configWithObject:(nonnull id)object {
     if ([object isKindOfClass:[Singer class]]) {
         Singer *oneSinger=(Singer*)object;
-        titleLabel.text=oneSinger.singer;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            titleLabel.text=oneSinger.singer;
+        });
         NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         if ([Utility instanceShare].netWorkStatus) {
             [header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
         } else {
-            header.image=[UIImage imageNamed:@"Default_Header"];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                header.image=[UIImage imageNamed:@"Default_Header"];
+            });
         }
     } else if ([object isKindOfClass:[Song class]]){
-        header.image=[UIImage imageNamed:@"music_icon"];
-        titleLabel.text=[(Song*)object songname];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            header.image=[UIImage imageNamed:@"music_icon"];
+            titleLabel.text=[(Song*)object songname];
+        });
+
     }
     
 }
