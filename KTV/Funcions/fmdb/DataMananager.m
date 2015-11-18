@@ -9,6 +9,8 @@
 #import "DataMananager.h"
 #import "NSString+Utility.h"
 #import "ZipArchive.h"
+
+
 #define DBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB.sqlite"]
 
 #define DEMODBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DemoDB.sqlite"]
@@ -44,9 +46,9 @@ static  int limit=1000;
 - (instancetype)init {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if (DEBUG) {
-            [self copyDBFile];
-        }
+//        if (DEBUG) {
+//            [self copyDBFile];
+//        }
 //        [self unArchiveDemoDbFile];
         [self createTables];
         shareInstance=[super init];

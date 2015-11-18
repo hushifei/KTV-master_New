@@ -35,6 +35,9 @@
     _previousRow = -1;
     myToast=[[HuToast alloc]init];
     cmd=[[CommandControler alloc]init];
+    _dataSrc=[[NSMutableArray alloc]init];
+    _yidianArray=[[NSMutableArray alloc]init];
+    [self initNavigationItem];
     [self initializeTableContent];
     UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
@@ -74,9 +77,7 @@
 }
 
 - (void)initializeTableContent {
-    [self initNavigationItem];
     _previousRow = -1;
-    _dataSrc=[[NSMutableArray alloc]init];
     _yidianArray=[[NSMutableArray alloc]init];
     [cmd sendCmd_get_yiDianList:^(BOOL completed, NSArray *list) {
         if (!completed || list.count==0) return;
@@ -346,7 +347,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         switch (result) {
             case KMessageSuccess:
-                [HuToast showToastWithMessage:@"切歌收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
+                [HuToast showToastWithMessage:@"切歌成功"  WithTimeDismiss:nil messageType:KMessageSuccess];
+                [_dataSrc removeAllObjects];
+                [_yidianArray removeAllObjects];
+                [self.tableView reloadData];
+                [self initializeTableContent];
                 break;
             case KMessageStyleError:
                 [HuToast showToastWithMessage:@"切歌失败"  WithTimeDismiss:nil messageType:KMessageStyleError];
@@ -354,7 +359,6 @@
             default:
                 break;
         }
-        [self initializeTableContent];
     });
 }
 

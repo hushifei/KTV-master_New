@@ -11,16 +11,9 @@
 #import "Singer.h"
 #import "Utility.h"
 #import "PinYinForObjc.h"
-//#define TOPCELLIDENTIFY @"SearchTableCell"
-//#import "SearchTableCell.h"
-//#define BOTTOMCELLIDENTIFY @"SongBottomCell"
-//#define SINGERCELLIDENTIFY @"SingsTableViewCell"
-//#import "SongBottomCell.h"
 #import "SearchResultCell.h"
 #define CELL_IDENTIFY @"CELL_IDENTIFY"
-
 #import "MBProgressHUD.h"
-//#import "SingsTableViewCell.h"
 #define SONGTABLE @"SongTable"
 #define SINGERTABLE @"SingerTable"
 #import "NSString+Utility.h"
@@ -53,6 +46,10 @@
     [self initializeSearchController];
     _searchDb = [DataMananager instanceShare].db;
     [_searchDb open];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
 }
 
 - (void)initializeSearchController {
@@ -90,9 +87,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SearchResultCell *cell=[tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFY forIndexPath:indexPath];
-    if (!cell) {
-        cell=[[SearchResultCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_IDENTIFY];
-    }
+//    if (!cell) {
+//        cell=[[SearchResultCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_IDENTIFY];
+//    }
     cell.contentView.backgroundColor=[UIColor clearColor];
     cell.backgroundColor=[UIColor clearColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
@@ -110,6 +107,7 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self dismissViewControllerAnimated:YES completion:nil];
     id object=_dataList[indexPath.row];
     if (object==nil) return;
     SongListViewController *songVC=[[SongListViewController alloc]init];
@@ -121,6 +119,7 @@
         [songVC setDataList:object];
     }
     [self.searchSongListVC.navigationController pushViewController:songVC animated:NO];
+
 }
 
 
@@ -219,8 +218,24 @@
 
 }
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+- (void)keyboardDidHide:(NSNotification*)notification {
+    [self.view endEditing:YES];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"keybordwillhide");
+}
+
+
+- (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar {
+    NSLog(@"searchBarCancelButtonClicked");
+}
+
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     canSearch=YES;
+    [searchBar setShowsCancelButton:NO animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"searchBarCancelButtonClicked");
 }
@@ -234,23 +249,30 @@
 
 -(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     searchBar.showsCancelButton = YES;
-    UIButton *cancelButton;
-    UIView *topView = searchBar.subviews[0];
-    for (UIView *subView in topView.subviews) {
-        if ([subView isKindOfClass:NSClassFromString(@"UINavigationButton")]) {
-            cancelButton = (UIButton*)subView;
-        }
-    }
-    if (cancelButton) {
-        //Set the new title of the cancel button
-        [cancelButton setTitle:NSLocalizedString(@"cancel", nil) forState:UIControlStateNormal];
-        cancelButton.tintColor = [UIColor whiteColor];
-    }
+//    UIButton *cancelButton;
+//    UIView *topView = searchBar.subviews[0];
+//    for (UIView *subView in topView.subviews) {
+//        if ([subView isKindOfClass:NSClassFromString(@"UINavigationButton")]) {
+//            cancelButton = (UIButton*)subView;
+//        }
+//    }
+//    if (cancelButton) {
+//        //Set the new title of the cancel button
+//        [cancelButton setTitle:NSLocalizedString(@"cancel", nil) forState:UIControlStateNormal];
+//        cancelButton.tintColor = [UIColor whiteColor];
+//    }
+    [searchBar setShowsCancelButton:YES animated:YES];
+
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
     canSearch=YES;
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [searchBar setShowsCancelButton:YES animated:YES];
+
+//    if (_dataList.count > 0) {
+//        self.searchSongListVC.dataList=[_dataList mutableCopy];
+//    }
+//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)viewDidLayoutSubviews
@@ -289,13 +311,5 @@
         default:
             break;
     }
-}
-
--(UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return YES;
 }
 @end

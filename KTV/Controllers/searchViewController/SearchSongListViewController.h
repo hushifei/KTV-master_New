@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SearchSongListViewController : UITableViewController
+@property (nonatomic,strong)NSMutableArray *dataList;
 - (void)showPromtView:(BOOL)isShow;
 @end

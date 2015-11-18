@@ -9,6 +9,9 @@
 #import "huSearchBar.h"
 #import "SettingViewController.h"
 #import "SearchSongListViewController.h"
+
+#import "SearchViewController.h"
+
 #import "ScanCodeViewController.h"
 #import "SingerAreaViewController.h"
 #import "jinxuanViewController.h"
@@ -71,14 +74,14 @@
     if ([keyPath isEqualToString:@"netWorkStatus"] && [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             [UIView animateWithDuration:2 animations:^{
-                promptConnectBtn.alpha=1.0;
-                promptConnectBtn.hidden=NO;
+                promptConnectBtn.alpha=0.0;
+                promptConnectBtn.hidden=YES;
             }];
         });
     } else if  ([keyPath isEqualToString:@"netWorkStatus"] && ![[change valueForKey:NSKeyValueChangeNewKey]boolValue]) {
         [UIView animateWithDuration:2 animations:^{
-            promptConnectBtn.alpha=0.0;
-            promptConnectBtn.hidden=YES;
+            promptConnectBtn.alpha=1.0;
+            promptConnectBtn.hidden=NO;
         }];
     }
 }
@@ -120,17 +123,8 @@
         promptConnectBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(bottomBGView.frame)+15,size.width-40,40)];
         promptConnectBtn.backgroundColor=[UIColor orangeColor];
         [promptConnectBtn setTitle:@"请连接包厢" forState:UIControlStateNormal];
-        promptConnectBtn.alpha=0.0;
         promptConnectBtn.hidden=YES;
         [self.view addSubview:promptConnectBtn];
-        
-    }
-    
-    if (![Utility instanceShare].netWorkStatus) {
-        [UIView animateWithDuration:2 animations:^{
-            promptConnectBtn.hidden=NO;
-            promptConnectBtn.alpha=1.0;
-        }];
     }
 }
 
@@ -152,9 +146,7 @@
 
 - (void)clicked_paihangBtn:(id)sender {
     paiHangViewController *vc=[[paiHangViewController alloc]init];
-    
 //    NewPaiHangViewController *vc=[[NewPaiHangViewController alloc]init];
-
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -389,12 +381,16 @@
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     SearchSongListViewController *vc=[[SearchSongListViewController alloc]initWithStyle:UITableViewStylePlain];
-    vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    BaseNavigationController *navc=[[BaseNavigationController alloc]initWithRootViewController:vc];
-    [self presentViewController: navc animated:YES completion: nil];
-//    [self presentViewController:vc animated:YES completion:nil];
+//    SearchViewController *vc=[[SearchViewController alloc]init];
+    [self.navigationController pushViewController:vc animated:YES];
+//    vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+//    BaseNavigationController *navc=[[BaseNavigationController alloc]initWithRootViewController:vc];
+//    
+//    [self presentViewController: navc animated:YES completion: nil];
+
     return YES;
 }
+
 
 
 

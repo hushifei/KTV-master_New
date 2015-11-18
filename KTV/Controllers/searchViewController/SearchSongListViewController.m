@@ -22,7 +22,6 @@
     SFSelectView *_leftView;
     
 }
-@property (nonatomic,strong)NSMutableArray *dataList;
 @property (nonatomic,strong)NSIndexPath *selectedIndexPath;
 @property(nonatomic,strong)UISearchController *searchController;
 @property(nonatomic,strong)ResultTableViewController *resultVC;
@@ -34,7 +33,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.backBarButtonItem=nil;
     [self initializeTableContent];
 }
 
@@ -44,6 +42,7 @@
     self.tableView.showsHorizontalScrollIndicator=NO;
     self.tableView.showsVerticalScrollIndicator=NO;
     _previousRow = -1;
+    _dataList = [[NSMutableArray alloc] init];
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     self.tableView.rowHeight=50;
     _resultVC=[[ResultTableViewController alloc]init];
@@ -61,10 +60,11 @@
     [self createDefaultView];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self.searchController.searchBar performSelectorOnMainThread:@selector(becomeFirstResponder) withObject:self waitUntilDone:NO];
-}
+
+//- (void)viewDidAppear:(BOOL)animated {
+//    [super viewDidAppear:animated];
+////    [self.searchController.searchBar performSelectorOnMainThread:@selector(becomeFirstResponder) withObject:self waitUntilDone:NO];
+//}
 
 - (void)createDefaultView {
 //    promtView=[[UIView alloc]initWithFrame:CGRectMake(self.view.center.x-300/2, 10, 300, 150)];
@@ -78,22 +78,26 @@
 //    [self.view addSubview:promtView];
     
     //modify searchbar
-    _leftView= [[SFSelectView alloc]initWithItems:@[NSLocalizedString(@"all", ni),NSLocalizedString(@"songs", ni),NSLocalizedString(@"singers", ni)]];
+//    _leftView= [[SFSelectView alloc]initWithItems:@[NSLocalizedString(@"all", ni),NSLocalizedString(@"songs", ni),NSLocalizedString(@"singers", ni)]];
     _leftView.delegate = _resultVC;
-    UITextField *textField;
-    for (UIView *view in [self.searchController.searchBar subviews])
-    {
-        for (UIView *subView in view.subviews) {
-            if ([subView isKindOfClass:[UITextField class]])
-            {
-                textField = (UITextField *)subView;
-            }
-        }
-    }
-    textField.clearButtonMode = UITextFieldViewModeNever;
-    textField.leftViewMode = UITextFieldViewModeAlways;
-    textField.leftView = _leftView;
+//    UITextField *textField;
+//    for (UIView *view in [self.searchController.searchBar subviews])
+//    {
+//        for (UIView *subView in view.subviews) {
+//            if ([subView isKindOfClass:[UITextField class]])
+//            {
+//                textField = (UITextField *)subView;
+//            }
+//        }
+//    }
+//    textField.clearButtonMode = UITextFieldViewModeNever;
+//    textField.leftViewMode = UITextFieldViewModeAlways;
+//    textField.leftView = _leftView;
 
+}
+
+- (void)setDataList:(NSMutableArray *)dataList {
+    [self.tableView reloadData];
 }
 
 - (void)showPromtView:(BOOL)isShow {
@@ -141,17 +145,15 @@
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataList.count;
-}
-
-
-
+//-(UIStatusBarStyle)preferredStatusBarStyle {
+//    return UIStatusBarStyleLightContent;
+//}
+//
+//- (BOOL)prefersStatusBarHidden {
+//    return YES;
+//}
 - (BOOL)canBecomeFirstResponder {
     return YES;
 }
 
-- (BOOL)canResignFirstResponder {
-    return YES;
-}
 @end
