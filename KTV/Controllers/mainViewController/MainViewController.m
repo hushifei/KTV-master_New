@@ -36,6 +36,8 @@
     UIButton *conHostBtn;
     UIBarButtonItem *kege;
     UIBarButtonItem *bokong;
+    UIView *bottomBGView;
+    UIButton *promptConnectBtn;
 }
 
 @end
@@ -49,10 +51,9 @@
     if ([[DataMananager instanceShare]databaseAlready]) {
         return;
     }
-    if (DEBUG) {
-        [self copyFile];
-    }
-    
+//    if (DEBUG) {
+//        [self copyFile];
+//    }
     [[Utility instanceShare] checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
         if (isConnected && error==nil) {
             dispatch_sync(dispatch_get_main_queue(), ^{
@@ -69,8 +70,16 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:@"netWorkStatus"] && [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ) {
         dispatch_sync(dispatch_get_main_queue(), ^{
-            //                NSLog(@"Network resume ok");
+            [UIView animateWithDuration:2 animations:^{
+                promptConnectBtn.alpha=1.0;
+                promptConnectBtn.hidden=NO;
+            }];
         });
+    } else if  ([keyPath isEqualToString:@"netWorkStatus"] && ![[change valueForKey:NSKeyValueChangeNewKey]boolValue]) {
+        [UIView animateWithDuration:2 animations:^{
+            promptConnectBtn.alpha=0.0;
+            promptConnectBtn.hidden=YES;
+        }];
     }
 }
 
@@ -105,19 +114,25 @@
     }
 }
 
-//- (void)initNavigationItem {
-//        //navigation item
-//    [super initNavigationItem];
-//    UIButton *button=[[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-//    [button setTitle:NSLocalizedString(@"demo", nil) forState:UIControlStateNormal];
-//    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [button setTitleColor:[UIColor grayColor] forState:UIControlStateSelected];
-//    [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-//    [button sizeToFit];
-//    [button addTarget:self action:@selector(openDemoDB) forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithCustomView:button];
-//}
-//
+- (void)showConnectionHostMessage {
+    if (promptConnectBtn==nil) {
+        CGSize size=self.view.bounds.size;
+        promptConnectBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(bottomBGView.frame)+15,size.width-40,40)];
+        promptConnectBtn.backgroundColor=[UIColor orangeColor];
+        [promptConnectBtn setTitle:@"请连接包厢" forState:UIControlStateNormal];
+        promptConnectBtn.alpha=0.0;
+        promptConnectBtn.hidden=YES;
+        [self.view addSubview:promptConnectBtn];
+        
+    }
+    
+    if (![Utility instanceShare].netWorkStatus) {
+        [UIView animateWithDuration:2 animations:^{
+            promptConnectBtn.hidden=NO;
+            promptConnectBtn.alpha=1.0;
+        }];
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -275,7 +290,7 @@
      */
     
     
-    UIView *bottomBGView=[[UIView alloc]initWithFrame:CGRectMake(SEARCHMARGIN_LRT, BOTTOMBGView_TOPMARGIN, searchBar.bounds.size.width, topBGView.bounds.size.height)];
+    bottomBGView=[[UIView alloc]initWithFrame:CGRectMake(SEARCHMARGIN_LRT, BOTTOMBGView_TOPMARGIN, searchBar.bounds.size.width, topBGView.bounds.size.height)];
     [self.view addSubview:bottomBGView];
     //    bottomBGView.backgroundColor=[UIColor whiteColor];
     
@@ -327,6 +342,9 @@
     conHostLabel.textAlignment=NSTextAlignmentCenter;
     [conHostBtn addTarget:self action:@selector(connect_Host:) forControlEvents:UIControlEventTouchUpInside];
     [bottomBGView addSubview:conHostLabel];
+    
+    
+    [self showConnectionHostMessage];
 }
 
 #pragma mark- ScanCodeDelegate
