@@ -11,6 +11,7 @@
 #import "Utility.h"
 #import "SDWebImageManager.h"
 #import "MBProgressHUD.h"
+#import <SFInstroduce/SFInstroduceVC.h>
 @interface AppDelegate () {
     MBProgressHUD *HUD;
     BaseTabBarViewController *_tabVC;
@@ -21,14 +22,34 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window = window;
+    
+    //判断是否需要显示：（内部已经考虑版本及本地版本缓存）
+    BOOL canShow=[SFInstroduceVC canShowNewFeature];
+    
+    //测试代码，正式版本应该删除
+    canShow=YES;
+    
+    if (canShow) {
+        window.rootViewController = [SFInstroduceVC createSFIntroduceVCEnterBlock:^{
+            NSLog(@"进入主页面");
+            [self enter];
+        }];
+    } else {
+        [self enter];
+    }
+    return YES;
+}
 
+
+-(void)enter{
     _tabVC=[[BaseTabBarViewController alloc]init];
     UIImage *imagebottom=[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"nav_bottom_bg" ofType:@"png"]];
     [_tabVC.tabBar setBackgroundImage:imagebottom];
     self.window.rootViewController=_tabVC;
-    return YES;
+    [self.window makeKeyAndVisible];
 }
-
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
