@@ -11,7 +11,6 @@
 #import "Utility.h"
 #import "SDWebImageManager.h"
 #import "MBProgressHUD.h"
-#import <SFInstroduce/SFInstroduceVC.h>
 @interface AppDelegate () {
     MBProgressHUD *HUD;
     BaseTabBarViewController *_tabVC;
@@ -24,21 +23,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window = window;
-    
-    //判断是否需要显示：（内部已经考虑版本及本地版本缓存）
-    BOOL canShow=[SFInstroduceVC canShowNewFeature];
-    
-    //测试代码，正式版本应该删除
-    canShow=YES;
-    
-    if (canShow) {
-        window.rootViewController = [SFInstroduceVC createSFIntroduceVCEnterBlock:^{
-            NSLog(@"进入主页面");
-            [self enter];
-        }];
-    } else {
-        [self enter];
-    }
+    [self enter];
     return YES;
 }
 
