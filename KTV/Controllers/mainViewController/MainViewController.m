@@ -10,8 +10,6 @@
 #import "SettingViewController.h"
 #import "SearchSongListViewController.h"
 
-#import "SearchViewController.h"
-
 #import "ScanCodeViewController.h"
 #import "SingerAreaViewController.h"
 #import "jinxuanViewController.h"
