@@ -73,6 +73,7 @@
 		D10E26821BFF761B008F77EF /* scanscanBg.png in Resources */ = {isa = PBXBuildFile; fileRef = D10E26791BFF761B008F77EF /* scanscanBg.png */; };
 		D10E26831BFF761B008F77EF /* SHBQRView.m in Sources */ = {isa = PBXBuildFile; fileRef = D10E267B1BFF761B008F77EF /* SHBQRView.m */; };
 		D10E26841BFF761B008F77EF /* TempViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D10E267D1BFF761B008F77EF /* TempViewController.m */; };
+		D10E26851BFF8BF4008F77EF /* SingerAreaTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D16E52671AE6755F00E57011 /* SingerAreaTypeCell.m */; };
 		D12374511B2D163500902361 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374301B2D163500902361 /* MKAnnotationView+WebCache.m */; };
 		D12374521B2D163500902361 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374321B2D163500902361 /* NSData+ImageContentType.m */; };
 		D12374531B2D163500902361 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D12374341B2D163500902361 /* SDImageCache.m */; };
@@ -1962,6 +1963,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D10E26851BFF8BF4008F77EF /* SingerAreaTypeCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

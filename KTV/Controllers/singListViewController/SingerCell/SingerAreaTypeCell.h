@@ -12,6 +12,4 @@
 @property (weak, nonatomic) IBOutlet UIImageView *headImageV;
 @property (weak, nonatomic) IBOutlet UILabel *SingerLabel;
 
-- (void)downLoadImage:(NSString*)imageName;
-
 @end

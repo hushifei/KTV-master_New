@@ -21,6 +21,8 @@
 #import "NSString+Utility.h"
 #import "DataMananager.h"
 #import "CommandControler.h"
+#import "UIImageView+WebCache.h"
+
 #define SINGER_PIC_URL @"http://192.168.43.1:8080/puze?cmd=0x02&filename="
 
 @interface SingersViewController ()
@@ -113,7 +115,8 @@
     cell.SingerLabel.font=[UIFont systemFontOfSize:14];
     cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"geshou_area_cell_bg"]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cell downLoadImage:oneSinger.singer];
+    NSString *urlStr=[[SINGER_PIC_URL stringByAppendingString:oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [cell.headImageV sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
     return cell;
 }
 
