@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>KTV copy.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>KTV.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -12,12 +17,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>C31B66521BE378A6005B2D89</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>D1586B3F1AE14CBF00AF3EDB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>D1586B581AE14CBF00AF3EDB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D1C51C5E1BFE1B62006209DC</key>
 		<dict>
 			<key>primary</key>
 			<true/>

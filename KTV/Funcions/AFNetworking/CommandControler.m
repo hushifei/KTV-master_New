@@ -10,8 +10,6 @@
 #import "Utility.h"
 #define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
 
-#define COMMANDURLHEADER_PIC @"http://192.168.43.1:8080/puze?cmd=0x02&filename="
-
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
 @interface CommandControler() {
     NSOperationQueue *queue;

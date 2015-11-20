@@ -30,4 +30,5 @@
 -(NSArray *) stringsByExtractingGroupsUsingRegexPattern:(NSString *)regex caseInsensitive:(BOOL) ignoreCase treatAsOneLine:(BOOL) assumeMultiLine;
 -(BOOL) matchesPatternRegexPattern:(NSString *)regex;
 -(BOOL) matchesPatternRegexPattern:(NSString *)regex caseInsensitive:(BOOL) ignoreCase treatAsOneLine:(BOOL) assumeMultiLine;
+- (BOOL)isIpAddress;
 @end

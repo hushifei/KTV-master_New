@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class AppDelegate;
 extern NSString *const HReachabilityChangedNotification;
-#define netWorkTimeInterval  10
+#define netWorkTimeInterval  5
 //
 #define SCREENSIZE  [UIScreen mainScreen].bounds.size
 
@@ -77,6 +77,7 @@ typedef void(^Completed)(BOOL Completed);
 @interface Utility : NSObject 
 @property (nonatomic,assign)iphoneModel myIphoneModel;
 @property (nonatomic,readonly,assign)BOOL netWorkStatus;
+@property (nonatomic,copy)NSString *serverIPAddress;
 
 //tools
 + (instancetype)instanceShare;
@@ -86,7 +87,7 @@ typedef void(^Completed)(BOOL Completed);
 //network
 - (void)starToMonitorNetowrkConnection;
 - (void)stopToMonitorNetworkConnection;
-+ (void)checkNetworkStatusImmediately:(void(^)(BOOL isConnected,NSError *error))block;
+- (void)checkNetworkStatusImmediately:(void(^)(BOOL isConnected,NSError *error))block;
 //nsstring handle
 + (CGSize)sizeWithString:(NSString *)string font:(UIFont *)font;
 + (BOOL)isChineseLanguge;

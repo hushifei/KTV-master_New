@@ -10,7 +10,5 @@ typedef NS_ENUM(NSInteger, KMessageStyle) {
 };
 @interface HuToast :UIView
 @property (nonatomic, readonly) UILabel *label;
-- (void)setToastWithMessage:(NSString *)message WithTimeDismiss:(NSString *)time messageType:(KMessageStyle)style;
-- (void)dissmiss;
-//-(void)show;
++ (void)showToastWithMessage:(NSString *)message WithTimeDismiss:(NSString *)time messageType:(KMessageStyle)style;
 @end

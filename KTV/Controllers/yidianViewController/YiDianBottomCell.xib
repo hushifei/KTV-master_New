@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -10,22 +10,12 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0W4-7b-U6W">
-                        <rect key="frame" x="80" y="5" width="80" height="34"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="tintColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                        <state key="normal" title="优先" image="priority_bt.png">
-                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        </state>
-                        <connections>
-                            <action selector="clicked_priority:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="OiC-cf-5Yk"/>
-                        </connections>
-                    </button>
                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dLi-Ka-pWS">
                         <rect key="frame" x="240" y="5" width="80" height="34"/>
+                        <animations/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <state key="normal" title="移除" image="remove_yidian.png">
                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -37,6 +27,7 @@
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XL0-qh-GYI">
                         <rect key="frame" x="0.0" y="5" width="80" height="34"/>
+                        <animations/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="tintColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                         <state key="normal" title="收藏" image="collection_bt.png">
@@ -46,22 +37,24 @@
                             <action selector="clicked_collection:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="eS1-WY-XDi"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JkR-ht-I3J">
-                        <rect key="frame" x="160" y="5" width="80" height="34"/>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0W4-7b-U6W">
+                        <rect key="frame" x="120" y="5" width="80" height="34"/>
+                        <animations/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="tintColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                        <state key="normal" title="切歌" image="cutsong_bt.png">
+                        <state key="normal" title="优先" image="priority_bt.png">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                         <connections>
-                            <action selector="clicked_cutsong:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="BWJ-LK-AOL"/>
+                            <action selector="clicked_priority:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="OiC-cf-5Yk"/>
                         </connections>
                     </button>
                 </subviews>
+                <animations/>
             </tableViewCellContentView>
+            <animations/>
             <connections>
                 <outlet property="collectionrec" destination="XL0-qh-GYI" id="mCV-tK-RiO"/>
-                <outlet property="cutsong" destination="JkR-ht-I3J" id="03K-3D-xAE"/>
                 <outlet property="priority" destination="0W4-7b-U6W" id="orI-e0-gUJ"/>
                 <outlet property="remove" destination="dLi-Ka-pWS" id="yqn-M8-1Rq"/>
             </connections>
@@ -70,7 +63,6 @@
     </objects>
     <resources>
         <image name="collection_bt.png" width="30" height="30"/>
-        <image name="cutsong_bt.png" width="30" height="30"/>
         <image name="priority_bt.png" width="30" height="30"/>
         <image name="remove_yidian.png" width="30" height="30"/>
     </resources>

@@ -91,13 +91,16 @@
 }
 
 
-- (void)insertSongToCollectionTable {
+- (void)insertSongToCollectionTable:(void(^)(BOOL complete))actionCompleted{
     __block __weak typeof (self) weakSelf=self;
     NSString *querySqlStr=[NSString stringWithFormat:@"select * from CollectionTable where number='%@'",[_number encodeBase64]];
     FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:querySqlStr];
     while ([rs next]) {
         if ([self.delegate respondsToSelector:@selector(addSongToCollection:result:)]) {
             [self.delegate addSongToCollection:weakSelf result:KMessageStyleInfo];
+        }
+        if (actionCompleted) {
+            actionCompleted(YES);
         }
         return;
     }
@@ -112,13 +115,16 @@
             [self.delegate addSongToCollection:weakSelf result:KMessageSuccess];
         }
     }
+    if (actionCompleted) {
+        actionCompleted(YES);
+    }
 }
 
-- (void)deleteSongFromCollectionTable {
+- (void)deleteSongFromCollectionTable:(void(^)(BOOL complete))actionCompleted {
     NSString *insertSql1= [NSString stringWithFormat:@"delete from CollectionTable where number='%@'",[_number encodeBase64]];
     __block __weak typeof (self) weakSelf=self;
     if (![[DataMananager instanceShare].db executeUpdate:insertSql1]) {
-        NSLog(@"取消收藏失败");
+//        NSLog(@"取消收藏失败");
         if ([self.delegate respondsToSelector:@selector(deleteCollectionSong:result:)]) {
             [self.delegate deleteCollectionSong:weakSelf result:KMessageWarning];
         }
@@ -127,9 +133,12 @@
             [self.delegate deleteCollectionSong:weakSelf result:KMessageSuccess];
         }
     }
+    if (actionCompleted) {
+        actionCompleted(YES);
+    }
 }
 
-- (void)cutSong {
+- (void)cutSong:(void(^)(BOOL complete))actionCompleted {
     if ([Utility instanceShare].netWorkStatus) {
     if (_number.length>0) {
         CommandControler *cmd=[[CommandControler alloc]init];
@@ -142,14 +151,24 @@
             } else {
                 
             }
+            if (actionCompleted) {
+                actionCompleted(YES);
+            }
         }];
-     }
+    } else {
+        if (actionCompleted) {
+            actionCompleted(YES);
+        }
+    }
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+        if (actionCompleted) {
+            actionCompleted(YES);
+        }
     }
 }
 
-- (void)prioritySong {
+- (void)prioritySong:(void(^)(BOOL complete))actionCompleted {
     if ([Utility instanceShare].netWorkStatus) {
     CommandControler *cmd=[[CommandControler alloc]init];
     __weak __block typeof (self) weakSelf=self;
@@ -185,7 +204,7 @@
 }
 
 
-- (void)diangeToTop {
+- (void)diangeToTop:(void(^)(BOOL complete))actionCompleted {
     if ([Utility instanceShare].netWorkStatus) {
         __weak __block typeof (self) weakSelf=self;
         CommandControler *cmd=[[CommandControler alloc]init];
@@ -201,6 +220,9 @@
             });}];
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
+        if (actionCompleted) {
+            actionCompleted(YES);
+        }
     }
 }
 @end

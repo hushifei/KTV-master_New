@@ -16,7 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title=@"关于我们";
+//    self.title=@"关于我们";
     _companyLogView.layer.masksToBounds =YES;
 //    _companyLogView.layer.shadowColor=[UIColor yellowColor].CGColor;
 //    _companyLogView.layer.shadowOffset=CGSizeMake(-1, -2);

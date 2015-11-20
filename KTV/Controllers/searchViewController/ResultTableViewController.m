@@ -11,27 +11,25 @@
 #import "Singer.h"
 #import "Utility.h"
 #import "PinYinForObjc.h"
-//#define TOPCELLIDENTIFY @"SearchTableCell"
-//#import "SearchTableCell.h"
-//#define BOTTOMCELLIDENTIFY @"SongBottomCell"
-//#define SINGERCELLIDENTIFY @"SingsTableViewCell"
-//#import "SongBottomCell.h"
 #import "SearchResultCell.h"
 #define CELL_IDENTIFY @"CELL_IDENTIFY"
-
 #import "MBProgressHUD.h"
-//#import "SingsTableViewCell.h"
 #define SONGTABLE @"SongTable"
 #define SINGERTABLE @"SingerTable"
 #import "NSString+Utility.h"
 #import "DataMananager.h"
-@interface ResultTableViewController ()<UITableViewDataSource,UITableViewDelegate,searchSongDelegate,UISearchBarDelegate> {
+
+#import "BaseNavigationController.h"
+#import "SongListViewController.h"
+#import "SearchSongListViewController.h"
+@interface ResultTableViewController ()<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate> {
     NSInteger _previousRow;
     BOOL canSearch;
+    NSString *olderStr;
+
+    NSMutableArray *searchArray;
 }
 @property (nonatomic,strong)NSIndexPath *selectedIndexPath;
-@property (nonatomic,strong)NSMutableArray *dataList;
-@property (nonatomic,strong)NSMutableArray *singerList;
 @property (nonatomic,strong)FMDatabase *searchDb;
 
 @end
@@ -44,15 +42,19 @@
     canSearch=YES;
     _searchSelectIndex = 0;
     _dataList = [[NSMutableArray alloc] init];
-    _singerList = [[NSMutableArray alloc] init];
+    searchArray=[[NSMutableArray alloc]init];
     [self initializeSearchController];
     _searchDb = [DataMananager instanceShare].db;
     [_searchDb open];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
 }
 
 - (void)initializeSearchController {
-//    UINib *nib=[UINib nibWithNibName:@"SearchTableCell" bundle:nil];
-//    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
+//    self.definesPresentationContext = YES;
+    self.edgesForExtendedLayout=UIRectEdgeNone;
     [self.tableView registerClass:[SearchResultCell class] forCellReuseIdentifier:CELL_IDENTIFY];
     _previousRow = -1;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
@@ -67,37 +69,12 @@
     
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-/*
-#pragma mark - use song cell or singer cell
-- (SearchTableCell*)songCell :(UITableView*)tableView :(NSIndexPath*)indexPath {
-    SearchTableCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.oneSong=self.dataList[indexPath.row];
-    cell.backgroundColor=[UIColor clearColor];
-    if (cell.opened) {
-        cell.sanjiaoxing.hidden=NO;
-    } else {
-        cell.sanjiaoxing.hidden=YES;
-    }
-    return cell;
-}
-- (SingsTableViewCell*)singerCell :(UITableView*)tableView :(NSIndexPath*)indexPath {
-    SingsTableViewCell *singerCell = [tableView dequeueReusableCellWithIdentifier:SINGERCELLIDENTIFY];
-    if (!singerCell) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:SINGERCELLIDENTIFY owner:self options:nil];
-        singerCell = [nib objectAtIndex:0];
-        singerCell.backgroundColor=[UIColor clearColor];
-        singerCell.singer = self.dataList[indexPath.row];
-        [singerCell.SingerLabel setTextColor:[UIColor groupTableViewBackgroundColor]];
-        return singerCell;
-    }else {
-        return nil;
-    }
-} */
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -110,162 +87,75 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SearchResultCell *cell=[tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFY forIndexPath:indexPath];
-    if (!cell) {
-        cell=[[SearchResultCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_IDENTIFY];
-    }
+//    if (!cell) {
+//        cell=[[SearchResultCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_IDENTIFY];
+//    }
     cell.contentView.backgroundColor=[UIColor clearColor];
     cell.backgroundColor=[UIColor clearColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    [cell configWithObject:_dataList[indexPath.row]];
-//    if (_previousRow >= 0 && _previousRow+1==indexPath.row) {
-//        SongBottomCell *cell=[tableView dequeueReusableCellWithIdentifier:BOTTOMCELLIDENTIFY];
-//        if (!cell) {
-//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:BOTTOMCELLIDENTIFY owner:self options:nil];
-//            cell = [nib objectAtIndex:0];
-//            cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"song_bt_bg"]];
-//            cell.oneSong=self.dataList[_previousRow];
-//            
-//        }
-//        return cell;
-//    } else {
-//        if (_searchSelectIndex == 0) {//查询全部
-//            if ([self.dataList[indexPath.row] isKindOfClass:[Song class]]) {
-//                return [self songCell:tableView :indexPath];
-//            }else {
-//                return [self singerCell:tableView :indexPath];
-//            }
-//            
-//        }else if(_searchSelectIndex == searchSong) {//查询单个
-//            return [self songCell:tableView :indexPath];
-//        }else {
-//            return [self singerCell:tableView :indexPath];
-//        }
-//    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [cell configWithObject:_dataList[indexPath.row]];
+    });
     return cell;
     
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
-//    return 45.0f;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
+    return 45.0f;
+}
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self dismissViewControllerAnimated:YES completion:nil];
     id object=_dataList[indexPath.row];
+    if (object==nil) return;
+    SongListViewController *songVC=[[SongListViewController alloc]init];
     if ([object isKindOfClass:[Singer class]]) {
-        if ([_delegate respondsToSelector:@selector(clickSinger:)]) {
-            [_delegate clickSinger:(Singer*)object];
-        }
+        songVC.singerName=[(Singer*)object singer];
+        songVC.needLoadData=YES;
     } else {
-        if ([_delegate respondsToSelector:@selector(clickSong:)]) {
-            [_delegate clickSong:(Song*)object];
-        }
-      }
-    
-    //    if ([[tableView cellForRowAtIndexPath:indexPath] isKindOfClass:[SearchTableCell class]]) {
-//    SearchTableCell *cell=(SearchTableCell*)[tableView cellForRowAtIndexPath:indexPath];
-//    if (cell.opened) {
-//        cell.sanjiaoxing.hidden=NO;
-//    } else {
-//        cell.sanjiaoxing.hidden=YES;
-//    }
-//    if (_previousRow >= 0) {
-//        NSIndexPath *preIndexPath=[NSIndexPath indexPathForRow:_previousRow inSection:0];
-//        SearchTableCell *preCell=(SearchTableCell*)[tableView cellForRowAtIndexPath:preIndexPath];
-//        
-//        if (indexPath.row == _previousRow + 1) {
-//        }
-//        else if (indexPath.row == _previousRow) {
-//            cell.opened=!cell.opened;
-//            if (cell.opened) {
-//                cell.sanjiaoxing.hidden=NO;
-//            } else {
-//                cell.sanjiaoxing.hidden=YES;
-//            }
-//            [_dataList removeObjectAtIndex:_previousRow+1];
-//            [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//            _previousRow = -1;
-//        }
-//        else if (indexPath.row < _previousRow) {
-//            if (preCell.opened) {
-//                preCell.sanjiaoxing.hidden=NO;
-//            } else {
-//                preCell.sanjiaoxing.hidden=YES;
-//            }
-//            
-//            [_dataList removeObjectAtIndex:_previousRow+1];
-//            [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//            _previousRow = indexPath.row;
-//            [_dataList insertObject:@"增加的" atIndex:indexPath.row+1];
-//            [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-//        }
-//        else {
-//            if (preCell.opened) {
-//                preCell.sanjiaoxing.hidden=NO;
-//            } else {
-//                preCell.sanjiaoxing.hidden=YES;
-//            }
-//            
-//            NSInteger oler=_previousRow;
-//            _previousRow = indexPath.row;
-//            [_dataList insertObject:@"增加的" atIndex:indexPath.row+1];
-//            [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-//            [_dataList removeObjectAtIndex:oler+1];
-//            _previousRow -=1;
-//            [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:oler+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-//        }
-//        
-//    } else {
-//        _previousRow = indexPath.row;
-//        [_dataList insertObject:@"增加的" atIndex:_previousRow+1];
-//        [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
-//    }
-//    }else {
-//        SingsTableViewCell *cell=[self singerCell:tableView :indexPath];
-//        if ([_delegate respondsToSelector:@selector(clickSingerWithSingerName:)]) {
-//            [_delegate clickSingerWithSingerName:cell.singer.singer];
-//        }
-//    }
-//    
+        songVC.needLoadData=NO;
+        [songVC setDataList:object];
+    }
+    [self.searchSongListVC.navigationController pushViewController:songVC animated:NO];
+
 }
+
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
 
 - (void)reloadData {
-    if (self.dataList.count > 0) {
-        if ([self.delegate respondsToSelector:@selector(searching)]) {
-            [self.delegate searching];
-        }
-    } else {
-        if ([self.delegate respondsToSelector:@selector(searchDone)]) {
-            [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
-            [self.delegate searchDone];
-        }
+    if (self.dataList && self.dataList.count > 0) {
+            [self.tableView reloadData];
     }
-    [self.tableView reloadData];
+    canSearch = YES;
 }
-
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
     NSString *searchStr=[searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    [self.dataList removeAllObjects];
     if (!canSearch) return;
-    if ( searchStr && searchStr.length>0) {
+    if (searchStr && searchStr.length>0 && ![olderStr isEqualToString:searchStr]) {
+        if (self.dataList.count>0) {
+            [self.dataList removeAllObjects];
+        }
         canSearch=NO;
-        [self initializeTableContent:searchStr];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [self initializeTableContent:searchStr];
+        });
+        olderStr=searchStr;
     } else {
         canSearch=YES;
-        [self reloadData];
     }
     
 }
 
 #pragma mark - sql method
 - (void)searchSongData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
-    NSString *temStr = [NSString stringWithFormat:@"%@%@",searchStr,@"%"];
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE songname LIKE '%@' OR %@ LIKE '%@'",tableName,temStr,conditionColumn,temStr];
+    NSString *temStr = [NSString stringWithFormat:@"%@%@%@",@"%",searchStr,@"%"];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE songname LIKE '%@' OR %@ LIKE '%@'" ,tableName,temStr,conditionColumn,temStr];
+//    NSLog(@"song:\n%@",sql);
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
@@ -289,16 +179,14 @@
 //        NSLog(@"%@",oneSong.songname);
         [self.dataList addObject:oneSong];
     }
-}
+} // limit 20
 
 - (void)searchSingData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
-    NSString *temStr = [NSString stringWithFormat:@"%@%@",searchStr,@"%"];
+    NSString *temStr = [NSString stringWithFormat:@"%@%@%@",@"%",searchStr,@"%"];
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE singer LIKE '%@' OR  %@ LIKE '%@'",tableName,temStr,conditionColumn,temStr];
+//    NSLog(@"singer:\n%@",sql);
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
-//        Singer *tempSinger = [[Singer alloc] init];
-//        tempSinger.singer = [rs stringForColumn:column];
-//        [self.dataList addObject:tempSinger];
         Singer *oneSinger=[[Singer alloc]init];
         oneSinger.area = [rs stringForColumn:@"area"];
         oneSinger.pingyin = [rs stringForColumn:@"pingyin"];
@@ -313,24 +201,41 @@
 
 - (void)initializeTableContent:(NSString*)searchStr {
      NSString *enCodeSearchStr = [[searchStr uppercaseString] encodeBase64];
-    [self.dataList removeAllObjects];
-    [self.singerList removeAllObjects];
+    [searchArray addObject:enCodeSearchStr];
     if (_searchSelectIndex == searchAll) {
+        
         [self searchSongData:SONGTABLE :@"songpiy" :enCodeSearchStr :@"songname"];
+        
         [self searchSingData:SINGERTABLE :@"pingyin" :enCodeSearchStr :@"singer"];
+        
         
     }else if (_searchSelectIndex == searchSong){
         [self searchSongData:SONGTABLE :@"songpiy" :enCodeSearchStr :@"songname"];
     }else {
         [self searchSingData:SINGERTABLE :@"pingyin" :enCodeSearchStr :@"singer"];
     }
-    canSearch = YES;
-    [self reloadData];
+    [self performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
+- (void)keyboardDidHide:(NSNotification*)notification {
+    [self.view endEditing:YES];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+    NSLog(@"keybordwillhide");
+}
+
+
+- (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar {
+    NSLog(@"searchBarCancelButtonClicked");
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     canSearch=YES;
+    [searchBar setShowsCancelButton:NO animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"searchBarCancelButtonClicked");
 }
@@ -344,23 +249,30 @@
 
 -(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     searchBar.showsCancelButton = YES;
-    UIButton *cancelButton;
-    UIView *topView = searchBar.subviews[0];
-    for (UIView *subView in topView.subviews) {
-        if ([subView isKindOfClass:NSClassFromString(@"UINavigationButton")]) {
-            cancelButton = (UIButton*)subView;
-        }
-    }
-    if (cancelButton) {
-        //Set the new title of the cancel button
-        [cancelButton setTitle:NSLocalizedString(@"cancel", nil) forState:UIControlStateNormal];
-        cancelButton.tintColor = [UIColor whiteColor];
-    }
+//    UIButton *cancelButton;
+//    UIView *topView = searchBar.subviews[0];
+//    for (UIView *subView in topView.subviews) {
+//        if ([subView isKindOfClass:NSClassFromString(@"UINavigationButton")]) {
+//            cancelButton = (UIButton*)subView;
+//        }
+//    }
+//    if (cancelButton) {
+//        //Set the new title of the cancel button
+//        [cancelButton setTitle:NSLocalizedString(@"cancel", nil) forState:UIControlStateNormal];
+//        cancelButton.tintColor = [UIColor whiteColor];
+//    }
+    [searchBar setShowsCancelButton:YES animated:YES];
+
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
     canSearch=YES;
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [searchBar setShowsCancelButton:YES animated:YES];
+
+//    if (_dataList.count > 0) {
+//        self.searchSongListVC.dataList=[_dataList mutableCopy];
+//    }
+//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)viewDidLayoutSubviews

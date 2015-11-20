@@ -41,23 +41,30 @@
     CGFloat titleWidth=rect.size.width-CGRectGetMaxX(header.frame)-80;
     CGFloat titleX=CGRectGetMaxX(header.frame)+40;
     titleLabel.frame=CGRectMake(titleX, y,titleWidth,height);
-//    titleLabel.textAlignment=NSTextAlignmentCenter;
     [super drawRect:rect];
 }
 
 - (void)configWithObject:(nonnull id)object {
+    if (object==nil) return;
     if ([object isKindOfClass:[Singer class]]) {
         Singer *oneSinger=(Singer*)object;
-        titleLabel.text=oneSinger.singer;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            titleLabel.text=oneSinger.singer;
+        });
         NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         if ([Utility instanceShare].netWorkStatus) {
             [header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
         } else {
-            header.image=[UIImage imageNamed:@"Default_Header"];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                header.image=[UIImage imageNamed:@"Default_Header"];
+            });
         }
     } else if ([object isKindOfClass:[Song class]]){
-        header.image=[UIImage imageNamed:@"music_icon"];
-        titleLabel.text=[(Song*)object songname];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            header.image=[UIImage imageNamed:@"music_icon"];
+            titleLabel.text=[(Song*)object songname];
+        });
+
     }
     
 }

@@ -11,8 +11,8 @@
 #import "Utility.h"
 #import "DataMananager.h"
 #import "SDWebImageManager.h"
-#define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
-#define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
+//#define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
+//#define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
 
 @interface DownLoadFileTool () {
@@ -58,8 +58,8 @@ static DownLoadFileTool *instance=nil;
     defaults =[NSUserDefaults standardUserDefaults];
     shareSession=[NSURLSession sharedSession];
     fileManager=[NSFileManager defaultManager];
-    [DataMananager instanceShare];
-allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
+    dataManager=[DataMananager instanceShare];
+    allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     savePath_TxtDir=[DOCUMENTPATH stringByAppendingPathComponent:@"/downloadDir/txt"];
     if (![fileManager fileExistsAtPath:savePath_TxtDir]) {
         [fileManager createDirectoryAtPath:savePath_TxtDir withIntermediateDirectories:YES attributes:nil error:nil];
@@ -126,7 +126,8 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
 //下载文件
 //typelist.txt  songlist.txt orderdata.txt singlist.txt
 - (void)downLoadFile:(NSString*)fileName{
-    NSString *strURL=[COMM_URLStr stringByAppendingString:fileName];
+    //#define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
+    NSString *strURL=[[NSString stringWithFormat:@"http://%@:8080/puze/?cmd=0x01&filename=",[Utility instanceShare].serverIPAddress]stringByAppendingString:fileName];
     NSURL *url=[NSURL URLWithString:[strURL stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     NSURLRequest *request=[[NSURLRequest alloc]initWithURL:url];
     NSURLSessionDownloadTask *dataTask=[shareSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -150,7 +151,6 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
 - (void)importTxtFilesToDataBase:(NSArray*)filePaths {
     //import data
     [dataManager setDatabaseAlready:NO];
-    [defaults synchronize];
     [[DataMananager instanceShare]addIntoDataSourceWithFileNames:filePaths completed:^(BOOL Completed) {
         if (Completed) {
             if (_completed) {
@@ -189,7 +189,9 @@ allTXTFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
 
 //获取数据版本
 - (void)isNeedToUpdate_Database_version:(void(^)(S_Actions action,BOOL completed))completed {
-    NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xd4"];
+//    NSString *strURL=[NSString stringWithFormat:@"http://%@:8080/puze/?cmd=0x01&filename=",[Utility instanceShare].serverIPAddress];
+    //#define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
+    NSString *urlStr=[NSString stringWithFormat:@"http://%@:8080/puze/?cmd=0xd4",[Utility instanceShare].serverIPAddress];
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     NSURLSessionDataTask *dataTask=[shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;

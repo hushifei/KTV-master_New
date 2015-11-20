@@ -19,8 +19,7 @@ typedef NS_ENUM(NSUInteger,ViewType) {
 @end
 
 /*
- ----.cell 更改成纯代码
- ----.国际化 检查
+ --- 已点切歌放到导航栏
 */
 
 

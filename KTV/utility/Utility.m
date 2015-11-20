@@ -9,11 +9,9 @@
 #import "Utility.h"
 #import "NSString+Utility.h"
 #import "AppDelegate.h"
-#import "FMDB.h"
 #import "CommandControler.h"
+#import "DataMananager.h"
 #define DBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB.sqlite"]
-
-#define COMM_URLStr @"http://192.168.43.1:8080/puze/?cmd=0x01&filename="
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
 NSString * const YiDian_Update_DidChangeNotification=@"YiDian_Update_DidChangeNotification";
 @interface Utility() {
@@ -30,6 +28,7 @@ static Utility *shareInstance=nil;
     static  dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if (!shareInstance) {
+            [DataMananager instanceShare];
             shareInstance=[[self alloc]init];
         }
     });
@@ -41,6 +40,14 @@ static Utility *shareInstance=nil;
     dispatch_once(&onceToken, ^{
         [self checkIphoneDevice];
         _shareSession=[NSURLSession sharedSession];
+        _serverIPAddress=nil;
+        //TODO::
+        _serverIPAddress=[[NSUserDefaults standardUserDefaults]objectForKey:@"SERVER_IP_ADDRESS"];
+        if (![_serverIPAddress isIpAddress])    {
+           _serverIPAddress=@"192.168.43.1";
+            //提示扫🐎；
+        }
+
         shareInstance= [super init];
     });
     return shareInstance;
@@ -90,6 +97,11 @@ static Utility *shareInstance=nil;
     return false;
 }
 
+- (void)setServerIPAddress:(NSString *)serverIPAddress {
+    [[NSUserDefaults standardUserDefaults]setObject:serverIPAddress forKey:@"SERVER_IP_ADDRESS"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+}
+
 + (NSString*)shouZiFu:(NSString*)string {
     return  [[Utility chineseToPinYin:string]substringToIndex:1];
 }
@@ -103,9 +115,13 @@ static Utility *shareInstance=nil;
 }
 
 
-+ (void)checkNetworkStatusImmediately:(void(^)(BOOL isConnected,NSError *error))block {
+- (void)checkNetworkStatusImmediately:(void(^)(BOOL isConnected,NSError *error))block {
     if (!block) return;
-    NSURL *url=[NSURL URLWithString:@"http://192.168.43.1:8080/puze/"];
+    if (![self.serverIPAddress isIpAddress])  {
+        NSDictionary* errorMessage = [NSDictionary dictionaryWithObject:@"IP Address Error" forKey:NSLocalizedDescriptionKey];
+        return block(NO,[NSError errorWithDomain:@"IP Address Error" code:999 userInfo:errorMessage]);
+    }
+    NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/puze/",self.serverIPAddress]];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:3];
     NSURLSessionDataTask *dataTask =[shareInstance.shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSHTTPURLResponse *httpResponse=(NSHTTPURLResponse*)response;
@@ -113,6 +129,10 @@ static Utility *shareInstance=nil;
         if (statuscode ==200 && error ==nil ) {
             block(YES,nil);
         } else {
+            if (self.serverIPAddress && self.serverIPAddress.length>0) {
+                
+            }
+            
             NSDictionary* errorMessage = [NSDictionary dictionaryWithObject:@"NetWork Error" forKey:NSLocalizedDescriptionKey];
             block(NO,[NSError errorWithDomain:@"SEND_COMMAND" code:999 userInfo:errorMessage]);
         }
@@ -120,8 +140,10 @@ static Utility *shareInstance=nil;
     [dataTask resume];
 }
 
+
+
 - (void)checkNetworkStatus:(NSTimer*)oneTimer {
-    NSURL *url=[NSURL URLWithString:@"http://192.168.43.1:8080/puze/"];
+    NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/puze/",self.serverIPAddress]];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:2];
     NSURLSessionDataTask *dataTask = [_shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if ([self httpsStatuCode:response] ==200 && error==nil) {

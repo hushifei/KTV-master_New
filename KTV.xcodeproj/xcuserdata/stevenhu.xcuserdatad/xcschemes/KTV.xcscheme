@@ -52,6 +52,16 @@
                ReferencedContainer = "container:KTV.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C31B66521BE378A6005B2D89"
+               BuildableName = "KTVUITests.xctest"
+               BlueprintName = "KTVUITests"
+               ReferencedContainer = "container:KTV.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
@@ -75,7 +85,8 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
-      language = "zh-Hans">
+      language = "zh-Hans"
+      region = "CN">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference

@@ -16,11 +16,13 @@
 - (void)awakeFromNib {
     // Initialization code
     CGRect rect=_singer.frame;
-    rect.origin.x=CGRectGetMinX(rect)-50;
-    rect.size.height=20.0f;
-    rect.origin.y=self.bounds.size.height-20.0f;
+    rect.origin.x=CGRectGetMinX(rect);
+    rect.size.height=18.0f;
+    rect.origin.y=CGRectGetMaxY(rect);
+    rect.size.width=60;
     play=[[UILabel alloc]initWithFrame:rect];
     play.text=NSLocalizedString(@"playing", nil);
+    play.font=[UIFont systemFontOfSize:12];
     play.textColor=[UIColor blueColor];
     [self addSubview:play];
     [play sizeToFit];

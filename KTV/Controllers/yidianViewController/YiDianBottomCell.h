@@ -16,7 +16,7 @@
 @property(nonatomic,weak)Song *oneSong;
 @property (weak, nonatomic) IBOutlet UIButton *collectionrec;
 @property (weak, nonatomic) IBOutlet UIButton *priority;
-@property (weak, nonatomic) IBOutlet UIButton *cutsong;
+//@property (weak, nonatomic) IBOutlet UIButton *cutsong;
 @property (weak, nonatomic) IBOutlet UIButton *remove;
 @property (nonatomic,weak)  NSString *orderID;
 @property(nonatomic,weak)id<yiDianDelegate> delegate;

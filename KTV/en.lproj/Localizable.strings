@@ -30,6 +30,9 @@
 
 "username" = "UserName";
 "password" = "PassWord";
+
+"demo"  = "Demo";
+
 /** playController*/
 
 "vocalonoff" = "Vocal On/Off";
@@ -82,3 +85,8 @@
 //** new song VC **/
 "collect" = "Collect";
 "jumpSetting" = "Go Setting";
+
+//*** HuToast **/
+"collectionsuccess" = "Collection Success";
+"collectioninfo" = "Duplicate collection";
+"ceollectionerror" = "Collection failure";

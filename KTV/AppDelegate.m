@@ -11,10 +11,9 @@
 #import "Utility.h"
 #import "SDWebImageManager.h"
 #import "MBProgressHUD.h"
-#import "DownLoadFileTool.h"
 @interface AppDelegate () {
     MBProgressHUD *HUD;
-    Utility *utilityTool;
+    BaseTabBarViewController *_tabVC;
 }
 
 @end
@@ -22,23 +21,20 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    utilityTool=[Utility instanceShare];
-    [Utility checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
-        if (isConnected && error==nil) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [self initData];
-                [utilityTool starToMonitorNetowrkConnection];
-                [utilityTool addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
-            });
-        }
-    }];
-    BaseTabBarViewController *_tabVC=[[BaseTabBarViewController alloc]init];
-    UIImage *imagebottom=[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"nav_bottom_bg" ofType:@"png"]];
-    [_tabVC.tabBar setBackgroundImage:imagebottom];
-    self.window.rootViewController=_tabVC;
+    UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.window = window;
+    [self enter];
     return YES;
 }
 
+
+-(void)enter{
+    _tabVC=[[BaseTabBarViewController alloc]init];
+    UIImage *imagebottom=[UIImage imageWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"nav_bottom_bg" ofType:@"png"]];
+    [_tabVC.tabBar setBackgroundImage:imagebottom];
+    self.window.rootViewController=_tabVC;
+    [self.window makeKeyAndVisible];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -67,33 +63,7 @@
     [[SDWebImageManager sharedManager].imageCache clearDisk];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"netWorkStatus"] && [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
-//                NSLog(@"Network resume ok");
-            });
-    }
-}
 
-- (void)initData {
-    HUD = [[MBProgressHUD alloc] initWithView:self.window];
-    [self.window.rootViewController.view addSubview:HUD];
-    HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
-    HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
-    HUD.detailsLabelColor=[UIColor greenColor];
-    [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed,NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [HUD hide:YES];
-            if (Completed) {
-//                NSLog(@"download file And import data done!");
-                
-            } else {
-//                NSLog(@"download file OR import data Error!");
-            }
-        });
-    }];
-    [HUD show:YES];
-}
 //networkError connectnetwork
 - (void)showMessageTitle:(NSString*)title message:(NSString*)message showType:(ViewType)type {
     NSString *localTitle=NSLocalizedString(title, nil);
@@ -112,7 +82,7 @@
         }];
     } else {
         UIAlertController *alVC=[UIAlertController alertControllerWithTitle:localTitle message:localMessage preferredStyle:UIAlertControllerStyleAlert];
-        
+        alVC.view.backgroundColor=[UIColor clearColor];
         
         UIAlertAction *cancelAction=[UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             [alVC dismissViewControllerAnimated:YES completion:nil];
@@ -124,15 +94,94 @@
         
         [alVC addAction:cancelAction];
         [alVC addAction:confirmaction];
-        [self.window.rootViewController presentViewController:alVC animated:YES completion:nil];
+        
+        [[self topMostController] presentViewController:alVC animated:YES completion:nil];
     }
 }
 
+- (UIViewController*) topMostController
+{
+    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    
+    return topController;
+}
+
+
+/*
+- (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)rootViewController {
+    if ([rootViewController isKindOfClass:[UITabBarController class]]) {
+        UITabBarController* tabBarController = (UITabBarController*)rootViewController;
+        return [self topViewControllerWithRootViewController:tabBarController.selectedViewController];
+    } else if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController* navigationController = (UINavigationController*)rootViewController;
+        return [self topViewControllerWithRootViewController:navigationController.visibleViewController];
+    } else if (rootViewController.presentedViewController) {
+        UIViewController* presentedViewController = rootViewController.presentedViewController;
+        return [self topViewControllerWithRootViewController:presentedViewController];
+    } else {
+        return rootViewController;
+    }
+}
+
+
+-(UIViewController *)getCurrentRootViewController {
+    UIViewController *result;
+    UIWindow *topWindow=[UIApplication sharedApplication].keyWindow;
+    if (topWindow.windowLevel!=UIWindowLevelNormal) {
+            NSArray *windows=[[UIApplication sharedApplication]windows];
+            for (topWindow in windows) {
+                if (topWindow.windowLevel==UIWindowLevelNormal) {
+                    break;
+                }
+            }
+        }
+        UIView *rootView=[[topWindow subviews]firstObject];
+        id nextResponder=[rootView nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            result=nextResponder;
+        } else if ([topWindow respondsToSelector:@selector(rootViewController)] && topWindow.rootViewController!=nil) {
+            result=topWindow.rootViewController;
+        } else {
+            NSAssert(NO, @"ShareKit: Could not find a root view controller.  You can assign one manually by calling [[SHK currentHelper] setRootViewController:YOURROOTVIEWCONTROLLER].");
+        }
+    return result;
+}
 
 - (void)dealloc {
     [utilityTool removeObserver:self forKeyPath:@"netWorkStatus" context:nil];
     [utilityTool stopToMonitorNetworkConnection];
 }
 
+//
+//作者：里脊串 授权本站转载。
+//
+//项目刚启动的时候 我们一般为了快速开发 会在使用字符串的时候直接选择硬编码到代码中 比如
+//
+//1
+//self.lblTime.text = @"1分钟前";
+//但是之后 如果有国际化的需求的话 我们又会改成这样
+//
+//1
+//self.lblTime.text = NSLocalizedString(@"one_min_ago", @"1分钟前");
+//不过随着代码越来越多 不免有疏漏 所以有时我们要去搜索一些漏网之鱼 这里分享一个快捷的方法
+//
+//打开”Find Navigator”
+//切换搜索模式到 “Find > Regular Expression”
+//输入@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?" (swift请去掉”@” 输入@"[^"]*[\u4E00-\u9FA5]+[^"\n]*?" 就好了)
+//                                                                          看看效果
+//
+//                                                                          blob.png
+//
+//                                                                          啊哦 发现了几个漏网之鱼 :)
+//
+//                                                                          如果你跟我一样嫌NSLocalizedString的comment碍事 也可以用正则替换掉
+//
+//                                                                          Find NSLocalizedString\((@"[^\)]*?")\s*,\s*@"[^\)]*"\s*\)
+//                                                                          Replace With NSLocalizedString\($1, nil\)
+*/
 
 @end

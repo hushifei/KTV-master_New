@@ -9,6 +9,9 @@
 #import "huSearchBar.h"
 #import "SettingViewController.h"
 #import "SearchSongListViewController.h"
+
+#import "SearchViewController.h"
+
 #import "ScanCodeViewController.h"
 #import "SingerAreaViewController.h"
 #import "jinxuanViewController.h"
@@ -18,7 +21,16 @@
 #import "SoundViewController.h"
 #import "Utility.h"
 #import "BaseNavigationController.h"
+#import "DataMananager.h"
+
+#import "NewPaiHangViewController.h"
+#import "NSString+Utility.h"
+#import "MBProgressHUD.h"
+#import "DownLoadFileTool.h"
+
+
 @interface MainViewController ()<UISearchBarDelegate,ScanCodeDelegate> {
+    MBProgressHUD *HUD;
     UIButton *geshouBtn;
     UIButton *paihangBtn;
     UIButton *jinxuanBtn;
@@ -27,6 +39,8 @@
     UIButton *conHostBtn;
     UIBarButtonItem *kege;
     UIBarButtonItem *bokong;
+    UIView *bottomBGView;
+    UIButton *promptConnectBtn;
 }
 
 @end
@@ -37,7 +51,61 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets=YES;
     [self createContextUI];
-    //    [self copyFile];
+    if ([[DataMananager instanceShare]databaseAlready]) {
+        return;
+    }
+//    if (DEBUG) {
+//        [self copyFile];
+//    }
+    [self  showConnectionHostMessage:NO];
+
+    [[Utility instanceShare] starToMonitorNetowrkConnection];
+    [[Utility instanceShare] addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
+    [[Utility instanceShare] checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
+        if (isConnected && error==nil) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self initData];
+            });
+        }
+    }];
+    ;
+    
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    if (promptConnectBtn.hidden==NO) return;
+    if ([keyPath isEqualToString:@"netWorkStatus"] && [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self showConnectionHostMessage:NO];
+        });
+
+    } else if  ([keyPath isEqualToString:@"netWorkStatus"] && ![[change valueForKey:NSKeyValueChangeNewKey]boolValue]) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self showConnectionHostMessage:YES];
+        });
+    }
+}
+
+- (void)initData {
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
+    HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
+    HUD.detailsLabelColor=[UIColor greenColor];
+    [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed,NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [HUD hide:YES];
+            if (Completed) {
+                //                NSLog(@"download file And import data done!");
+                
+            } else {
+                //                NSLog(@"download file OR import data Error!");
+            }
+        });
+    }];
+    [HUD show:YES];
+    //    po [[self view] recursiveDescription]
+    //     po [[[[UIApplication sharedApplication] windows] objectAtIndex:0] recursiveDescription]
 }
 
 - (void)copyFile {
@@ -48,6 +116,28 @@
         [fileManager copyItemAtPath:sourcePath toPath:distancePath error:nil];
     }
 }
+
+- (void)showConnectionHostMessage:(BOOL)show {
+    CGSize size=self.view.bounds.size;
+    if (promptConnectBtn==nil) {
+        promptConnectBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(self.view.frame),size.width-40,40)];
+        promptConnectBtn.backgroundColor=[UIColor grayColor];
+        [promptConnectBtn setTitle:@"请连接包厢" forState:UIControlStateNormal];
+        promptConnectBtn.hidden=YES;
+        [self.view addSubview:promptConnectBtn];
+    }
+    if (show && promptConnectBtn.hidden==YES) {
+        [UIView animateWithDuration:2 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:UIViewAnimationOptionShowHideTransitionViews animations:^{
+            promptConnectBtn.hidden=NO;
+            promptConnectBtn.frame= CGRectMake(20, CGRectGetMaxY(bottomBGView.frame)+15,size.width-40,40);
+        } completion:nil];
+    } else if (!show && promptConnectBtn.hidden==NO){
+        [UIView animateWithDuration:2 animations:^{
+            promptConnectBtn.frame= CGRectMake(20, CGRectGetMaxY(bottomBGView.frame)+15,size.width-40,40);
+        }];
+    }
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -67,6 +157,7 @@
 
 - (void)clicked_paihangBtn:(id)sender {
     paiHangViewController *vc=[[paiHangViewController alloc]init];
+//    NewPaiHangViewController *vc=[[NewPaiHangViewController alloc]init];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -202,7 +293,7 @@
      */
     
     
-    UIView *bottomBGView=[[UIView alloc]initWithFrame:CGRectMake(SEARCHMARGIN_LRT, BOTTOMBGView_TOPMARGIN, searchBar.bounds.size.width, topBGView.bounds.size.height)];
+    bottomBGView=[[UIView alloc]initWithFrame:CGRectMake(SEARCHMARGIN_LRT, BOTTOMBGView_TOPMARGIN, searchBar.bounds.size.width, topBGView.bounds.size.height)];
     [self.view addSubview:bottomBGView];
     //    bottomBGView.backgroundColor=[UIColor whiteColor];
     
@@ -258,16 +349,8 @@
 
 #pragma mark- ScanCodeDelegate
 - (void)didFinishedScanCode:(NSError *)error withString:(NSString *)string {
-    //check network status
-    if ([Utility instanceShare].netWorkStatus) {
-        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetOK", nil) preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-        }];
-        [alVC addAction:action];
-    } else {
-        NSArray *scanArray=[string componentsSeparatedByString:@","];
-        if (scanArray && [scanArray count]==2) {
+    if ([string hasPrefix:@"wifi->"] && [[string substringFromIndex:[@"wifi->" length]] componentsSeparatedByString:@","].count ==2){
+            NSArray *scanArray=[[string substringFromIndex:[@"wifi->" length]] componentsSeparatedByString:@","];
             NSString *wifiName=scanArray[0];
             NSString *wifiPassWord=scanArray[1];
             UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetContent", nil) preferredStyle:UIAlertControllerStyleAlert];
@@ -275,6 +358,7 @@
                 [alVC dismissViewControllerAnimated:YES completion:nil];
             }];
             UIAlertAction *confirmaction=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [Utility instanceShare].serverIPAddress=@"192.168.43.1";
                 [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
             }];
             [alVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -288,23 +372,34 @@
             
             [alVC addAction:cancelAction];
             [alVC addAction:confirmaction];
-        } else {
-            UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"scancodeerror", nil) preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                
-            }];
-            [alVC addAction:action];
-            
+        
+    } else if ([string hasPrefix:@"route->"] && [[string substringFromIndex:[@"route->" length]]isIpAddress]) {
+        //192.168.0.90
+        if (![[Utility instanceShare].serverIPAddress isEqualToString:[string substringFromIndex:[@"route->" length]]]) {
+            [Utility instanceShare].serverIPAddress=[string substringFromIndex:[@"route->" length]];
         }
+    } else {
+        UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"scancodeerror", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *action=[UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+
+        }];
+        [alVC addAction:action];
     }
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     SearchSongListViewController *vc=[[SearchSongListViewController alloc]initWithStyle:UITableViewStylePlain];
-    vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    BaseNavigationController *navc=[[BaseNavigationController alloc]initWithRootViewController:vc];
-    [self.navigationController presentViewController: navc animated:YES completion: nil];
+//    SearchViewController *vc=[[SearchViewController alloc]init];
+    [self.navigationController pushViewController:vc animated:YES];
+//    vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+//    BaseNavigationController *navc=[[BaseNavigationController alloc]initWithRootViewController:vc];
+//    
+//    [self presentViewController: navc animated:YES completion: nil];
+
     return YES;
 }
+
+
+
 
 @end
