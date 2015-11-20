@@ -47,7 +47,8 @@ static Utility *shareInstance=nil;
            _serverIPAddress=@"192.168.43.1";
             //提示扫🐎；
         }
-
+        netWorkStatus=YES;
+//        [self setValue:[NSNumber numberWithBool:YES] forKey:@"netWorkStatus"];
         shareInstance= [super init];
     });
     return shareInstance;
