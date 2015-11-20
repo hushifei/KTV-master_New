@@ -22,6 +22,7 @@
 		C31B66561BE378A6005B2D89 /* KTVUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C31B66551BE378A6005B2D89 /* KTVUITests.m */; };
 		C329A2781BCB933C00E1FE3A /* DownLoadFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = C329A2771BCB933C00E1FE3A /* DownLoadFileTool.m */; };
 		C329A27B1BCBAE2000E1FE3A /* UIColor+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = C329A27A1BCBAE2000E1FE3A /* UIColor+Utility.m */; };
+		C335148B1BFEEF9C00C4167A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C335148A1BFEEF9C00C4167A /* Default-568h@2x.png */; };
 		C344DB4E1BCB493400F1325D /* DataMananager.m in Sources */ = {isa = PBXBuildFile; fileRef = C344DB4D1BCB493400F1325D /* DataMananager.m */; };
 		C344DB5F1BCB4AAB00F1325D /* UIImage+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = C344DB571BCB4AAB00F1325D /* UIImage+Utility.m */; };
 		C344DB601BCB4AAB00F1325D /* UIImageView+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = C344DB591BCB4AAB00F1325D /* UIImageView+Animation.m */; };
@@ -598,6 +599,7 @@
 		C329A2771BCB933C00E1FE3A /* DownLoadFileTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownLoadFileTool.m; sourceTree = "<group>"; };
 		C329A2791BCBAE2000E1FE3A /* UIColor+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utility.h"; sourceTree = "<group>"; };
 		C329A27A1BCBAE2000E1FE3A /* UIColor+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utility.m"; sourceTree = "<group>"; };
+		C335148A1BFEEF9C00C4167A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		C344DB4C1BCB493400F1325D /* DataMananager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataMananager.h; sourceTree = "<group>"; };
 		C344DB4D1BCB493400F1325D /* DataMananager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataMananager.m; sourceTree = "<group>"; };
 		C344DB561BCB4AAB00F1325D /* UIImage+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utility.h"; sourceTree = "<group>"; };
@@ -1761,6 +1763,7 @@
 		D1586B371AE14CBF00AF3EDB = {
 			isa = PBXGroup;
 			children = (
+				C335148A1BFEEF9C00C4167A /* Default-568h@2x.png */,
 				D1586B421AE14CBF00AF3EDB /* KTV */,
 				D1586B5C1AE14CBF00AF3EDB /* KTVTests */,
 				C31B66541BE378A6005B2D89 /* KTVUITests */,
@@ -2524,6 +2527,7 @@
 				D15430681AFDDCD600522DE1 /* bokong_selected@2x.png in Resources */,
 				C3AAC0D01BCC953C009582D1 /* yuan@2x.png in Resources */,
 				D14F1CC51AFBACE400EA6E50 /* unselected.jpeg in Resources */,
+				C335148B1BFEEF9C00C4167A /* Default-568h@2x.png in Resources */,
 				D16735961BA4540A0057CA0A /* ScanCodeViewController.xib in Resources */,
 				C3AAC0D21BCC958F009582D1 /* error.png in Resources */,
 				D19326871B062C4500F89470 /* search_0549@2x.PNG in Resources */,
@@ -3096,7 +3100,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: ZENG ZEBIN (FCUD3D8C9X)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -3138,7 +3143,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: ZENG ZEBIN (D69H8VACW4)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

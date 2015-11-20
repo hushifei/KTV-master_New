@@ -57,11 +57,13 @@
 //    if (DEBUG) {
 //        [self copyFile];
 //    }
+    [self  showConnectionHostMessage:NO];
+
+    [[Utility instanceShare] starToMonitorNetowrkConnection];
+    [[Utility instanceShare] addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
     [[Utility instanceShare] checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
         if (isConnected && error==nil) {
             dispatch_sync(dispatch_get_main_queue(), ^{
-                [[Utility instanceShare] starToMonitorNetowrkConnection];
-                [[Utility instanceShare] addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
                 [self initData];
             });
         }
@@ -71,18 +73,16 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    if (promptConnectBtn.hidden==NO) return;
     if ([keyPath isEqualToString:@"netWorkStatus"] && [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ) {
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:2 animations:^{
-                promptConnectBtn.alpha=0.0;
-                promptConnectBtn.hidden=YES;
-            }];
+            [self showConnectionHostMessage:NO];
         });
+
     } else if  ([keyPath isEqualToString:@"netWorkStatus"] && ![[change valueForKey:NSKeyValueChangeNewKey]boolValue]) {
-        [UIView animateWithDuration:2 animations:^{
-            promptConnectBtn.alpha=1.0;
-            promptConnectBtn.hidden=NO;
-        }];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self showConnectionHostMessage:YES];
+        });
     }
 }
 
@@ -117,16 +117,27 @@
     }
 }
 
-- (void)showConnectionHostMessage {
+- (void)showConnectionHostMessage:(BOOL)show {
+    CGSize size=self.view.bounds.size;
     if (promptConnectBtn==nil) {
-        CGSize size=self.view.bounds.size;
-        promptConnectBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(bottomBGView.frame)+15,size.width-40,40)];
-        promptConnectBtn.backgroundColor=[UIColor orangeColor];
+        promptConnectBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, CGRectGetMaxY(self.view.frame),size.width-40,40)];
+        promptConnectBtn.backgroundColor=[UIColor grayColor];
         [promptConnectBtn setTitle:@"请连接包厢" forState:UIControlStateNormal];
         promptConnectBtn.hidden=YES;
         [self.view addSubview:promptConnectBtn];
     }
+    if (show && promptConnectBtn.hidden==YES) {
+        [UIView animateWithDuration:2 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:UIViewAnimationOptionShowHideTransitionViews animations:^{
+            promptConnectBtn.hidden=NO;
+            promptConnectBtn.frame= CGRectMake(20, CGRectGetMaxY(bottomBGView.frame)+15,size.width-40,40);
+        } completion:nil];
+    } else if (!show && promptConnectBtn.hidden==NO){
+        [UIView animateWithDuration:2 animations:^{
+            promptConnectBtn.frame= CGRectMake(20, CGRectGetMaxY(bottomBGView.frame)+15,size.width-40,40);
+        }];
+    }
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -334,9 +345,6 @@
     conHostLabel.textAlignment=NSTextAlignmentCenter;
     [conHostBtn addTarget:self action:@selector(connect_Host:) forControlEvents:UIControlEventTouchUpInside];
     [bottomBGView addSubview:conHostLabel];
-    
-    
-    [self showConnectionHostMessage];
 }
 
 #pragma mark- ScanCodeDelegate
