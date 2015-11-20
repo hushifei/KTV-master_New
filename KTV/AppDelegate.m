@@ -11,6 +11,7 @@
 #import "Utility.h"
 #import "SDWebImageManager.h"
 #import "MBProgressHUD.h"
+
 @interface AppDelegate () {
     MBProgressHUD *HUD;
     BaseTabBarViewController *_tabVC;

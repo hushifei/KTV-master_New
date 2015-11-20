@@ -2437,7 +2437,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"BUILT_PRODUCTS_DIR = $BUILT_PRODUCTS_DIR\"\necho \"SRCROOT=$SRCROOT\"\ncd KTV\nmkdir -p Bundles\ncp -r ${BUILT_PRODUCTS_DIR}/*.framework ${SRCROOT}/KTV/Bundles\";";
+			shellScript = "echo \"BUILT_PRODUCTS_DIR = $BUILT_PRODUCTS_DIR\"\necho \"SRCROOT=$SRCROOT\"\ncd KTV\nmkdir -p Bundles\ncp -r ${BUILT_PRODUCTS_DIR}/*.framework ${SRCROOT}/KTV/Bundles";
 		};
 /* End PBXShellScriptBuildPhase section */
 
