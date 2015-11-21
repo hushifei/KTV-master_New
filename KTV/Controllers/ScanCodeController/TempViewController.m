@@ -23,6 +23,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.title=@"连接包厢";
+    self.tabBarController.tabBar.hidden=YES;
     SHBQRView *qrView = [[SHBQRView alloc] initWithFrame:self.view.bounds];
     qrView.delegate = self;
     [self.view addSubview:qrView];
@@ -38,11 +39,11 @@
 - (void)cancelQrView:(SHBQRView *)view {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-- (void)viewDidAppear:(BOOL)animated {
-    [self.navigationController popViewControllerAnimated:NO];
-    [super viewDidAppear:animated];
-}
+//
+//- (void)viewDidAppear:(BOOL)animated {
+//    [self.navigationController popViewControllerAnimated:NO];
+//    [super viewDidAppear:animated];
+//}
 
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;

@@ -73,6 +73,11 @@
     
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.tabBarController.tabBar.hidden=NO;
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
     if (![[DataMananager instanceShare]databaseAlready] && [[change valueForKey:NSKeyValueChangeNewKey]boolValue]) {
         if (onGoingInitData) return;
