@@ -39,6 +39,11 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [self.navigationController popViewControllerAnimated:NO];
+    [super viewDidAppear:animated];
+}
+
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }

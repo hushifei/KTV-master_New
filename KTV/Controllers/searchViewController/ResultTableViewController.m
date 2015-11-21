@@ -18,7 +18,7 @@
 #define SINGERTABLE @"SingerTable"
 #import "NSString+Utility.h"
 #import "DataMananager.h"
-
+#import "WebImage.h"
 #import "BaseNavigationController.h"
 #import "SongListViewController.h"
 #import "SearchSongListViewController.h"
@@ -87,14 +87,21 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SearchResultCell *cell=[tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFY forIndexPath:indexPath];
-//    if (!cell) {
-//        cell=[[SearchResultCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CELL_IDENTIFY];
-//    }
     cell.contentView.backgroundColor=[UIColor clearColor];
     cell.backgroundColor=[UIColor clearColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    [cell configWithObject:_dataList[indexPath.row]];
+    id object=_dataList[indexPath.row];
+    if ([object isKindOfClass:[Singer class]]) {
+        Singer *oneSinger=(Singer*)object;
+        cell.titleLabel.text=oneSinger.singer;
+        NSString *urlStr=[[NSString stringWithFormat:@"http://%@:8080/paze?cmd=0x02&filename=%@",[Utility instanceShare].serverIPAddress,oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        [cell.header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
+    } else if ([object isKindOfClass:[Song class]]){
+       cell.header.image=[UIImage imageNamed:@"music_icon"];
+       cell.titleLabel.text=[(Song*)object songname];
+    }
+    
     return cell;
     
 }
@@ -139,9 +146,9 @@
             [self.dataList removeAllObjects];
         }
         canSearch=NO;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             [self initializeTableContent:searchStr];
-        });
+//        });
         olderStr=searchStr;
     } else {
         canSearch=YES;
