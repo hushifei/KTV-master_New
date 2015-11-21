@@ -117,6 +117,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     NSString *urlStr=[[SINGER_PIC_URL stringByAppendingString:oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     [cell.headImageV sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
+//   UIImage *a= [UIImage imageNamed:@"DefaultHeader.jpg"];
     return cell;
 }
 

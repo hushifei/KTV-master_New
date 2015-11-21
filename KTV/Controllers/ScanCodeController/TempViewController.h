@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class TempViewController;
+typedef void(^scanComplete)(TempViewController *tempViewController,NSString* result);
 @interface TempViewController : UIViewController
-
+@property (nonatomic,strong) scanComplete completed;
 @end

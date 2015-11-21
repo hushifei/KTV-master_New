@@ -259,6 +259,11 @@
 		D19936F81B38028500C57622 /* placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D19936F61B38028500C57622 /* placeholder@2x.png */; };
 		D19994B01AEA87D200CEC16D /* SongTopCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D19994AE1AEA87D200CEC16D /* SongTopCell.m */; };
 		D1ACF5791B0563CC00666D6D /* HuToast.m in Sources */ = {isa = PBXBuildFile; fileRef = D1ACF5781B0563CB00666D6D /* HuToast.m */; };
+		D1B159271BFF97EF00350B5B /* Default_Header.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B159261BFF97EF00350B5B /* Default_Header.png */; };
+		D1B1592D1C004D8100350B5B /* cancel_bt_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B1592A1C004D8100350B5B /* cancel_bt_bg.png */; };
+		D1B1592E1C004D8100350B5B /* line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B1592B1C004D8100350B5B /* line@2x.png */; };
+		D1B1592F1C004D8100350B5B /* pick_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B1592C1C004D8100350B5B /* pick_bg@2x.png */; };
+		D1B159311C0050E600350B5B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1B159301C0050E600350B5B /* AudioToolbox.framework */; };
 		D1E32F351BFCDD7D001FB54E /* nav_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E32F341BFCDD7D001FB54E /* nav_back@2x.png */; };
 		D1E32F371BFCDFBB001FB54E /* nav_back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E32F361BFCDFBB001FB54E /* nav_back@3x.png */; };
 		D1E39F0B1AFDDD9800E739F9 /* newsong_header.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E39F0A1AFDDD9800E739F9 /* newsong_header.png */; };
@@ -420,7 +425,6 @@
 		C3AAC1291BCCD0CA009582D1 /* libz.1.2.5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.2.5.tbd; path = usr/lib/libz.1.2.5.tbd; sourceTree = SDKROOT; };
 		C3AAC12B1BCCD0E1009582D1 /* libiconv.2.4.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.4.0.tbd; path = usr/lib/libiconv.2.4.0.tbd; sourceTree = SDKROOT; };
 		C3AAC12F1BCD1478009582D1 /* music_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = music_icon.png; sourceTree = "<group>"; };
-		C3AAC1331BCD1627009582D1 /* Default_Header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default_Header.png; sourceTree = "<group>"; };
 		C3CB01F21BCDF7FC0021B615 /* SearchResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultCell.h; sourceTree = "<group>"; };
 		C3CB01F31BCDF7FC0021B615 /* SearchResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultCell.m; sourceTree = "<group>"; };
 		C3D36E6E1BDA39B100B0167A /* SearchResultBottomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultBottomCell.h; sourceTree = "<group>"; };
@@ -699,6 +703,11 @@
 		D19994AE1AEA87D200CEC16D /* SongTopCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SongTopCell.m; sourceTree = "<group>"; };
 		D1ACF5771B0563CB00666D6D /* HuToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HuToast.h; sourceTree = "<group>"; };
 		D1ACF5781B0563CB00666D6D /* HuToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HuToast.m; sourceTree = "<group>"; };
+		D1B159261BFF97EF00350B5B /* Default_Header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default_Header.png; sourceTree = "<group>"; };
+		D1B1592A1C004D8100350B5B /* cancel_bt_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel_bt_bg.png; sourceTree = "<group>"; };
+		D1B1592B1C004D8100350B5B /* line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line@2x.png"; sourceTree = "<group>"; };
+		D1B1592C1C004D8100350B5B /* pick_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pick_bg@2x.png"; sourceTree = "<group>"; };
+		D1B159301C0050E600350B5B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D1E32F341BFCDD7D001FB54E /* nav_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_back@2x.png"; path = "KTV/images/kege/nav_back@2x.png"; sourceTree = SOURCE_ROOT; };
 		D1E32F361BFCDFBB001FB54E /* nav_back@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_back@3x.png"; path = "KTV/images/kege/nav_back@3x.png"; sourceTree = SOURCE_ROOT; };
 		D1E39F0A1AFDDD9800E739F9 /* newsong_header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newsong_header.png; sourceTree = "<group>"; };
@@ -735,6 +744,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1B159311C0050E600350B5B /* AudioToolbox.framework in Frameworks */,
 				C389FE721BD489830017ECBF /* libz.tbd in Frameworks */,
 				C3AAC12C1BCCD0E1009582D1 /* libiconv.2.4.0.tbd in Frameworks */,
 				C3AAC12A1BCCD0CA009582D1 /* libz.1.2.5.tbd in Frameworks */,
@@ -854,7 +864,7 @@
 		C3AAC0BC1BCC94FE009582D1 /* ohter */ = {
 			isa = PBXGroup;
 			children = (
-				C3AAC1331BCD1627009582D1 /* Default_Header.png */,
+				D1B159261BFF97EF00350B5B /* Default_Header.png */,
 				C3AAC12F1BCD1478009582D1 /* music_icon.png */,
 				C3AAC0BD1BCC953C009582D1 /* password_cancel_down@2x.png */,
 				C3AAC0BE1BCC953C009582D1 /* password_cancel_down@3x.png */,
@@ -1276,6 +1286,7 @@
 				C3AAC12B1BCCD0E1009582D1 /* libiconv.2.4.0.tbd */,
 				C3AAC1291BCCD0CA009582D1 /* libz.1.2.5.tbd */,
 				C3AAC1251BCCD09C009582D1 /* libsqlite3.tbd */,
+				D1B159301C0050E600350B5B /* AudioToolbox.framework */,
 				209C9FCB1B60D72A0060739C /* SystemConfiguration.framework */,
 				209C9FC91B606ECF0060739C /* CFNetwork.framework */,
 				D155898D1B038BE9000AA4C9 /* Foundation.framework */,
@@ -1522,6 +1533,9 @@
 		D16E52201AE6755F00E57011 /* ScanCodeController */ = {
 			isa = PBXGroup;
 			children = (
+				D1B1592A1C004D8100350B5B /* cancel_bt_bg.png */,
+				D1B1592B1C004D8100350B5B /* line@2x.png */,
+				D1B1592C1C004D8100350B5B /* pick_bg@2x.png */,
 				D10E26751BFF761B008F77EF /* lightNormal.png */,
 				D10E26761BFF761B008F77EF /* lightSelect.png */,
 				D10E26771BFF761B008F77EF /* scanLine@2x.png */,
@@ -1845,6 +1859,7 @@
 				D15430361AFDDCD600522DE1 /* collectionFlag3.png in Resources */,
 				D10E26801BFF761B008F77EF /* scanLine@2x.png in Resources */,
 				D15430391AFDDCD600522DE1 /* collectionFlag6.png in Resources */,
+				D1B1592F1C004D8100350B5B /* pick_bg@2x.png in Resources */,
 				D15430791AFDDCD600522DE1 /* shoucan.png in Resources */,
 				C389FE501BD47E450017ECBF /* DemoDB.sqlite.zip in Resources */,
 				D154306F1AFDDCD600522DE1 /* kege_selected@2x.png in Resources */,
@@ -1861,6 +1876,7 @@
 				D19936F81B38028500C57622 /* placeholder@2x.png in Resources */,
 				D154306B1AFDDCD600522DE1 /* geshou.png in Resources */,
 				D170BF951BAE66E000A8FAF5 /* ZVolumeSlide_volumeCell1.png in Resources */,
+				D1B159271BFF97EF00350B5B /* Default_Header.png in Resources */,
 				D15430701AFDDCD600522DE1 /* mainVC_bg@2x.png in Resources */,
 				D15430291AFDDCD600522DE1 /* bokong1.png in Resources */,
 				D15E2AAD1AEBB9970093C773 /* jingXuanTableViewCell.xib in Resources */,
@@ -1868,6 +1884,7 @@
 				D15430711AFDDCD600522DE1 /* paihangbang.png in Resources */,
 				D15430841AFDDCD600522DE1 /* paihang_flag3.png in Resources */,
 				D15430741AFDDCD600522DE1 /* setting_selected@2x.png in Resources */,
+				D1B1592E1C004D8100350B5B /* line@2x.png in Resources */,
 				D15430581AFDDCD600522DE1 /* kge_head.png in Resources */,
 				D175E8C01B02444E003449A6 /* selectView_bg.png in Resources */,
 				D154304B1AFDDCD600522DE1 /* pick_bg@2x.png in Resources */,
@@ -1903,6 +1920,7 @@
 				D155C6A81AF48A1C0085CDCB /* CollectionViewCell.xib in Resources */,
 				D153328F1BA1B2B000734C77 /* hecai_normal.png in Resources */,
 				D16E52831AE6755F00E57011 /* SingerAreaTypeCell.xib in Resources */,
+				D1B1592D1C004D8100350B5B /* cancel_bt_bg.png in Resources */,
 				D19326861B062C4500F89470 /* search_0548@2x.PNG in Resources */,
 				D15430851AFDDCD600522DE1 /* paihang_flag4.png in Resources */,
 				D10E267F1BFF761B008F77EF /* lightSelect.png in Resources */,

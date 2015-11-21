@@ -15,6 +15,7 @@
 @implementation SingerAreaTypeCell
 
 - (void)awakeFromNib {
+//    _headImageV.backgroundColor=[UIColor orangeColor]   ;
     // Initialization code
 }
 

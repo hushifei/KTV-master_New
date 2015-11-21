@@ -12,7 +12,7 @@
 @protocol SHBQRViewDelegate <NSObject>
 
 - (void)qrView:(SHBQRView *)view ScanResult:(NSString *)result;
-
+- (void)cancelQrView:(SHBQRView*)view;
 @end
 
 @interface SHBQRView : UIView
@@ -20,6 +20,7 @@
 @property (nonatomic, assign) id<SHBQRViewDelegate> delegate;
 
 @property (nonatomic, assign, readonly) CGRect scanViewFrame;
+
 
 - (void)startScan;
 - (void)stopScan;

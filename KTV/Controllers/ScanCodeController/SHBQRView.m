@@ -19,6 +19,7 @@
     
     UIImageView     *_scanView;
     UIImageView     *_lineView;
+    UIButton        *_cancelBtn;
     
 }
 
@@ -30,14 +31,23 @@
     return self;
 }
 
+- (void)cancelBtn_Clicked:(id)sender {
+    if ([_delegate respondsToSelector:@selector(cancelQrView:)]) {
+        [self stopScan];
+        __weak typeof(self) weakSelf=self;
+        [_delegate cancelQrView:weakSelf];
+    }
+}
+
 - (void)initView {
     UIImage *scanImage = [UIImage imageNamed:@"scanscanBg"];
-    
+//    UIImage *scanImage = [UIImage imageNamed:@"pick_bg"];
+
     
     CGFloat width = CGRectGetWidth(self.frame);
     CGFloat height = CGRectGetHeight(self.frame);
     
-    CGFloat scanW = 200;
+    CGFloat scanW = 220;
     
     CGRect scanFrame = CGRectMake(width / 2. - scanW / 2. , height / 2. - scanW / 2., scanW, scanW);
     _scanViewFrame = scanFrame;
@@ -47,6 +57,16 @@
     _scanView.backgroundColor = [UIColor clearColor];
     _scanView.frame = scanFrame;
     [self addSubview:_scanView];
+    
+    //cancel Button
+//    float cancelBtnWidth=_scanView.bounds.size.width/2.;
+//    float x=_scanView.center.x-(cancelBtnWidth/2);
+//    float cancelBtnHeight=40.;
+//    _cancelBtn=[[UIButton alloc]initWithFrame:CGRectMake(x, CGRectGetMaxY(_scanView.frame)+40, cancelBtnWidth, cancelBtnHeight)];
+//    [_cancelBtn setTitle:NSLocalizedString(@"cancel", nil) forState:UIControlStateNormal];
+//    [_cancelBtn addTarget:self action:@selector(cancelBtn_Clicked:) forControlEvents:UIControlEventTouchUpInside];
+//    [_cancelBtn setBackgroundImage:[UIImage imageNamed:@"cancel_bt_bg"] forState:UIControlStateNormal];
+//    [self addSubview:_cancelBtn];
     
     // 获取摄像设备
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
@@ -106,7 +126,7 @@
     [self.layer insertSublayer:layer above:0];
     
     [self bringSubviewToFront:_scanView];
-    
+    [self bringSubviewToFront:_cancelBtn];
     [self setOverView];
     
     [_session startRunning];
@@ -149,13 +169,16 @@
     view.backgroundColor = backColor;
     view.alpha = alpha;
     [self addSubview:view];
+    
+
 }
 
 
 #pragma mark - 动画
 - (void)loopDrawLine {
-    UIImage *lineImage = [UIImage imageNamed:@"scanLine"];
-    
+//    UIImage *lineImage = [UIImage imageNamed:@"scanLine"];
+    UIImage *lineImage = [UIImage imageNamed:@"line"];
+
     CGFloat x = CGRectGetMinX(_scanView.frame);
     CGFloat y = CGRectGetMinY(_scanView.frame);
     CGFloat w = CGRectGetWidth(_scanView.frame);
@@ -185,7 +208,9 @@
     if (metadataObjects.count > 0) {
         AVMetadataMachineReadableCodeObject *metadataObject = [metadataObjects firstObject];
         if ([_delegate respondsToSelector:@selector(qrView:ScanResult:)]) {
-            [_delegate qrView:self ScanResult:metadataObject.stringValue];
+            [self stopScan];
+            __weak typeof(self) weakSelf=self;
+            [_delegate qrView:weakSelf ScanResult:metadataObject.stringValue];
         }
     }
 }
@@ -197,5 +222,15 @@
 - (void)stopScan {
     [_session stopRunning];
 }
+
+//- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+////    UITouch *touch=[touches anyObject];
+////    CGPoint point=[touch locationInView:self];
+////    if ([_cancelBtn pointInside:point withEvent:event]) {
+////        NSLog(@"ff");
+////    }
+////    [self.nextResponder touchesBegan:touches withEvent:event];
+//
+//}
 
 @end

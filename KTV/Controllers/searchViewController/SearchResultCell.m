@@ -48,22 +48,22 @@
     if (object==nil) return;
     if ([object isKindOfClass:[Singer class]]) {
         Singer *oneSinger=(Singer*)object;
-        dispatch_sync(dispatch_get_main_queue(), ^{
+//        dispatch_sync(dispatch_get_main_queue(), ^{
             titleLabel.text=oneSinger.singer;
-        });
+//        });
         NSString *urlStr=[[COMMANDURLHEADER_PIC stringByAppendingString:oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         if ([Utility instanceShare].netWorkStatus) {
             [header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
         } else {
-            dispatch_sync(dispatch_get_main_queue(), ^{
+//            dispatch_sync(dispatch_get_main_queue(), ^{
                 header.image=[UIImage imageNamed:@"Default_Header"];
-            });
+//            });
         }
     } else if ([object isKindOfClass:[Song class]]){
-        dispatch_sync(dispatch_get_main_queue(), ^{
+//        dispatch_sync(dispatch_get_main_queue(), ^{
             header.image=[UIImage imageNamed:@"music_icon"];
             titleLabel.text=[(Song*)object songname];
-        });
+//        });
 
     }
     

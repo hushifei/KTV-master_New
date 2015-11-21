@@ -94,9 +94,7 @@
     cell.backgroundColor=[UIColor clearColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [cell configWithObject:_dataList[indexPath.row]];
-    });
+    [cell configWithObject:_dataList[indexPath.row]];
     return cell;
     
 }
