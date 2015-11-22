@@ -263,7 +263,7 @@
     [dataList removeObjectAtIndex:_previousRow+1];
     [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     _previousRow=-1;
-    [HuToast showToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
+        [HuToast showToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     //TODO::
     BBBadgeBarButtonItem *barButton = (BBBadgeBarButtonItem *)self.navigationItem.rightBarButtonItem;
     __weak __typeof(BBBadgeBarButtonItem*)weakBarButton=barButton;

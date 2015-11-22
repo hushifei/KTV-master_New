@@ -8,7 +8,5 @@
 
 #import <UIKit/UIKit.h>
 @interface SearchResultCell : UITableViewCell
-@property(nonatomic,strong)UIImageView *header;
-@property(nonatomic,strong)UILabel     *titleLabel;
-
+- (void)configWithObject:(nonnull id)object;
 @end

@@ -18,7 +18,7 @@
 #define SINGERTABLE @"SingerTable"
 #import "NSString+Utility.h"
 #import "DataMananager.h"
-#import "WebImage.h"
+
 #import "BaseNavigationController.h"
 #import "SongListViewController.h"
 #import "SearchSongListViewController.h"
@@ -26,7 +26,7 @@
     NSInteger _previousRow;
     BOOL canSearch;
     NSString *olderStr;
-
+    
     NSMutableArray *searchArray;
 }
 @property (nonatomic,strong)NSIndexPath *selectedIndexPath;
@@ -53,7 +53,7 @@
 }
 
 - (void)initializeSearchController {
-//    self.definesPresentationContext = YES;
+    self.definesPresentationContext = YES;
     self.edgesForExtendedLayout=UIRectEdgeNone;
     [self.tableView registerClass:[SearchResultCell class] forCellReuseIdentifier:CELL_IDENTIFY];
     _previousRow = -1;
@@ -91,17 +91,9 @@
     cell.backgroundColor=[UIColor clearColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    id object=_dataList[indexPath.row];
-    if ([object isKindOfClass:[Singer class]]) {
-        Singer *oneSinger=(Singer*)object;
-        cell.titleLabel.text=oneSinger.singer;
-        NSString *urlStr=[[NSString stringWithFormat:@"http://%@:8080/paze?cmd=0x02&filename=%@",[Utility instanceShare].serverIPAddress,oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        [cell.header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
-    } else if ([object isKindOfClass:[Song class]]){
-       cell.header.image=[UIImage imageNamed:@"music_icon"];
-       cell.titleLabel.text=[(Song*)object songname];
-    }
-    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        [cell configWithObject:_dataList[indexPath.row]];
+    });
     return cell;
     
 }
@@ -124,7 +116,7 @@
         [songVC setDataList:object];
     }
     [self.searchSongListVC.navigationController pushViewController:songVC animated:NO];
-
+    
 }
 
 
@@ -134,7 +126,10 @@
 
 - (void)reloadData {
     if (self.dataList && self.dataList.count > 0) {
-            [self.tableView reloadData];
+        [_searchSongListVC showPromtView:YES];
+        [self.tableView reloadData];
+    } else {
+        [_searchSongListVC showPromtView:NO];
     }
     canSearch = YES;
 }
@@ -146,9 +141,9 @@
             [self.dataList removeAllObjects];
         }
         canSearch=NO;
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
             [self initializeTableContent:searchStr];
-//        });
+        });
         olderStr=searchStr;
     } else {
         canSearch=YES;
@@ -160,7 +155,7 @@
 - (void)searchSongData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
     NSString *temStr = [NSString stringWithFormat:@"%@%@%@",@"%",searchStr,@"%"];
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE songname LIKE '%@' OR %@ LIKE '%@'" ,tableName,temStr,conditionColumn,temStr];
-//    NSLog(@"song:\n%@",sql);
+    //    NSLog(@"song:\n%@",sql);
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
@@ -181,7 +176,7 @@
         oneSong.stype = [rs stringForColumn:@"stype"];
         oneSong.volume = [rs stringForColumn:@"volume"];
         oneSong.word = [rs stringForColumn:@"word"];
-//        NSLog(@"%@",oneSong.songname);
+        //        NSLog(@"%@",oneSong.songname);
         [self.dataList addObject:oneSong];
     }
 } // limit 20
@@ -189,7 +184,7 @@
 - (void)searchSingData:(NSString*)tableName :(NSString*)conditionColumn :(NSString*)searchStr :(NSString*)column {
     NSString *temStr = [NSString stringWithFormat:@"%@%@%@",@"%",searchStr,@"%"];
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE singer LIKE '%@' OR  %@ LIKE '%@'",tableName,temStr,conditionColumn,temStr];
-//    NSLog(@"singer:\n%@",sql);
+    //    NSLog(@"singer:\n%@",sql);
     FMResultSet *rs = [_searchDb executeQuery:sql];
     while ([rs next]) {
         Singer *oneSinger=[[Singer alloc]init];
@@ -199,13 +194,13 @@
         oneSinger.singer = [rs stringForColumn:@"singer"];
         //        NSLog(@"%@",oneSinger.singer);
         [self.dataList addObject:oneSinger];
-       
+        
     }
 }
 
 
 - (void)initializeTableContent:(NSString*)searchStr {
-     NSString *enCodeSearchStr = [[searchStr uppercaseString] encodeBase64];
+    NSString *enCodeSearchStr = [[searchStr uppercaseString] encodeBase64];
     [searchArray addObject:enCodeSearchStr];
     if (_searchSelectIndex == searchAll) {
         
@@ -220,7 +215,7 @@
         [self searchSingData:SINGERTABLE :@"pingyin" :enCodeSearchStr :@"singer"];
     }
     [self performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-
+    
 }
 
 - (void)dealloc {
@@ -229,7 +224,7 @@
 
 - (void)keyboardDidHide:(NSNotification*)notification {
     [self.view endEditing:YES];
-//    [self dismissViewControllerAnimated:YES completion:nil];
+    //    [self dismissViewControllerAnimated:YES completion:nil];
     NSLog(@"keybordwillhide");
 }
 
@@ -254,30 +249,12 @@
 
 -(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     searchBar.showsCancelButton = YES;
-//    UIButton *cancelButton;
-//    UIView *topView = searchBar.subviews[0];
-//    for (UIView *subView in topView.subviews) {
-//        if ([subView isKindOfClass:NSClassFromString(@"UINavigationButton")]) {
-//            cancelButton = (UIButton*)subView;
-//        }
-//    }
-//    if (cancelButton) {
-//        //Set the new title of the cancel button
-//        [cancelButton setTitle:NSLocalizedString(@"cancel", nil) forState:UIControlStateNormal];
-//        cancelButton.tintColor = [UIColor whiteColor];
-//    }
     [searchBar setShowsCancelButton:YES animated:YES];
-
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
     canSearch=YES;
     [searchBar setShowsCancelButton:YES animated:YES];
-
-//    if (_dataList.count > 0) {
-//        self.searchSongListVC.dataList=[_dataList mutableCopy];
-//    }
-//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)viewDidLayoutSubviews

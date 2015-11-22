@@ -47,8 +47,6 @@ static Utility *shareInstance=nil;
            _serverIPAddress=@"192.168.43.1";
             //提示扫🐎；
         }
-        netWorkStatus=YES;
-//        [self setValue:[NSNumber numberWithBool:YES] forKey:@"netWorkStatus"];
         shareInstance= [super init];
     });
     return shareInstance;
@@ -143,17 +141,22 @@ static Utility *shareInstance=nil;
 
 
 
+
 - (void)checkNetworkStatus:(NSTimer*)oneTimer {
     NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/puze/",self.serverIPAddress]];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:2];
     NSURLSessionDataTask *dataTask = [_shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+         BOOL networkOk=NO;
         if ([self httpsStatuCode:response] ==200 && error==nil) {
-            [self setValue:[NSNumber numberWithBool:YES] forKey:@"netWorkStatus"];
+            networkOk=YES;
             [self updateYiDianStatus];
         } else {
-            [self setValue:[NSNumber numberWithBool:NO] forKey:@"netWorkStatus"];
+            networkOk=NO;
             NSLog(@"network connection error");
         }
+        
+        [self setValue:[NSNumber numberWithBool:networkOk] forKey:@"netWorkStatus"];
+        
     }];
     [dataTask resume];
 }

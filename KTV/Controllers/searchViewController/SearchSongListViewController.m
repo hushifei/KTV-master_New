@@ -44,7 +44,6 @@
     _previousRow = -1;
     _dataList = [[NSMutableArray alloc] init];
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
-    self.tableView.rowHeight=50;
     _resultVC=[[ResultTableViewController alloc]init];
     self.searchController=[[UISearchController alloc]initWithSearchResultsController:_resultVC];
     self.searchController.searchResultsUpdater=_resultVC;
@@ -61,39 +60,21 @@
 }
 
 
-//- (void)viewDidAppear:(BOOL)animated {
-//    [super viewDidAppear:animated];
-////    [self.searchController.searchBar performSelectorOnMainThread:@selector(becomeFirstResponder) withObject:self waitUntilDone:NO];
-//}
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.searchController.searchBar performSelectorOnMainThread:@selector(becomeFirstResponder) withObject:self waitUntilDone:NO];
+}
 
 - (void)createDefaultView {
-//    promtView=[[UIView alloc]initWithFrame:CGRectMake(self.view.center.x-300/2, 10, 300, 150)];
-//    UILabel *labelStr=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
-//    labelStr.numberOfLines=0;
-//    labelStr.textColor=[UIColor groupTableViewBackgroundColor];
-//    labelStr.font=[UIFont systemFontOfSize:15];
-//    labelStr.text=NSLocalizedString(@"searchcomment_searchVC", ni);
-//    [labelStr sizeToFit];
-//    [promtView addSubview:labelStr];
-//    [self.view addSubview:promtView];
-    
-    //modify searchbar
-//    _leftView= [[SFSelectView alloc]initWithItems:@[NSLocalizedString(@"all", ni),NSLocalizedString(@"songs", ni),NSLocalizedString(@"singers", ni)]];
-    _leftView.delegate = _resultVC;
-//    UITextField *textField;
-//    for (UIView *view in [self.searchController.searchBar subviews])
-//    {
-//        for (UIView *subView in view.subviews) {
-//            if ([subView isKindOfClass:[UITextField class]])
-//            {
-//                textField = (UITextField *)subView;
-//            }
-//        }
-//    }
-//    textField.clearButtonMode = UITextFieldViewModeNever;
-//    textField.leftViewMode = UITextFieldViewModeAlways;
-//    textField.leftView = _leftView;
-
+    promtView=[[UIView alloc]initWithFrame:CGRectMake(self.view.center.x-300/2, 10, 300, 150)];
+    UILabel *labelStr=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
+    labelStr.numberOfLines=0;
+    labelStr.textColor=[UIColor groupTableViewBackgroundColor];
+    labelStr.font=[UIFont systemFontOfSize:15];
+    labelStr.text=NSLocalizedString(@"searchcomment_searchVC", ni);
+    [labelStr sizeToFit];
+    [promtView addSubview:labelStr];
+    [self.view addSubview:promtView];
 }
 
 - (void)setDataList:(NSMutableArray *)dataList {
@@ -114,13 +95,10 @@
 }
 
 - (void)clickSong:(Song *)song {
-    //    [self.navigationController popToRootViewControllerAnimated:YES];
-    //    [self dismissViewControllerAnimated:NO completion:^{
     SongListViewController *songVC=[[SongListViewController alloc]init];
     songVC.needLoadData=NO;
     [songVC setDataList:song];
     [self.navigationController pushViewController:songVC animated:YES];
-    //    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -133,16 +111,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     return nil;
     
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
-
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
 }
 
 //-(UIStatusBarStyle)preferredStatusBarStyle {

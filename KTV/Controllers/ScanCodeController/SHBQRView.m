@@ -19,7 +19,6 @@
     
     UIImageView     *_scanView;
     UIImageView     *_lineView;
-    UIButton        *_cancelBtn;
     
 }
 
@@ -67,6 +66,17 @@
 //    [_cancelBtn addTarget:self action:@selector(cancelBtn_Clicked:) forControlEvents:UIControlEventTouchUpInside];
 //    [_cancelBtn setBackgroundImage:[UIImage imageNamed:@"cancel_bt_bg"] forState:UIControlStateNormal];
 //    [self addSubview:_cancelBtn];
+    
+//    prompt title
+        float cancelBtnWidth=_scanView.bounds.size.width;
+        float x=_scanView.center.x-(cancelBtnWidth/2);
+        float cancelBtnHeight=40.;
+    
+        UILabel *title=[[UILabel alloc]initWithFrame:CGRectMake(x, CGRectGetMaxY(_scanView.frame)+40, cancelBtnWidth, cancelBtnHeight)];
+        title.text=@"将二维码／条码放入框内，即可自动扫描";
+    title.textColor=[UIColor whiteColor];
+    title.font=[UIFont systemFontOfSize:12.];
+        [self addSubview:title];
     
     // 获取摄像设备
     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
@@ -126,7 +136,7 @@
     [self.layer insertSublayer:layer above:0];
     
     [self bringSubviewToFront:_scanView];
-    [self bringSubviewToFront:_cancelBtn];
+    [self bringSubviewToFront:title];
     [self setOverView];
     
     [_session startRunning];

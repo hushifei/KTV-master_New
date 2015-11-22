@@ -47,10 +47,12 @@ static  int limit=1000;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
 //        if (DEBUG) {
+        
 //            [self copyDBFile];
 //        }
 //        [self unArchiveDemoDbFile];
         [self createTables];
+        userDefaults=[NSUserDefaults standardUserDefaults];
         shareInstance=[super init];
     });
     return shareInstance;
@@ -108,12 +110,16 @@ static  int limit=1000;
 }
 
 - (BOOL)databaseAlready {
-    return [userDefaults boolForKey:DATABASE_ALREADY];
+    BOOL already=[userDefaults boolForKey:DATABASE_ALREADY];
+    return already;
 }
 
 - (void)setDatabaseAlready:(BOOL)already {
-    [userDefaults setBool:already forKey:DATABASE_ALREADY];
-    [userDefaults synchronize];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [userDefaults setBool:already forKey:DATABASE_ALREADY];
+        [userDefaults synchronize];
+    });
+
 }
 
 // 获得表的数据条数
@@ -243,6 +249,7 @@ static  int limit=1000;
     }
     //drap  all  data for tables
     [self eraserTables:fileNames];
+    [self setDatabaseAlready:NO];
     //Import all data for tables
     for (NSString *oneFilePath in fileNames) {
         NSString *fileName=[oneFilePath lastPathComponent];

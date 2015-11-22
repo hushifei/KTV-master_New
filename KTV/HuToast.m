@@ -34,7 +34,7 @@
     [myToast setMessage:message];
     [myToast setTime:[time floatValue]];
     myToast.label.font = [UIFont systemFontOfSize:12];
-    UIWindow  *window = [UIApplication sharedApplication].windows[0];
+    UIWindow  *window = [UIApplication sharedApplication].keyWindow;
     UIFont *font = [UIFont systemFontOfSize:12];
     CGRect width = [myToast.message boundingRectWithSize:CGSizeMake(300, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{ NSFontAttributeName :font} context:nil];
     myToast.label.frame = CGRectMake(5, 5, width.size.width+10, width.size.height+20);

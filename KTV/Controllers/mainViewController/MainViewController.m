@@ -49,49 +49,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    onGoingInitData=NO;
     self.automaticallyAdjustsScrollViewInsets=YES;
     [self createContextUI];
-    if ([[DataMananager instanceShare]databaseAlready]) {
-        return;
-    }
 //    if (DEBUG) {
 //        [self copyFile];
 //    }
     [self  showConnectionHostMessage:NO];
-
     [[Utility instanceShare] starToMonitorNetowrkConnection];
-    [[Utility instanceShare] addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew context:nil];
-//    [[Utility instanceShare] checkNetworkStatusImmediately:^(BOOL isConnected, NSError *error) {
-//        if (isConnected && error==nil) {
-//            dispatch_sync(dispatch_get_main_queue(), ^{
-//                [self initData];
-//            });
-//        }
-//    }];
-//    ;
+    [[Utility instanceShare] addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
     
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+
+- (void)viewWillAppear:(BOOL)animated {
     self.tabBarController.tabBar.hidden=NO;
+    [super viewWillAppear:animated] ;
+
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    if (![[DataMananager instanceShare]databaseAlready] && [[change valueForKey:NSKeyValueChangeNewKey]boolValue]) {
-        if (onGoingInitData) return;
+    if (onGoingInitData || [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ==[[change valueForKey:NSKeyValueChangeOldKey]boolValue]) {
+        if (![[change valueForKey:NSKeyValueChangeNewKey]boolValue] && promptConnectBtn.hidden==YES) {
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self showConnectionHostMessage:YES];
+            });
+        }
+        return;
+    }
+    
+    if ( [[change valueForKey:NSKeyValueChangeNewKey]boolValue] && ![[DataMananager instanceShare]databaseAlready]) {
         dispatch_sync(dispatch_get_main_queue(), ^{
+            if (promptConnectBtn.hidden==NO) {
+                [self showConnectionHostMessage:NO];
+            }
             onGoingInitData=YES;
             [self initData];
         });
+        return;
     }
     
-    if ([[change valueForKey:NSKeyValueChangeNewKey]boolValue] && promptConnectBtn.hidden==YES) {
-        return;
-    } else  if (![[change valueForKey:NSKeyValueChangeNewKey]boolValue] && promptConnectBtn.hidden==NO){
-        return;
-    } else if ([[change valueForKey:NSKeyValueChangeNewKey]boolValue] && promptConnectBtn.hidden==NO) {
+     if ([[change valueForKey:NSKeyValueChangeNewKey]boolValue] && [[DataMananager instanceShare]databaseAlready] && promptConnectBtn.hidden==NO) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self showConnectionHostMessage:NO];
             return;
@@ -104,24 +101,27 @@
 }
 
 - (void)initData {
-    HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:HUD];
-    HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
-    HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
-    HUD.detailsLabelColor=[UIColor greenColor];
-    [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed,NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [HUD hide:YES];
-            if (Completed) {
-                //                NSLog(@"download file And import data done!");
-                
-            } else {
-                //                NSLog(@"download file OR import data Error!");
-            }
-            onGoingInitData=NO;
-        });
-    }];
-    [HUD show:YES];
+    if ([Utility instanceShare].netWorkStatus) {
+        HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:HUD];
+        HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
+        HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
+        HUD.detailsLabelColor=[UIColor greenColor];
+        [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed,NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [HUD hide:YES];
+                if (Completed) {
+                    //                NSLog(@"download file And import data done!");
+                    
+                } else {
+                    //                NSLog(@"download file OR import data Error!");
+                }
+                onGoingInitData=NO;
+            });
+        }];
+        [HUD show:YES];
+    }
+ 
     //    po [[self view] recursiveDescription]
     //     po [[[[UIApplication sharedApplication] windows] objectAtIndex:0] recursiveDescription]
 }

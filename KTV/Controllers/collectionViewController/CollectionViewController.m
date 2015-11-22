@@ -203,11 +203,11 @@
             [dataList removeObjectAtIndex:_previousRow];
             [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0],[NSIndexPath indexPathForRow:_previousRow inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             _previousRow=-1;
-            [HuToast showToastWithMessage:@"成功取消收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
+            [HuToast showToastWithMessage:@"取消收藏"  WithTimeDismiss:nil messageType:KMessageSuccess];
             break;
         }
         case KMessageStyleError: {
-            [HuToast showToastWithMessage:@"取消收藏出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
+            [HuToast showToastWithMessage:@"出错了,请重发"  WithTimeDismiss:nil messageType:KMessageStyleError];
             
             break;
         }
@@ -244,7 +244,7 @@
     [dataList removeObjectAtIndex:_previousRow+1];
     [self.tableView  deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_previousRow+1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     _previousRow=-1;
-//    [myToast setToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
+    [HuToast showToastWithMessage:@"顶歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     [self performSelector:@selector(updateYidanBadge) withObject:self afterDelay:0.5];
 }
 

@@ -150,7 +150,6 @@ static DownLoadFileTool *instance=nil;
 
 - (void)importTxtFilesToDataBase:(NSArray*)filePaths {
     //import data
-    [dataManager setDatabaseAlready:NO];
     [[DataMananager instanceShare]addIntoDataSourceWithFileNames:filePaths completed:^(BOOL Completed) {
         if (Completed) {
             if (_completed) {
