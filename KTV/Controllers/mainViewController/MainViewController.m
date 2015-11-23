@@ -212,10 +212,11 @@
 
 
 - (void)handScanResult:(NSString*)result {
-    if ([result hasPrefix:@"wifi->"] && [[result substringFromIndex:[@"wifi->" length]] componentsSeparatedByString:@","].count ==2){
-        NSArray *scanArray=[[result substringFromIndex:[@"wifi->" length]] componentsSeparatedByString:@","];
+    
+    if ([result hasPrefix:@"wifi: ;T:WPA2;S:"] && [[result substringFromIndex:[@"wifi: ;T:WPA2;S:" length]] componentsSeparatedByString:@";"].count ==2){
+        NSArray *scanArray=[[result substringFromIndex:[@"wifi: ;T:WPA2;S:" length]] componentsSeparatedByString:@";"];
         NSString *wifiName=scanArray[0];
-        NSString *wifiPassWord=scanArray[1];
+        NSString *wifiPassWord=[[scanArray[1] componentsSeparatedByString:@":"]lastObject];
         UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"connectnetwork", nil) message:NSLocalizedString(@"connectNetContent", nil) preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *cancelAction=[UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -241,11 +242,11 @@
 
         [self presentViewController:alVC animated:YES completion:nil];
         
-    } else if ([result hasPrefix:@"route->"] && [[result substringFromIndex:[@"route->" length]]isIpAddress]) {
+    } else if ([result hasPrefix:@"wifi:;eth0:"] && [[result substringFromIndex:[@"wifi:;eth0:" length]]isIpAddress]) {
         //192.168.0.90
-        if (![[Utility instanceShare].serverIPAddress isEqualToString:[result substringFromIndex:[@"route->" length]]]) {
-            NSLog(@"%@",[result substringFromIndex:[@"route->" length]]);
-            [Utility instanceShare].serverIPAddress=[result substringFromIndex:[@"route->" length]];
+        if (![[Utility instanceShare].serverIPAddress isEqualToString:[result substringFromIndex:[@"wifi:;eth0:" length]]]) {
+            NSLog(@"%@",[result substringFromIndex:[@"wifi:;eth0:" length]]);
+            [Utility instanceShare].serverIPAddress=[result substringFromIndex:[@"wifi:;eth0:" length]];
         }
         [HuToast showToastWithMessage:@"扫描成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     } else {
