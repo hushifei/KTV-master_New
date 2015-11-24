@@ -72,7 +72,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
     if (onGoingInitData || [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ==[[change valueForKey:NSKeyValueChangeOldKey]boolValue]) {
         if (![[change valueForKey:NSKeyValueChangeNewKey]boolValue] && promptConnectBtn.hidden==YES) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [self showConnectionHostMessage:YES];
             });
         }
@@ -80,7 +80,7 @@
     }
     
     if ( [[change valueForKey:NSKeyValueChangeNewKey]boolValue] && ![[DataMananager instanceShare]databaseAlready]) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             if (promptConnectBtn.hidden==NO) {
                 [self showConnectionHostMessage:NO];
             }
@@ -91,12 +91,12 @@
     }
     
      if ([[change valueForKey:NSKeyValueChangeNewKey]boolValue] && [[DataMananager instanceShare]databaseAlready] && promptConnectBtn.hidden==NO) {
-        dispatch_sync(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             [self showConnectionHostMessage:NO];
             return;
         });
     } else if (![[change valueForKey:NSKeyValueChangeNewKey]boolValue] && promptConnectBtn.hidden==YES) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [self showConnectionHostMessage:YES];
             });
     }
@@ -113,10 +113,10 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [HUD hide:YES];
                 if (Completed) {
-                    //                NSLog(@"download file And import data done!");
+                         NSLog(@"download file And import data done!");
                     
                 } else {
-                    //                NSLog(@"download file OR import data Error!");
+                      NSLog(@"download file OR import data Error!");
                 }
                 onGoingInitData=NO;
             });
@@ -229,7 +229,7 @@
             [alVC dismissViewControllerAnimated:YES completion:nil];
             [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }];
-        
+//
         [alVC addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
             textField.text=[NSString stringWithFormat:@ "%@ : %@",NSLocalizedString(@"username", nil),wifiName];
             textField.enabled=NO;
@@ -250,6 +250,7 @@
 //            NSLog(@"%@",[result substringFromIndex:[@"wifi: ;eth0:" length]]);
             [Utility instanceShare].serverIPAddress=[result substringFromIndex:[@"wifi: ;eth0:" length]];
         }
+        
         [HuToast showToastWithMessage:@"扫描成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     } else {
         UIAlertController *alVC=[UIAlertController alertControllerWithTitle:NSLocalizedString(@"error", nil) message:NSLocalizedString(@"scancodeerror", nil) preferredStyle:UIAlertControllerStyleAlert];

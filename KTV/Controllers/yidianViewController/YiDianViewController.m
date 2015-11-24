@@ -48,7 +48,7 @@
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
     self.tableView.backgroundView=bgImageView;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
-    self.tableView.rowHeight=UITableViewAutomaticDimension;
+    self.tableView.rowHeight=60.0f;
 }
 
 - (void)initNavigationItem {

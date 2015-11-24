@@ -92,6 +92,7 @@
 
 
 - (void)insertSongToCollectionTable:(void(^)(BOOL complete))actionCompleted{
+    [[DataMananager instanceShare].db open];
     __block __weak typeof (self) weakSelf=self;
     NSString *querySqlStr=[NSString stringWithFormat:@"select * from CollectionTable where number='%@'",[_number encodeBase64]];
     FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:querySqlStr];
@@ -118,6 +119,8 @@
     if (actionCompleted) {
         actionCompleted(YES);
     }
+    [[DataMananager instanceShare].db open];
+
 }
 
 - (void)deleteSongFromCollectionTable:(void(^)(BOOL complete))actionCompleted {
@@ -209,7 +212,7 @@
         __weak __block typeof (self) weakSelf=self;
         CommandControler *cmd=[[CommandControler alloc]init];
         [cmd sendCmd_DiangeToTop:_number completed:^(BOOL completed, NSError *error) {
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 if (completed) {
                     if ([self.delegate respondsToSelector:@selector(dingGeFromCollection:result:)]) {
                         [self.delegate dingGeFromCollection:weakSelf result:KMessageSuccess];

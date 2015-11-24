@@ -35,7 +35,7 @@
         self.tableView.separatorColor=[UIColor colorWithRed:100 green:27 blue:55 alpha:1];
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
     self.tableView.backgroundView=bgImageView;
-    self.tableView.rowHeight=80;
+    self.tableView.rowHeight=80.0f;
     [self initializeTableContent];
 
 }

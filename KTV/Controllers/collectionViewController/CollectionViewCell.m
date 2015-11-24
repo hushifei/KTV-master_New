@@ -36,7 +36,7 @@
         if (self.buttonitem && self.oneSong.number.length > 0) {
             CommandControler *cmd=[[CommandControler alloc]init];
             [cmd sendCmd_Diange:self.oneSong.number completed:^(BOOL completed, NSError *error) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [self.collectionFlagView shakeAndFlyAnimationToView:self.buttonitem];
                 });
             }];

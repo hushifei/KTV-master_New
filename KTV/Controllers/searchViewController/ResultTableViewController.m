@@ -58,7 +58,7 @@
     [self.tableView registerClass:[SearchResultCell class] forCellReuseIdentifier:CELL_IDENTIFY];
     _previousRow = -1;
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.rowHeight=50;
+    self.tableView.rowHeight=60;
     self.tableView.showsHorizontalScrollIndicator=NO;
     self.tableView.showsVerticalScrollIndicator=NO;
     self.tableView.backgroundColor=[UIColor clearColor];
@@ -98,7 +98,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
-    return 45.0f;
+    return 60.0f;
 }
 
 

@@ -99,8 +99,13 @@ static Utility *shareInstance=nil;
 }
 
 - (void)setServerIPAddress:(NSString *)serverIPAddress {
+    if (networkTimer) {
+        [self stopToMonitorNetworkConnection];
+    }
     [[NSUserDefaults standardUserDefaults]setObject:serverIPAddress forKey:@"SERVER_IP_ADDRESS"];
     [[NSUserDefaults standardUserDefaults]synchronize];
+    _serverIPAddress=serverIPAddress;
+    [self starToMonitorNetowrkConnection];
 }
 
 + (NSString*)shouZiFu:(NSString*)string {
@@ -113,6 +118,7 @@ static Utility *shareInstance=nil;
 
 - (void)stopToMonitorNetworkConnection {
     [networkTimer invalidate];
+    networkTimer=nil;
 }
 
 
@@ -145,6 +151,11 @@ static Utility *shareInstance=nil;
 
 
 - (void)checkNetworkStatus:(NSTimer*)oneTimer {
+    if (![_serverIPAddress isIpAddress]) {
+        [self setValue:[NSNumber numberWithBool:NO] forKey:@"netWorkStatus"];
+        NSLog(@"server ip address is null");
+        return;
+    }
     NSURL *url=[NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/puze/",self.serverIPAddress]];
     NSMutableURLRequest *request=[NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:2];
     NSURLSessionDataTask *dataTask = [_shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {

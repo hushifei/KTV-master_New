@@ -308,16 +308,17 @@
     [HuToast showToastWithMessage:@"切歌成功" WithTimeDismiss:nil messageType:KMessageSuccess];
 }
 
-//-(UIStatusBarStyle)preferredStatusBarStyle {
-//    return UIStatusBarStyleLightContent;
-//}
+-(UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
 
-//- (BOOL)prefersStatusBarHidden {
+- (BOOL)prefersStatusBarHidden {
 //    if (searchSong) {
 //        return NO;
 //    }
 //    return YES;
-//}
+    return NO;
+}
 
 #pragma mark -#########################################################
 

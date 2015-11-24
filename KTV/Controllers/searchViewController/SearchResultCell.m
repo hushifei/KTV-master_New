@@ -30,7 +30,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    CGFloat height=rect.size.height-20;
+    CGFloat height=rect.size.height-10;
     CGFloat y=(rect.size.height-height)/2;
     CGFloat x=rect.origin.x+20;
     CGRect headerRect=CGRectMake(x,y,height,height);

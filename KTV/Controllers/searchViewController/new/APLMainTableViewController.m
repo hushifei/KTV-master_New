@@ -16,6 +16,7 @@
 #import "NSString+Utility.h"
 #import "DataMananager.h"
 #import "UIImage+Utility.h"
+#import "SongListViewController.h"
 enum selectSearchType{
     searchAll,
     searchSong,
@@ -25,6 +26,7 @@ enum selectSearchType{
     NSInteger _previousRow;
     dispatch_group_t group;
     NSOperationQueue *_queue;
+    UIView *promtView;
 
 }
 
@@ -62,6 +64,8 @@ enum selectSearchType{
 
     // we want to be the delegate for our filtered table so didSelectRowAtIndexPath is called for both tables
     self.resultsTableController.tableView.delegate = self;
+    self.resultsTableController.tableView.rowHeight=60.0f;
+    
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO; // default is YES
     self.searchController.searchBar.delegate = self; // so we can monitor text changes + others
@@ -81,7 +85,7 @@ enum selectSearchType{
     self.searchController.searchBar.backgroundImage=[UIImage imageWithColor:[UIColor clearColor]];
     self.searchController.hidesNavigationBarDuringPresentation=NO;
     self.tableView.tableFooterView=[[UIView alloc]initWithFrame:CGRectZero];
-
+    [self hidePromptView:NO];
 
     //open database
     _searchDb = [DataMananager instanceShare].db;
@@ -122,23 +126,49 @@ enum selectSearchType{
 // Implement this method if the default presentation is not adequate for your purposes.
 //
 - (void)presentSearchController:(UISearchController *)searchController {
-    
+    NSLog(@"%s",__func__);
 }
 
 - (void)willPresentSearchController:(UISearchController *)searchController {
+    NSLog(@"%s",__func__);
+
+    [self hidePromptView:YES];
     // do something before the search controller is presented
 }
 
 - (void)didPresentSearchController:(UISearchController *)searchController {
+    NSLog(@"%s",__func__);
     // do something after the search controller is presented
 }
 
 - (void)willDismissSearchController:(UISearchController *)searchController {
+    NSLog(@"%s",__func__);
     // do something before the search controller is dismissed
 }
 
 - (void)didDismissSearchController:(UISearchController *)searchController {
+    NSLog(@"%s",__func__);
     // do something after the search controller is dismissed
+    [self hidePromptView:NO];
+}
+
+- (void)hidePromptView:(BOOL)hide {
+    if (!promtView) {
+        [self createDefaultView];
+    }
+    promtView.hidden=hide;
+}
+
+- (void)createDefaultView {
+    promtView=[[UIView alloc]initWithFrame:CGRectMake(self.view.center.x-300/2, 10, 300, 150)];
+    UILabel *labelStr=[[UILabel alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
+    labelStr.numberOfLines=0;
+    labelStr.textColor=[UIColor groupTableViewBackgroundColor];
+    labelStr.font=[UIFont systemFontOfSize:15];
+    labelStr.text=NSLocalizedString(@"searchcomment_searchVC", ni);
+    [labelStr sizeToFit];
+    [promtView addSubview:labelStr];
+    [self.view addSubview:promtView];
 }
 
 
@@ -161,9 +191,19 @@ enum selectSearchType{
 // is not this UINavigationController)
 //
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    APLProduct *selectedProduct = (tableView == self.tableView) ?
-//        self.products[indexPath.row] : self.resultsTableController.filteredProducts[indexPath.row];
-//    
+    id object = (tableView == self.tableView) ?
+        self.products[indexPath.row] : self.resultsTableController.filteredProducts[indexPath.row];
+    SongListViewController *songVC=[[SongListViewController alloc]init];
+    if ([object isKindOfClass:[Singer class]]) {
+        songVC.singerName=[(Singer*)object singer];
+        songVC.needLoadData=YES;
+    } else {
+        songVC.needLoadData=NO;
+        [songVC setDataList:object];
+    }
+    [self.navigationController pushViewController:songVC animated:NO];
+    
+    
 //    APLDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"APLDetailViewController"];
 //    detailViewController.product = selectedProduct; // hand off the current product to the detail view controller
 //    
@@ -173,6 +213,10 @@ enum selectSearchType{
 //    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath  {
+//    return CGFLoat height=(tableView == self.tableView)?0.0f:60.0f;
+//}
 
 #pragma mark - UISearchResultsUpdating
 

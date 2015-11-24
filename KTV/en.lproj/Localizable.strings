@@ -77,7 +77,7 @@
 "error" = "Error";
 "confirm"  =  "Confirm";
 "connectnetwork" = "Connect WIFI";
-"connectNetContent" = "Please Connect to WIFI -> Puze";
+"connectNetContent" = "Please Connect to WIFI";
 "connectNetOK"  =  "Network has been connected";
 "playing"="onPlaying";
 

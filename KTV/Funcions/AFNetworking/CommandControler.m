@@ -8,8 +8,7 @@
 
 #import "CommandControler.h"
 #import "Utility.h"
-#define COMMANDURLHEADER @"http://192.168.43.1:8080/puze/?cmd="
-
+#define COMMANDURLHEADER  [NSString stringWithFormat:@"http://%@:8080/puze/?cmd=",[Utility instanceShare].serverIPAddress]
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
 @interface CommandControler() {
     NSOperationQueue *queue;
@@ -42,6 +41,7 @@
 }
 
 //服务
+
 - (void)sendCmd_FUWU:(sendCompleted)completed {
     NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xb1"];
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
@@ -541,7 +541,7 @@
             NSString *strContent=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
             NSMutableArray *arr=[[strContent componentsSeparatedByString:@"\r\n"] mutableCopy];
             [arr removeLastObject];
-            dispatch_sync(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 item.badgeValue=[NSString stringWithFormat:@"%d",(int)arr.count];
         });
             if (completed) {

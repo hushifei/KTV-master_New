@@ -41,16 +41,22 @@ NSString *const SFCellIdentifier = @"SearchResultCell_Identify";
 }
 
 - (void)configureCell:(SearchResultCell *)cell forProduct:(id)object {
-    if (object==nil) return;
-    if ([object isKindOfClass:[Singer class]]) {
-        Singer *oneSinger=(Singer*)object;
-        cell.titleLabel.text=oneSinger.singer;
-        NSString *urlStr=[[NSString stringWithFormat:@"http://%@:8080/paze?cmd=0x02&filename=%@",[Utility instanceShare].serverIPAddress,oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        [cell.header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
-    } else if ([object isKindOfClass:[Song class]]){
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (object==nil) return;
+        if ([object isKindOfClass:[Singer class]]) {
+            Singer *oneSinger=(Singer*)object;
+            cell.titleLabel.text=oneSinger.singer;
+            NSString *urlStr=[[NSString stringWithFormat:@"http://%@:8080/puze?cmd=0x02&filename=%@",[Utility instanceShare].serverIPAddress,oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            [cell.header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
+        } else if ([object isKindOfClass:[Song class]]){
             cell.header.image=[UIImage imageNamed:@"music_icon"];
             cell.titleLabel.text=[(Song*)object songname];
-    }
+        }
+    });
+    
+ 
 }
+
+
 
 @end

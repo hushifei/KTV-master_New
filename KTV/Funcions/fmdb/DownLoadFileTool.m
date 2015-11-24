@@ -78,7 +78,6 @@ static DownLoadFileTool *instance=nil;
     [self isNeedToUpdate_Database_version:^(S_Actions action, BOOL completed) {
             if (action==S_Can_Donload && completed) {
                 [self startDownloadFiles];
-                [[SDWebImageManager sharedManager].imageCache cleanDisk];
             } else if (action ==S_Can_ImportData && completed) {
                 //check txt files exist
                 if ([dataManager databaseAlready]) {

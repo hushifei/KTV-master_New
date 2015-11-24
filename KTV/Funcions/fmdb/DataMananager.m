@@ -212,7 +212,7 @@ static  int limit=1000;
     
     //5.check and create CollectionTable
     if (![self isTableOK:@"CollectionTable"]) {
-        sqlCreateTable =@"CREATE TABLE IF NOT EXISTS CollectionTable (number TEXT PRIMARY KEY,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
+        sqlCreateTable =@"CREATE TABLE IF NOT EXISTS CollectionTable (number TEXT,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
         res = [_db executeUpdate:sqlCreateTable];
         if (!res) {
             NSLog(@"error when creating TypeTable table");

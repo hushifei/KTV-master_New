@@ -33,38 +33,6 @@
     }
     mySoundView.delegate=self;
     [self.view addSubview:mySoundView];
-        
-//    // keyboard
-//    sendInput=[[UITextField alloc]init];
-//    CGRect sendRect=CGRectMake(0, 0, 200, 40);
-//    sendRect.origin.x=4;
-//    sendRect.origin.y=3;
-//    sendRect.size.width-=8;
-//    sendRect.size.height-=6;
-//    sendInput.frame=sendRect;
-//    sendInput.layer.borderWidth=1;
-//    sendInput.backgroundColor=[UIColor whiteColor];
-//    sendInput.layer.borderColor=[UIColor groupTableViewBackgroundColor].CGColor;
-//    sendInput.placeholder=@"发送内容";
-//    sendInput.tintColor=[UIColor whiteColor];
-//    sendInput.layer.cornerRadius=8;
-//    UIBarButtonItem *sendInputItem=[[UIBarButtonItem alloc]initWithCustomView:sendInput];
-//    UIBarButtonItem *flex0=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:(UIBarButtonSystemItemFlexibleSpace) target:nil action:nil];
-//    
-//    switchBtn=[UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    switchBtn.frame=CGRectMake(0, 0, 40, 40);
-//    [switchBtn setTitle:@"切换" forState:UIControlStateNormal];
-//    [switchBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    UIBarButtonItem *switchItem=[[UIBarButtonItem alloc]initWithCustomView:switchBtn];
-//    
-//    sendBtn=[UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    sendBtn.frame=CGRectMake(0, 0, 40, 40);
-//    [sendBtn setTitle:@"发送" forState:UIControlStateNormal];
-//    [sendBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    UIBarButtonItem *sendItem=[[UIBarButtonItem alloc]initWithCustomView:sendBtn];
-//    self.toolbarItems=@[flex0,sendInputItem,flex0,switchItem,flex0,sendItem];
-//    
-//    
 }
 
 
@@ -87,6 +55,10 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
 /*
 #pragma mark - Navigation
 

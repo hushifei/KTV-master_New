@@ -59,6 +59,7 @@
     ZVolumeSlide *slider1;
     ZVolumeSlide *slider2;
     
+    
 }
 
 @end
@@ -318,15 +319,13 @@
     [serviceBtn addTarget:self action:@selector(fuwu_clicked:) forControlEvents:UIControlEventTouchUpInside];
 }
 #pragma mark - Events
-//(1静音 2=放音)
+//(1静音 2=放音)MUTE_SOUND
 - (void)mute_unmute_clicked:(id)sender {
     if ([Utility instanceShare].netWorkStatus) {
         [cmdController sendCmd_mute_unmute:^(BOOL completed, NSError *error) {
-//            if (completed) {
-//                NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-//            } else {
-//                NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-//            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [HuToast showToastWithMessage:[NSString stringWithFormat:@"    %@ ",([userDefaults boolForKey:@"MUTE_SOUND"])?@"静音":@"放音"] WithTimeDismiss:nil messageType:KMessageSuccess];
+            });
         }];
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
@@ -338,11 +337,9 @@
     //气氛(1,喝彩 2，倒彩 3，明亮 4，柔和 5 动感 6 开关)
     if ([Utility instanceShare].netWorkStatus) {
         [cmdController sendCmd_qiFen:1 completed:^(BOOL completed, NSError *error) {
-//            if (completed) {
-//                NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-//            } else {
-//                NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-//            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",@"喝彩"] WithTimeDismiss:nil messageType:KMessageSuccess];
+            });
         }];
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
@@ -352,6 +349,9 @@
 - (void)daocai_clicked:(id)sender {
     if ([Utility instanceShare].netWorkStatus) {
         [cmdController sendCmd_qiFen:2 completed:^(BOOL completed, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",@"倒彩"] WithTimeDismiss:nil messageType:KMessageSuccess];
+            });
         }];
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
@@ -361,6 +361,9 @@
 - (void)rouhe_clicked:(id)sender {
     if ([Utility instanceShare].netWorkStatus) {
         [cmdController sendCmd_qiFen:4 completed:^(BOOL completed, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",@"柔和"] WithTimeDismiss:nil messageType:KMessageSuccess];
+            });
         }];
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
@@ -370,15 +373,22 @@
 - (void)mingliang_clicked:(id)sender {
     if ([Utility instanceShare].netWorkStatus) {
         [cmdController sendCmd_qiFen:3 completed:^(BOOL completed, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",@"明亮"] WithTimeDismiss:nil messageType:KMessageSuccess];
+            });
         }];
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
     }
 }
+//气氛(1,喝彩 2，倒彩 3，明亮 4，柔和 5 动感 6 开关)
 
 - (void)donggang_clicked:(id)sender {
     if ([Utility instanceShare].netWorkStatus) {
         [cmdController sendCmd_qiFen:5 completed:^(BOOL completed, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",@"动感"] WithTimeDismiss:nil messageType:KMessageSuccess];
+            });
         }];
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
@@ -388,6 +398,10 @@
 - (void)kaiguang_clicked:(id)sender {
     if ([Utility instanceShare].netWorkStatus) {
         [cmdController sendCmd_qiFen:6 completed:^(BOOL completed, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",@"开关"] WithTimeDismiss:nil messageType:KMessageSuccess];
+            });
+
         }];
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
@@ -396,14 +410,10 @@
 
 - (void)fuwu_clicked:(id)sender {
     if ([Utility instanceShare].netWorkStatus) {
-        [cmdController sendCmd_qiFen:2 completed:^(BOOL completed, NSError *error) {
-            [cmdController sendCmd_FUWU:^(BOOL completed, NSError *error) {
-                if (completed) {
-//                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-                } else {
-//                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-                }
-            }];
+        [cmdController sendCmd_FUWU:^(BOOL completed, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [HuToast showToastWithMessage:[NSString stringWithFormat:@"  %@",@"呼叫服务"] WithTimeDismiss:nil messageType:KMessageSuccess];
+            });
         }];
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
@@ -418,43 +428,36 @@
         case 0: {
 //            NSLog(@"点击原音");
             [cmdController sendCmd_yuanChang_pangChang:^(BOOL completed, NSError *error) {
-                if (completed) {
-//                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-                } else {
-//                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",([userDefaults boolForKey:@"PANGYING"])?@"伴音":@"原音"] WithTimeDismiss:nil messageType:KMessageSuccess];
+                });
             }];
             break;
         }
         case 1: {
 //            NSLog(@"点击切歌");
             [cmdController sendCmd_switchSong:^(BOOL completed, NSError *error) {
-                if (completed) {
-//                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-                } else {
-//                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-                }
+//                if (completed) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",@"切歌"] WithTimeDismiss:nil messageType:KMessageSuccess];
+                });
             }];
             break;
         }
         case 2: {
 //            NSLog(@"点击播放");
             [cmdController sendCmd_stopPlay:^(BOOL completed, NSError *error) {
-                if (completed) {
-//                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-                } else {
-//                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",([userDefaults boolForKey:@"PLAYING"])?@"播放":@"停止"] WithTimeDismiss:nil messageType:KMessageSuccess];
+                });
             }];
             break;
         }
         case 3: {
             [cmdController sendCmd_rePlay:^(BOOL completed, NSError *error) {
-                if (completed) {
-                    NSLog(@"%s___OK",__PRETTY_FUNCTION__);
-                } else {
-                    NSLog(@"%s___NO",__PRETTY_FUNCTION__);
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [HuToast showToastWithMessage:[NSString stringWithFormat:@"      %@   ",@"重唱"] WithTimeDismiss:nil messageType:KMessageSuccess];
+                });
             }];
             break;
         }
@@ -502,6 +505,11 @@
                 if (completed && error==nil) {
                     [userDefaults setObject:value forKey:@"Mic_soundAdjust"];
                     [userDefaults synchronize];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                     [HuToast showToastWithMessage:[NSString stringWithFormat:@"     %@   ",[value stringValue]] WithTimeDismiss:nil messageType:KMessageSuccess];
+                    });
+
+                    
                 } else {
                     [slider resumeSliderValue];
                 }
@@ -511,6 +519,10 @@
                 if (completed && error==nil) {
                     [userDefaults setObject:value forKey:@"Music_soundAdjust"];
                     [userDefaults synchronize];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [HuToast showToastWithMessage:[NSString stringWithFormat:@"     %@   ",[value stringValue]] WithTimeDismiss:nil messageType:KMessageSuccess];
+                    });
+
                 } else {
                     [slider resumeSliderValue];
                 }
