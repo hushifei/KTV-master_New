@@ -27,6 +27,8 @@
 #import "HuToast.h"
 
 #import "TempViewController.h"
+#import "AppDelegate.h"
+#import "APLMainTableViewController.h"
 
 @interface MainViewController ()<UISearchBarDelegate> {
     MBProgressHUD *HUD;
@@ -242,11 +244,11 @@
 
         [self presentViewController:alVC animated:YES completion:nil];
         
-    } else if ([result hasPrefix:@"wifi:;eth0:"] && [[result substringFromIndex:[@"wifi:;eth0:" length]]isIpAddress]) {
+    } else if ([result hasPrefix:@"wifi: ;eth0:"] && [[result substringFromIndex:[@"wifi: ;eth0:" length]]isIpAddress]) {
         //192.168.0.90
-        if (![[Utility instanceShare].serverIPAddress isEqualToString:[result substringFromIndex:[@"wifi:;eth0:" length]]]) {
-            NSLog(@"%@",[result substringFromIndex:[@"wifi:;eth0:" length]]);
-            [Utility instanceShare].serverIPAddress=[result substringFromIndex:[@"wifi:;eth0:" length]];
+        if (![[Utility instanceShare].serverIPAddress isEqualToString:[result substringFromIndex:[@"wifi: ;eth0:" length]]]) {
+//            NSLog(@"%@",[result substringFromIndex:[@"wifi: ;eth0:" length]]);
+            [Utility instanceShare].serverIPAddress=[result substringFromIndex:[@"wifi: ;eth0:" length]];
         }
         [HuToast showToastWithMessage:@"扫描成功" WithTimeDismiss:nil messageType:KMessageSuccess];
     } else {
@@ -425,13 +427,18 @@
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    SearchSongListViewController *vc=[[SearchSongListViewController alloc]initWithStyle:UITableViewStylePlain];
+//    SearchSongListViewController *vc=[[SearchSongListViewController alloc]initWithStyle:UITableViewStylePlain];
+    APLMainTableViewController *vc=[[APLMainTableViewController alloc]initWithStyle:UITableViewStylePlain];
 //    SearchViewController *vc=[[SearchViewController alloc]init];
-    [self.navigationController pushViewController:vc animated:YES];
+//    [self.navigationController pushViewController:vc animated:YES];
 //    vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
 //    BaseNavigationController *navc=[[BaseNavigationController alloc]initWithRootViewController:vc];
-//    
-//    [self presentViewController: navc animated:YES completion: nil];
+//
+//    [self.navigationController presentViewController: navc animated:YES completion: nil];
+//    [self.navigationController pushViewController:navc animated:YES];
+    BaseNavigationController *nav= (BaseNavigationController*)((AppDelegate*)[UIApplication sharedApplication].delegate).tabVC.selectedViewController;
+    [nav pushViewController:vc animated:YES];
+    
 
     return YES;
 }

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseTabBarViewController.h"
 typedef NS_ENUM(NSUInteger,ViewType) {
     Show_HUD = 0,
     Show_Alert
@@ -15,6 +16,8 @@ typedef NS_ENUM(NSUInteger,ViewType) {
 @interface AppDelegate : UIResponder <UIApplicationDelegate,UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) BaseTabBarViewController *tabVC;
+
 - (void)showMessageTitle:(NSString*)title message:(NSString*)message showType:(ViewType)type;
 @end
 

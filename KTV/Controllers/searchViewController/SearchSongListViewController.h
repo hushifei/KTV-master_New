@@ -10,5 +10,5 @@
 
 @interface SearchSongListViewController : UITableViewController
 @property (nonatomic,strong)NSMutableArray *dataList;
-- (void)showPromtView:(BOOL)isShow;
+//- (void)showPromtView:(BOOL)isShow;
 @end

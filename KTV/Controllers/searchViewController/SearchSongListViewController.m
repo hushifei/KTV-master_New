@@ -56,7 +56,7 @@
     self.searchController.searchBar.placeholder=NSLocalizedString(@"searchhinttext_searchVC", nil);
     self.searchController.searchBar.backgroundImage=[UIImage imageWithColor:[UIColor clearColor]];
     _resultVC.searchSongListVC=self;
-    [self createDefaultView];
+//    [self createDefaultView];
 }
 
 
@@ -81,9 +81,9 @@
     [self.tableView reloadData];
 }
 
-- (void)showPromtView:(BOOL)isShow {
-    promtView.hidden=isShow;
-}
+//- (void)showPromtView:(BOOL)isShow {
+//    promtView.hidden=isShow;
+//}
 
 - (void)clickSinger:(Singer*)singer {
     //    [self dismissViewControllerAnimated:NO completion:^{

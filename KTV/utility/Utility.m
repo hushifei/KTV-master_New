@@ -40,13 +40,15 @@ static Utility *shareInstance=nil;
     dispatch_once(&onceToken, ^{
         [self checkIphoneDevice];
         _shareSession=[NSURLSession sharedSession];
-        _serverIPAddress=nil;
-        //TODO::
         _serverIPAddress=[[NSUserDefaults standardUserDefaults]objectForKey:@"SERVER_IP_ADDRESS"];
-        if (![_serverIPAddress isIpAddress])    {
-           _serverIPAddress=@"192.168.43.1";
-            //提示扫🐎；
-        }
+//        if (_serverIPAddress==nil) {
+//            [self setServerIPAddress:@"192.168.43.1"];
+//
+//        }
+//        if (![_serverIPAddress isIpAddress])    {
+//           _serverIPAddress=@"192.168.43.1";
+//            //提示扫🐎；
+//        }
         shareInstance= [super init];
     });
     return shareInstance;

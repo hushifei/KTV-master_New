@@ -7,13 +7,11 @@
 //
 
 #import "AppDelegate.h"
-#import "BaseTabBarViewController.h"
 #import "Utility.h"
 #import "SDWebImageManager.h"
 #import "MBProgressHUD.h"
 @interface AppDelegate () {
     MBProgressHUD *HUD;
-    BaseTabBarViewController *_tabVC;
 }
 
 @end
@@ -108,6 +106,16 @@
     }
     
     return topController;
+}
+
+#pragma mark - UIStateRestoration
+
+- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
+    return YES;
 }
 
 

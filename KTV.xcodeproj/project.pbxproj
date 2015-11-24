@@ -66,6 +66,9 @@
 		C3AAC1261BCCD09C009582D1 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C3AAC1251BCCD09C009582D1 /* libsqlite3.tbd */; };
 		C3AAC12A1BCCD0CA009582D1 /* libz.1.2.5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C3AAC1291BCCD0CA009582D1 /* libz.1.2.5.tbd */; };
 		C3AAC12C1BCCD0E1009582D1 /* libiconv.2.4.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C3AAC12B1BCCD0E1009582D1 /* libiconv.2.4.0.tbd */; };
+		C3C716E01C040C1800F0D810 /* APLBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C716D91C040C1800F0D810 /* APLBaseTableViewController.m */; };
+		C3C716E31C040C1800F0D810 /* APLResultsTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C716DF1C040C1800F0D810 /* APLResultsTableController.m */; };
+		C3C716E71C043A4000F0D810 /* APLMainTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C716E51C043A4000F0D810 /* APLMainTableViewController.m */; };
 		D10E267E1BFF761B008F77EF /* lightNormal.png in Resources */ = {isa = PBXBuildFile; fileRef = D10E26751BFF761B008F77EF /* lightNormal.png */; };
 		D10E267F1BFF761B008F77EF /* lightSelect.png in Resources */ = {isa = PBXBuildFile; fileRef = D10E26761BFF761B008F77EF /* lightSelect.png */; };
 		D10E26801BFF761B008F77EF /* scanLine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D10E26771BFF761B008F77EF /* scanLine@2x.png */; };
@@ -261,8 +264,6 @@
 		D1ACF5791B0563CC00666D6D /* HuToast.m in Sources */ = {isa = PBXBuildFile; fileRef = D1ACF5781B0563CB00666D6D /* HuToast.m */; };
 		D1B159271BFF97EF00350B5B /* Default_Header.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B159261BFF97EF00350B5B /* Default_Header.png */; };
 		D1B1592D1C004D8100350B5B /* cancel_bt_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B1592A1C004D8100350B5B /* cancel_bt_bg.png */; };
-		D1B1592E1C004D8100350B5B /* line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B1592B1C004D8100350B5B /* line@2x.png */; };
-		D1B1592F1C004D8100350B5B /* pick_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B1592C1C004D8100350B5B /* pick_bg@2x.png */; };
 		D1B159311C0050E600350B5B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1B159301C0050E600350B5B /* AudioToolbox.framework */; };
 		D1BBF2F21C0166010013E286 /* music_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1BBF2F11C0166010013E286 /* music_icon@2x.png */; };
 		D1E32F351BFCDD7D001FB54E /* nav_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E32F341BFCDD7D001FB54E /* nav_back@2x.png */; };
@@ -425,6 +426,12 @@
 		C3AAC1251BCCD09C009582D1 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		C3AAC1291BCCD0CA009582D1 /* libz.1.2.5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.2.5.tbd; path = usr/lib/libz.1.2.5.tbd; sourceTree = SDKROOT; };
 		C3AAC12B1BCCD0E1009582D1 /* libiconv.2.4.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.4.0.tbd; path = usr/lib/libiconv.2.4.0.tbd; sourceTree = SDKROOT; };
+		C3C716D81C040C1800F0D810 /* APLBaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLBaseTableViewController.h; sourceTree = "<group>"; };
+		C3C716D91C040C1800F0D810 /* APLBaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APLBaseTableViewController.m; sourceTree = "<group>"; };
+		C3C716DE1C040C1800F0D810 /* APLResultsTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLResultsTableController.h; sourceTree = "<group>"; };
+		C3C716DF1C040C1800F0D810 /* APLResultsTableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APLResultsTableController.m; sourceTree = "<group>"; };
+		C3C716E41C043A4000F0D810 /* APLMainTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLMainTableViewController.h; sourceTree = "<group>"; };
+		C3C716E51C043A4000F0D810 /* APLMainTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APLMainTableViewController.m; sourceTree = "<group>"; };
 		C3CB01F21BCDF7FC0021B615 /* SearchResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultCell.h; sourceTree = "<group>"; };
 		C3CB01F31BCDF7FC0021B615 /* SearchResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultCell.m; sourceTree = "<group>"; };
 		C3D36E6E1BDA39B100B0167A /* SearchResultBottomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultBottomCell.h; sourceTree = "<group>"; };
@@ -705,8 +712,6 @@
 		D1ACF5781B0563CB00666D6D /* HuToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HuToast.m; sourceTree = "<group>"; };
 		D1B159261BFF97EF00350B5B /* Default_Header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default_Header.png; sourceTree = "<group>"; };
 		D1B1592A1C004D8100350B5B /* cancel_bt_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel_bt_bg.png; sourceTree = "<group>"; };
-		D1B1592B1C004D8100350B5B /* line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line@2x.png"; sourceTree = "<group>"; };
-		D1B1592C1C004D8100350B5B /* pick_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pick_bg@2x.png"; sourceTree = "<group>"; };
 		D1B159301C0050E600350B5B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D1BBF2F11C0166010013E286 /* music_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music_icon@2x.png"; sourceTree = "<group>"; };
 		D1E32F341BFCDD7D001FB54E /* nav_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_back@2x.png"; path = "KTV/images/kege/nav_back@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -979,6 +984,19 @@
 				C3AAC1071BCCA2F7009582D1 /* MJRefreshStateHeader.m */,
 			);
 			path = Header;
+			sourceTree = "<group>";
+		};
+		C3C716D71C040C1800F0D810 /* new */ = {
+			isa = PBXGroup;
+			children = (
+				C3C716D81C040C1800F0D810 /* APLBaseTableViewController.h */,
+				C3C716D91C040C1800F0D810 /* APLBaseTableViewController.m */,
+				C3C716E41C043A4000F0D810 /* APLMainTableViewController.h */,
+				C3C716E51C043A4000F0D810 /* APLMainTableViewController.m */,
+				C3C716DE1C040C1800F0D810 /* APLResultsTableController.h */,
+				C3C716DF1C040C1800F0D810 /* APLResultsTableController.m */,
+			);
+			path = new;
 			sourceTree = "<group>";
 		};
 		D123742E1B2D163500902361 /* SDWebImage */ = {
@@ -1535,8 +1553,6 @@
 			isa = PBXGroup;
 			children = (
 				D1B1592A1C004D8100350B5B /* cancel_bt_bg.png */,
-				D1B1592B1C004D8100350B5B /* line@2x.png */,
-				D1B1592C1C004D8100350B5B /* pick_bg@2x.png */,
 				D10E26751BFF761B008F77EF /* lightNormal.png */,
 				D10E26761BFF761B008F77EF /* lightSelect.png */,
 				D10E26771BFF761B008F77EF /* scanLine@2x.png */,
@@ -1553,6 +1569,7 @@
 		D16E525F1AE6755F00E57011 /* searchViewController */ = {
 			isa = PBXGroup;
 			children = (
+				C3C716D71C040C1800F0D810 /* new */,
 				D16E52A61AE68B8700E57011 /* SearchSongListViewController.h */,
 				D16E52A71AE68B8700E57011 /* SearchSongListViewController.m */,
 				D16E52A41AE68B8700E57011 /* ResultTableViewController.h */,
@@ -1861,7 +1878,6 @@
 				D15430361AFDDCD600522DE1 /* collectionFlag3.png in Resources */,
 				D10E26801BFF761B008F77EF /* scanLine@2x.png in Resources */,
 				D15430391AFDDCD600522DE1 /* collectionFlag6.png in Resources */,
-				D1B1592F1C004D8100350B5B /* pick_bg@2x.png in Resources */,
 				D15430791AFDDCD600522DE1 /* shoucan.png in Resources */,
 				C389FE501BD47E450017ECBF /* DemoDB.sqlite.zip in Resources */,
 				D154306F1AFDDCD600522DE1 /* kege_selected@2x.png in Resources */,
@@ -1886,7 +1902,6 @@
 				D15430711AFDDCD600522DE1 /* paihangbang.png in Resources */,
 				D15430841AFDDCD600522DE1 /* paihang_flag3.png in Resources */,
 				D15430741AFDDCD600522DE1 /* setting_selected@2x.png in Resources */,
-				D1B1592E1C004D8100350B5B /* line@2x.png in Resources */,
 				D15430581AFDDCD600522DE1 /* kge_head.png in Resources */,
 				D175E8C01B02444E003449A6 /* selectView_bg.png in Resources */,
 				D154304B1AFDDCD600522DE1 /* pick_bg@2x.png in Resources */,
@@ -2008,6 +2023,7 @@
 				D15589761B0388CD000AA4C9 /* CSNotificationView.m in Sources */,
 				C3AAC1121BCCA2F7009582D1 /* MJRefreshAutoFooter.m in Sources */,
 				209C9FC81B606D770060739C /* PingHelper.m in Sources */,
+				C3C716E31C040C1800F0D810 /* APLResultsTableController.m in Sources */,
 				C3AAC1171BCCA2F7009582D1 /* MJRefreshAutoGifFooter.m in Sources */,
 				C344DB651BCB4B9F00F1325D /* NSString+Utility.m in Sources */,
 				C3AAC1241BCCA2F7009582D1 /* UIView+MJExtension.m in Sources */,
@@ -2032,6 +2048,7 @@
 				C344DB681BCB5CEA00F1325D /* BaseNavigationController.m in Sources */,
 				D15E2AA41AEBB19C0093C773 /* jinxuanViewController.m in Sources */,
 				D19469331AEE53920077E738 /* BokongView.m in Sources */,
+				C3C716E01C040C1800F0D810 /* APLBaseTableViewController.m in Sources */,
 				D12374571B2D163500902361 /* SDWebImageDownloaderOperation.m in Sources */,
 				D156A3E41AECE0F80091C419 /* CollectionViewController.m in Sources */,
 				D12374511B2D163500902361 /* MKAnnotationView+WebCache.m in Sources */,
@@ -2053,6 +2070,7 @@
 				C389FE9F1BD491B80017ECBF /* unzip.c in Sources */,
 				C3AAC11B1BCCA2F7009582D1 /* MJRefreshBackNormalFooter.m in Sources */,
 				C389FE9C1BD491B80017ECBF /* ZipArchive.m in Sources */,
+				C3C716E71C043A4000F0D810 /* APLMainTableViewController.m in Sources */,
 				D123745F1B2D163500902361 /* UIImageView+WebCache.m in Sources */,
 				D16E52841AE6755F00E57011 /* SingerAreaViewController.m in Sources */,
 				D175F10F1AE15F78004E3B9A /* HanyuPinyinOutputFormat.m in Sources */,

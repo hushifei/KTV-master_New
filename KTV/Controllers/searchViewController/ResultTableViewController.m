@@ -62,8 +62,7 @@
     self.tableView.showsHorizontalScrollIndicator=NO;
     self.tableView.showsVerticalScrollIndicator=NO;
     self.tableView.backgroundColor=[UIColor clearColor];
-    UIView *backView=[[UIView alloc]initWithFrame:CGRectZero];
-    self.tableView.tableFooterView=backView;
+    self.tableView.tableFooterView=[[UIView alloc]initWithFrame:CGRectZero];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -126,10 +125,10 @@
 
 - (void)reloadData {
     if (self.dataList && self.dataList.count > 0) {
-        [_searchSongListVC showPromtView:YES];
+//        [_searchSongListVC showPromtView:YES];
         [self.tableView reloadData];
     } else {
-        [_searchSongListVC showPromtView:NO];
+//        [_searchSongListVC showPromtView:NO];
     }
     canSearch = YES;
 }
