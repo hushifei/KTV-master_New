@@ -7,6 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TxtDownloadModel.h"
+@class DownLoadFileTool;
+@protocol SFdownloadImportDelegate <NSObject>
+- (void)startingDownload:(DownLoadFileTool*)downloadFileTool model:(TxtDownloadModel*)model;
+- (void)finishedDownload:(DownLoadFileTool*)downloadFileTool model:(TxtDownloadModel*)model;
+- (void)allFilesDownloaded:(DownLoadFileTool*)downloadFileTool model:(TxtDownloadModel*)model;
+- (void)startingImportData:(DownLoadFileTool*)downloadFileTool model:(TxtDownloadModel*)model;
+- (void)finishedImportData:(DownLoadFileTool*)downloadFileTool model:(TxtDownloadModel*)model;
+- (void)allDataImported:(DownLoadFileTool*)downloadFileTool model:(TxtDownloadModel*)model;
+@end
+
+
 typedef NS_ENUM (NSUInteger,S_Actions) {
     S_Can_Donload =0,
     S_Can_ImportData,

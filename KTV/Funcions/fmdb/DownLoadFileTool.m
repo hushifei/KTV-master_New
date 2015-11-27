@@ -33,7 +33,7 @@ typedef  void (^completedBlock)(BOOL isOk,NSError *error);
     completedBlock finishiDownLoadBlock;
     dispatch_group_t completedGroup;
     NSMutableArray *requests;
-    NSArray *downloadTask;
+    NSArray *downloadTasks;
 }
 @property(nonatomic,strong)NSOperationQueue *queue;
 
