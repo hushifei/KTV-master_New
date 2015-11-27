@@ -19,5 +19,7 @@ typedef void(^DownloadTxtFilesCompleted)(BOOL Completed,NSError *error);
 
 + (instancetype)instance;
 - (void)downLoadTxtFile:(DownloadTxtFilesCompleted)completed;
+- (void)downloadTxtFiles:(NSArray *)fileNames completionBlock:(void (^)(BOOL isOk))completionBlock;
+
 - (void)remove_downloadedTxtFiles;
 @end
