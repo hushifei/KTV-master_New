@@ -16,7 +16,7 @@
 #import "BBBadgeBarButtonItem.h"
 #import "MBProgressHUD.h"
 #import "Song.h"
-#import "DataMananager.h"
+#import "DataManager.h"
 #import "CommandControler.h"
 
 @interface CollectionViewController ()<SongDelegate> {
@@ -44,7 +44,7 @@
 
 - (void)initializeTableContent {
     dataList=[[NSMutableArray alloc]init];
-    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:@"select * from CollectionTable"];
+    FMResultSet *rs=[[DataManager instanceShare].db executeQuery:@"select * from CollectionTable"];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
         oneSong.addtime = [rs stringForColumn:@"addtime"];

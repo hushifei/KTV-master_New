@@ -18,7 +18,7 @@
 #import "SoundViewController.h"
 #import "MBProgressHUD.h"
 #import "NSString+Utility.h"
-#import "DataMananager.h"
+#import "DataManager.h"
 #import "CommandControler.h"
 @interface SingerAreaViewController ()<UITableViewDataSource,UITableViewDelegate> {
 }
@@ -43,7 +43,7 @@
 - (void)initializeTableContent {
     NSString *typeID=[@"4" encodeBase64];
     NSString *sqlStr= [NSString stringWithFormat:@"select * from TypeTable where typeid='%@'",typeID];
-    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
+    FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Typelist *oneType=[[Typelist alloc]init];
         oneType.ztype = [rs stringForColumn:@"type"];

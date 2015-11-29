@@ -18,19 +18,18 @@
 #import "SoundViewController.h"
 #import "Utility.h"
 #import "BaseNavigationController.h"
-#import "DataMananager.h"
 
 #import "NewPaiHangViewController.h"
 #import "NSString+Utility.h"
 #import "MBProgressHUD.h"
-#import "DownLoadFileTool.h"
+#import "DataManager.h"
 #import "HuToast.h"
 
 #import "TempViewController.h"
 #import "AppDelegate.h"
 #import "APLMainTableViewController.h"
 
-@interface MainViewController ()<UISearchBarDelegate> {
+@interface MainViewController ()<UISearchBarDelegate,DataManagerDelegate> {
     MBProgressHUD *HUD;
     UIButton *geshouBtn;
     UIButton *paihangBtn;
@@ -43,6 +42,7 @@
     UIView *bottomBGView;
     UIButton *promptConnectBtn;
     BOOL onGoingInitData;
+    NSMutableArray *models;
 }
 
 @end
@@ -56,77 +56,26 @@
 //    if (DEBUG) {
 //        [self copyFile];
 //    }
+    
+    NSArray *downloadTxtFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
+    models=[NSMutableArray new];
+    for (NSString *fileName in downloadTxtFiles) {
+        KTVModel *oneModel=[[KTVModel alloc]initWithFileName:fileName];
+        [models addObject:oneModel];
+    }
     [self  showConnectionHostMessage:NO];
+    [Utility instanceShare].serverIPAddress=@"192.168.43.1";
     [[Utility instanceShare] starToMonitorNetowrkConnection];
+    
     [[Utility instanceShare] addObserver:self forKeyPath:@"netWorkStatus" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
     
-}
 
-
-- (void)viewWillAppear:(BOOL)animated {
-    self.tabBarController.tabBar.hidden=NO;
-    [super viewWillAppear:animated] ;
-
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    if (onGoingInitData || [[change valueForKey:NSKeyValueChangeNewKey]boolValue] ==[[change valueForKey:NSKeyValueChangeOldKey]boolValue]) {
-        if (![[change valueForKey:NSKeyValueChangeNewKey]boolValue] && promptConnectBtn.hidden==YES) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self showConnectionHostMessage:YES];
-            });
-        }
-        return;
-    }
     
-    if ( [[change valueForKey:NSKeyValueChangeNewKey]boolValue] && ![[DataMananager instanceShare]databaseAlready]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (promptConnectBtn.hidden==NO) {
-                [self showConnectionHostMessage:NO];
-            }
-            onGoingInitData=YES;
-            [self initData];
-        });
-        return;
-    }
+//    [self initData];
     
-     if ([[change valueForKey:NSKeyValueChangeNewKey]boolValue] && [[DataMananager instanceShare]databaseAlready] && promptConnectBtn.hidden==NO) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showConnectionHostMessage:NO];
-            return;
-        });
-    } else if (![[change valueForKey:NSKeyValueChangeNewKey]boolValue] && promptConnectBtn.hidden==YES) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self showConnectionHostMessage:YES];
-            });
-    }
 }
 
-- (void)initData {
-    if ([Utility instanceShare].netWorkStatus) {
-        HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
-        HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
-        HUD.detailsLabelColor=[UIColor greenColor];
-        [[DownLoadFileTool instance]downLoadTxtFile:^(BOOL Completed,NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [HUD hide:YES];
-                if (Completed) {
-                         NSLog(@"download file And import data done!");
-                    
-                } else {
-                      NSLog(@"download file OR import data Error!");
-                }
-                onGoingInitData=NO;
-            });
-        }];
-        [HUD show:YES];
-    }
- 
-    //    po [[self view] recursiveDescription]
-    //     po [[[[UIApplication sharedApplication] windows] objectAtIndex:0] recursiveDescription]
-}
+
 
 - (void)copyFile {
     NSFileManager *fileManager=[NSFileManager defaultManager];
@@ -136,6 +85,124 @@
         [fileManager copyItemAtPath:sourcePath toPath:distancePath error:nil];
     }
 }
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    if (onGoingInitData || ![Utility instanceShare].netWorkStatus)  return;
+    onGoingInitData=YES;
+    [self initData];
+}
+
+- (void)initData {
+    if ([Utility instanceShare].netWorkStatus) {
+            [[DataManager instanceShare]downloadTxtFiles:models delegate:self completionBlock:^(BOOL isOk, NSError *error) {
+                if (error) {
+                    NSLog(@"%@",error.description);
+                    return ;
+                }
+                NSBlockOperation *operation=[NSBlockOperation blockOperationWithBlock:^{
+                    [[DataManager instanceShare]addIntoDataSourceWithModels:models delegate:self];
+                    NSLog(@"data import done ok!");
+                }];
+                [operation start];
+            }];
+        
+    }
+    //    po [[self view] recursiveDescription]
+    //@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"]
+
+}
+
+- (void)startingDownload:(DataManager*)downloadFileTool model:(KTVModel*)model {
+    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+}
+
+- (void)failDownload:(DataManager *)downloadFileTool model:(KTVModel *)model {
+    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+
+}
+- (void)finishedDownload:(DataManager*)downloadFileTool model:(KTVModel*)model {
+    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+}
+- (void)tasksWillDownloading:(DataManager *)downloadFileTool {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    if (!HUD) {
+        HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:HUD];
+        HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
+        HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
+        HUD.detailsLabelColor=[UIColor greenColor];
+    }
+      [HUD show:YES];
+}
+
+- (void)tasksDownloaded:(DataManager *)downloadFileTool {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    NSArray *retryDownloadModels=[models filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"downloadStatus != 3"]]; // !=TxtDownloadModel_finished
+    if (retryDownloadModels.count <= 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //
+        });
+    } else {
+        [models enumerateObjectsUsingBlock:^(KTVModel * obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSLog(@"%d",obj.downloadStatus);
+        }];
+    }
+    NSLog(@"\n txt  done ok!");
+    if (HUD.hidden==NO) {
+        HUD.hidden=YES;
+        [HUD removeFromSuperview];
+        HUD=nil;
+    };
+
+
+}
+
+
+- (void)startingImportData:(DataManager*)downloadFileTool model:(KTVModel*)model {
+    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+
+}
+
+
+- (void)failImportData:(DataManager*)downloadFileTool model:(KTVModel*)model {
+    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+
+}
+
+- (void)finishedImportData:(DataManager*)downloadFileTool model:(KTVModel*)model {
+    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+
+}
+
+- (void)tasksWillImportData:(DataManager*)downloadFileTool {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    if (!HUD) {
+        HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:HUD];
+    }
+    HUD.labelText=NSLocalizedString(@"Import Data",@"导入数据");
+    HUD.detailsLabelText =NSLocalizedString(@"please Watting",@"请稍后...");
+    HUD.detailsLabelColor=[UIColor greenColor];
+    [HUD show:YES];
+
+
+}
+
+- (void)tasksDataImported:(DataManager*)downloadFileTool {
+    NSLog(@"%s",__PRETTY_FUNCTION__);
+    HUD.hidden=YES;
+    [HUD removeFromSuperview];
+    HUD=nil;
+    onGoingInitData=NO;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    self.tabBarController.tabBar.hidden=NO;
+    [super viewWillAppear:animated] ;
+    
+}
+
 
 - (void)showConnectionHostMessage:(BOOL)show {
     CGSize size=self.view.bounds.size;

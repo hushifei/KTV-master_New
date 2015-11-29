@@ -18,8 +18,8 @@
 #import "SettingViewController.h"
 #import "SoundViewController.h"
 #import "NSString+Utility.h"
-#import "DataMananager.h"
 #import "CommandControler.h"
+#import "DataManager.h"
 @interface jinxuanViewController ()
 {
     NSMutableArray *dataList;
@@ -45,7 +45,7 @@
 - (void)initializeTableContent {
     dataList=[[NSMutableArray alloc]init];
     NSString *sqlStr= [NSString stringWithFormat:@"select * from TypeTable where type='%@'",[@"3" encodeBase64]];
-    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
+    FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Typelist *type=[[Typelist alloc]init];
         type.ztype = [rs stringForColumn:@"type"];

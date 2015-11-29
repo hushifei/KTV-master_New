@@ -15,7 +15,7 @@
 #import "BBBadgeBarButtonItem.h"
 #import "MBProgressHUD.h"
 #import "Song.h"
-#import "DataMananager.h"
+#import "DataManager.h"
 #import "CommandControler.h"
 @interface newSongViewController ()<MBProgressHUDDelegate,SongDelegate> {
     NSInteger _previousRow;
@@ -46,7 +46,7 @@
 - (void)initializeTableContent{
     NSString *newSongFlag=[@"1" encodeBase64];
     NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where newsong='%@' ORDER BY singer limit %d OFFSET %@",newSongFlag,pageLimint,offset];
-    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
+    FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
         oneSong.number = [rs stringForColumn:@"number"];

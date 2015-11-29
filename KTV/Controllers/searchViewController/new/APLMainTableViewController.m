@@ -14,7 +14,7 @@
 #define SONGTABLE @"SongTable"
 #define SINGERTABLE @"SingerTable"
 #import "NSString+Utility.h"
-#import "DataMananager.h"
+#import "DataManager.h"
 #import "UIImage+Utility.h"
 #import "SongListViewController.h"
 enum selectSearchType{
@@ -88,7 +88,7 @@ enum selectSearchType{
     [self hidePromptView:NO];
 
     //open database
-    _searchDb = [DataMananager instanceShare].db;
+    _searchDb = [DataManager instanceShare].db;
     [_searchDb open];
 
 }

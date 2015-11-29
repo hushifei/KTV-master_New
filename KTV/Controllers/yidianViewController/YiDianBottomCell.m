@@ -9,7 +9,7 @@
 #import "YiDianBottomCell.h"
 #import "CommandControler.h"
 #import "Order.h"
-#import "DataMananager.h"
+#import "DataManager.h"
 #import "AppDelegate.h"
 @interface YiDianBottomCell ()
 

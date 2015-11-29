@@ -17,7 +17,7 @@
 #define SONGTABLE @"SongTable"
 #define SINGERTABLE @"SingerTable"
 #import "NSString+Utility.h"
-#import "DataMananager.h"
+#import "DataManager.h"
 
 #import "BaseNavigationController.h"
 #import "SongListViewController.h"
@@ -44,7 +44,7 @@
     _dataList = [[NSMutableArray alloc] init];
     searchArray=[[NSMutableArray alloc]init];
     [self initializeSearchController];
-    _searchDb = [DataMananager instanceShare].db;
+    _searchDb = [DataManager instanceShare].db;
     [_searchDb open];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardDidHide:)

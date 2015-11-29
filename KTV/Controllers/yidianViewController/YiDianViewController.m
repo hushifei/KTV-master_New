@@ -13,9 +13,9 @@
 #define BOTTOMCELLIDENTIFY @"YiDianBottomCell"
 #import "CommandControler.h"
 #import "NSString+Utility.h"
-#import "DataMananager.h"
 #import "Utility.h"
 #import "AppDelegate.h"
+#import "DataManager.h"
 @interface YiDianViewController ()<SongDelegate,yiDianDelegate>
 {
     NSInteger _previousRow;
@@ -93,7 +93,7 @@
             for (NSString *number in dict.allValues) {
                 // in
                 NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where number='%@'",[number encodeBase64]];
-                FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
+                FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
                 while ([rs next]) {
                     Song *oneSong=[[Song alloc]init];
                     oneSong.addtime = [rs stringForColumn:@"addtime"];
@@ -377,12 +377,12 @@
 }
 
 #pragma mark -#########################################################
--(UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return YES;
-}
+//-(UIStatusBarStyle)preferredStatusBarStyle {
+//    return UIStatusBarStyleLightContent;
+//}
+//
+//- (BOOL)prefersStatusBarHidden {
+//    return YES;
+//}
 
 @end

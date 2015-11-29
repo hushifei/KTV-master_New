@@ -10,9 +10,6 @@
 #import "NSString+Utility.h"
 #import "AppDelegate.h"
 #import "CommandControler.h"
-#import "DataMananager.h"
-#define DBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB.sqlite"]
-#define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
 NSString * const YiDian_Update_DidChangeNotification=@"YiDian_Update_DidChangeNotification";
 @interface Utility() {
     NSString* savePath_TxtDir;
@@ -28,7 +25,6 @@ static Utility *shareInstance=nil;
     static  dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if (!shareInstance) {
-            [DataMananager instanceShare];
             shareInstance=[[self alloc]init];
         }
     });

@@ -19,7 +19,7 @@
 #import "MBProgressHUD.h"
 #import "UIImageView+WebCache.h"
 #import "NSString+Utility.h"
-#import "DataMananager.h"
+#import "DataManager.h"
 #import "CommandControler.h"
 #import "UIImageView+WebCache.h"
 
@@ -38,7 +38,7 @@
     UINib *nib=[UINib nibWithNibName:@"SingerAreaTypeCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
-   totalRowCount= [[DataMananager instanceShare]rowCountWithStatment:[NSString stringWithFormat:@"select count(*) from SingerTable where area='%@'",[_area encodeBase64]]];
+   totalRowCount= [[DataManager instanceShare]rowCountWithStatment:[NSString stringWithFormat:@"select count(*) from SingerTable where area='%@'",[_area encodeBase64]]];
     [self loadMJRefreshingView];
     
     self.tableView.backgroundView=bgImageView;
@@ -56,7 +56,7 @@
     //DESC 降序
     NSString *typeID=[_area encodeBase64];
     NSString *sqlStr= [NSString stringWithFormat:@"select * from SingerTable where area='%@' order by singer limit %d OFFSET %@",typeID,pageLimint,offset];
-    FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:sqlStr];
+    FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Singer *oneSinger=[[Singer alloc]init];
         oneSinger.area = [rs stringForColumn:@"area"];

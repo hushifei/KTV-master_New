@@ -19,7 +19,7 @@
 #import "Order.h"
 #import "Song.h"
 #import "NSString+Utility.h"
-#import "DataMananager.h"
+#import "DataManager.h"
 #import "CommandControler.h"
 @interface paiHangViewController ()<SongDelegate>
 {
@@ -51,7 +51,7 @@
 
 - (void)initializeTableContent {
         NSString *song_sqlStr= [NSString stringWithFormat:@"select * from SongTable,OrderTable where SongTable.number=OrderTable.number"];
-        FMResultSet *song_rs=[[DataMananager instanceShare].db executeQuery:song_sqlStr];
+        FMResultSet *song_rs=[[DataManager instanceShare].db executeQuery:song_sqlStr];
         while ([song_rs next]) {
             Song *oneSong=[[Song alloc]init];
             oneSong.addtime = [song_rs stringForColumn:@"addtime"];

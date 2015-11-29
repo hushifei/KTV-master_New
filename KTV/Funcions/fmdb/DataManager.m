@@ -1,77 +1,254 @@
 //
-//  DataMananager.m
+//  DownLoadFileTool.m
 //  KTV
 //
 //  Created by admin on 15/10/12.
 //  Copyright © 2015年 stevenhu. All rights reserved.
 //
 
-#import "DataMananager.h"
+#import "DataManager.h"
+#import "CommandControler.h"
+#import "Utility.h"
 #import "NSString+Utility.h"
-#import "ZipArchive.h"
+#import "DataManager.h"
+#import "SDWebImageManager.h"
+#import "KTVModel.h"
+static  int limit=1000;
 
+#define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
 
 #define DBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB.sqlite"]
 
 #define DEMODBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DemoDB.sqlite"]
+typedef void (^completedBlock)(BOOL isOk,NSError *error);
 
-static DataMananager *shareInstance=nil;
-#define DATABASE_ALREADY  @"DATABASE_ALREADY"
-static  int limit=1000;
-@interface DataMananager () {
+@interface DataManager () {
+    NSString* savePath_TxtDir;
+    NSUserDefaults *defaults;
+    NSURLSession *shareSession;
+    NSFileManager *fileManager;
+    
+    //download
+    completedBlock finishedBlock;
+    dispatch_group_t completedGroup;
+    NSMutableArray *requests;
+    NSString * newVersion;
+    
+    //import
     int hasCount;
-    NSUserDefaults *userDefaults;
-}
+    dispatch_group_t importGroup;
 
+}
+@property(nonatomic,strong)NSOperationQueue *queue;
+@property(nonatomic,strong)NSArray *downloadModels;
 @end
+static DataManager *instance=nil;
+@implementation DataManager
 
-@implementation DataMananager
 + (instancetype)instanceShare {
-    static  dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        if (!shareInstance) {
-            shareInstance=[[self alloc]init];
-        }
-    });
-    return shareInstance;
-}
-+ (instancetype)allocWithZone:(struct _NSZone *)zone  {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        shareInstance=[super allocWithZone:zone];
+        instance = [[self alloc]init];
     });
-    return shareInstance;
+    return instance;
 }
 
-- (instancetype)init {
++ (instancetype)allocWithZone:(NSZone *)zone {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-//        if (DEBUG) {
-        
-//            [self copyDBFile];
-//        }
-//        [self unArchiveDemoDbFile];
-        [self createTables];
-        userDefaults=[NSUserDefaults standardUserDefaults];
-        shareInstance=[super init];
+        instance = [super allocWithZone:zone];
     });
-    return shareInstance;
+    return instance;
 }
-
 
 - (instancetype)copyWithZone:(NSZone *)zone {
     return self;
 }
 
-- (void)copyDBFile {
-    NSFileManager *fileManager=[NSFileManager defaultManager];
-    NSString *filePath=[[NSBundle mainBundle]pathForResource:@"DB.sqlite" ofType:nil];
-    if ([fileManager fileExistsAtPath:DBPATH]) {
-        [fileManager removeItemAtPath:DBPATH error:nil];
-        [fileManager copyItemAtPath:filePath toPath:DBPATH error:nil];
-        [self setDatabaseAlready:YES];
-    }
+- (instancetype)init {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        defaults =[NSUserDefaults standardUserDefaults];
+        shareSession=[NSURLSession sharedSession];
+        fileManager=[NSFileManager defaultManager];
+        [self createTables];
+        NSLog(@"%@",DOCUMENTPATH);
+        importGroup=dispatch_group_create();
+        instance = [super init];
+    });
+    return instance;
 }
+
+/*
+ *新的下载方法 形如
+ * ===============
+ */
+//@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"]
+- (void)downloadTxtFiles:(NSArray<KTVModel*> *)downloadModels delegate:(id<DataManagerDelegate>)delegate completionBlock:(void (^)(BOOL isOk,NSError *error))completionBlock {
+    savePath_TxtDir=[DOCUMENTPATH stringByAppendingPathComponent:@"DownloadFiles"];
+    if (![fileManager fileExistsAtPath:savePath_TxtDir]) {
+        [fileManager createDirectoryAtPath:savePath_TxtDir withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    finishedBlock=[completionBlock copy];
+    _delegate=delegate;
+    _downloadModels=[downloadModels copy];
+    shareSession=[NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    _queue=[[NSOperationQueue alloc]init];
+    [_queue setMaxConcurrentOperationCount:10];
+    
+    //是否有新版本需要更新
+    NSString *urlStr=[NSString stringWithFormat:@"http://%@:8080/puze/?cmd=0xd4",[Utility instanceShare].serverIPAddress];
+    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+    NSURLSessionDataTask *dataTask=[shareSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+        if ([httpResponse statusCode]==200 && data) {
+            newVersion=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+            //check and download
+            [self checkAndDownloadfilesOpearations];
+        } else {
+            // all downloadCompleted ???
+            if (finishedBlock) {
+                finishedBlock(YES,[NSError errorWithDomain:@"9999" code:9999 userInfo:@{@"errorDescript":@"error connection to host for check version"}]);
+            }
+        }
+    }];
+    dataTask.priority=NSURLSessionTaskPriorityHigh;
+    [dataTask resume];
+    
+}
+
+
+-(void)checkAndDownloadfilesOpearations {
+    completedGroup= dispatch_group_create();
+    NSBlockOperation *finishedOperation = [NSBlockOperation blockOperationWithBlock:^{
+        dispatch_group_notify(completedGroup, dispatch_get_main_queue(), ^{
+            if (self.delegate && [self.delegate respondsToSelector:@selector(tasksDownloaded:)]) {
+                __weak __typeof(self) weakSelf=self;
+                [self.delegate tasksDownloaded:weakSelf];
+            }
+            if (finishedBlock) {
+                [[NSURLCache sharedURLCache]removeAllCachedResponses];
+                finishedBlock(YES,nil);
+            }
+        });
+    }];
+    
+    for (KTVModel *downloadModel in _downloadModels) {
+        //check who will be to download,if download need to downdoad
+        if (![downloadModel.txtVersion isEqualToString:newVersion]) {
+            downloadModel.downloadStatus=TxtDownloadModel_starting;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(startingDownload:model:)]) {
+                __weak __typeof(self) weakSelf=self;
+                    [self.delegate startingDownload:weakSelf model:downloadModel];
+            }
+            [_queue addOperation:[self createSingalTxtFileOpearation:downloadModel depenency:finishedOperation]];
+        } else {
+            downloadModel.downloadStatus=TxtDownloadModel_finished;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(finishedDownload:model:)]) {
+                __weak __typeof(self) weakSelf=self;
+                [self.delegate finishedDownload:weakSelf model:downloadModel];
+            }
+        }
+    }
+    if (_queue.operationCount > 0 && [self.delegate respondsToSelector:@selector(tasksWillDownloading:)]) {
+
+        __weak __typeof(self) weakSelf=self;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.delegate tasksWillDownloading:weakSelf];
+        });
+    }
+    
+    [_queue addOperation:finishedOperation];
+
+}
+
+- (NSBlockOperation*)createSingalTxtFileOpearation:(KTVModel*)model depenency:(NSOperation*)deOperation {
+    NSBlockOperation *operation=[NSBlockOperation blockOperationWithBlock:^{
+        NSString *strURL=[[NSString stringWithFormat:@"http://%@:8080/puze/?cmd=0x01&filename=",[Utility instanceShare].serverIPAddress]stringByAppendingString:model.fileName];
+        NSURL *URL = [NSURL URLWithString:strURL];
+        NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+        [requests addObject:request];
+        NSURLSessionDownloadTask *downloadTask=[shareSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            NSHTTPURLResponse* httpResponse = (NSHTTPURLResponse*)response;
+            NSInteger responseStatusCode = [httpResponse statusCode];
+            if (responseStatusCode==200) {
+                //                NSURL *documentsDirectoryURL = [[fileManager URLForDirectory:NSLibraryDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:ye error:nil]URLByAppendingPathComponent:[response suggestedFilename]];
+                NSURL * documentsDirectoryURL=[NSURL fileURLWithPath:[savePath_TxtDir stringByAppendingPathComponent:[response suggestedFilename]]];
+                if (![self tryCopyFiles:location toDic:documentsDirectoryURL]) {
+                    finishedBlock(YES,[NSError errorWithDomain:@"9999" code:9999 userInfo:@{@"errorDescript":@"copy files error"}]);
+                }
+                model.downloadStatus=TxtDownloadModel_finished;
+                model.txtVersion=newVersion;
+                if (self.delegate && [self.delegate respondsToSelector:@selector(finishedDownload:model:)]) {
+                    __weak __typeof(self) weakSelf=self;
+                    [self.delegate finishedDownload:weakSelf model:model];
+                }
+                dispatch_group_leave(completedGroup);
+                
+            } else {
+                model.downloadStatus=TxtDownloadModel_failed;
+                NSLog(@"File downloaded to failed: %@", model.fileName);
+                if (self.delegate && [self.delegate respondsToSelector:@selector(failDownload:model:)]) {
+                    __weak __typeof(self) weakSelf=self;
+                    [self.delegate failDownload:weakSelf model:model];
+                }
+                dispatch_group_leave(completedGroup);
+            }
+        }];
+        [downloadTask resume];
+    }];
+    dispatch_group_enter(completedGroup);
+    [deOperation addDependency:operation];
+    return operation;
+}
+
+
+- (BOOL)tryCopyFiles:(NSURL *)local toDic:(NSURL*)toDic {
+    static int copyCount=0;
+    NSURL *url=nil;
+    if (![fileManager replaceItemAtURL:toDic withItemAtURL:local backupItemName:@"backup" options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&url error:nil]) {
+        copyCount++;
+        //remove files
+        [fileManager removeItemAtURL:toDic error:nil];
+        if (copyCount <3) {
+            [self tryCopyFiles:local toDic:toDic];
+        } else {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+/*
+ *新的下载方法 结束
+ * ===============
+ */
+
+//
+////copy file
+//- (void)copyTxtFile:(NSURL*)location Distance:(NSURL*)distancePath {
+//    [self removeFile:[distancePath absoluteString]];
+//    [fileManager moveItemAtURL:location toURL:distancePath error:NULL];
+//}
+//
+////删除文件
+//- (void)remove_downloadedTxtFiles {
+//    savePath_TxtDir=[DOCUMENTPATH stringByAppendingPathComponent:@"/downloadDir/txt"];
+//    for (NSString *str in allTXTFiles) {
+//        [self removeFile:[savePath_TxtDir stringByAppendingPathComponent:str]];
+//    }
+//}
+//
+//- (BOOL)removeFile:(NSString*)filePath {
+//    if ([fileManager fileExistsAtPath:filePath]) {
+//        [fileManager removeItemAtPath:filePath error:nil];
+//    }
+//
+//    return YES;
+//}
+
+// import
 
 // open db file
 
@@ -107,19 +284,6 @@ static  int limit=1000;
         }
     }
     return NO;
-}
-
-- (BOOL)databaseAlready {
-    BOOL already=[userDefaults boolForKey:DATABASE_ALREADY];
-    return already;
-}
-
-- (void)setDatabaseAlready:(BOOL)already {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [userDefaults setBool:already forKey:DATABASE_ALREADY];
-        [userDefaults synchronize];
-    });
-
 }
 
 // 获得表的数据条数
@@ -224,58 +388,54 @@ static  int limit=1000;
     
 }
 
-- (void)eraserTables:(NSArray*)fileArray{
-    for (NSString *oneFilePath in fileArray) {
-        NSString *fileName=[oneFilePath lastPathComponent];
-        if ([fileName isEqualToString:@"songlist.txt"]) {
-            [self eraseTable:@"SongTable"];
-        } else if ([fileName isEqualToString:@"singlist.txt"]) {
-            [self eraseTable:@"SingerTable"];
-        } else if ([fileName isEqualToString:@"typelist.txt"]) {
-            [self eraseTable:@"TypeTable"];
-        } else if ([fileName isEqualToString:@"orderdata.txt"]) {
-            [self eraseTable:@"OrderTable"];
-        }
-        //        //删除表 CollectionTable
-        //        sqlDeleteRecord =@"DROP TABLE IF EXISTS CollectionTable";
-        //        [_db executeUpdate:sqlDeleteRecord];
-        
+- (void)eraserTables:(NSArray*)models{
+    for (KTVModel *oneModel in models) {
+        [self eraseTable:[oneModel.fileName stringByDeletingPathExtension]];
     }
 }
 
-- (void)addIntoDataSourceWithFileNames:(NSArray*)fileNames completed:(DataImportCompleted)completed {
-    if (completed) {
-        _completed=completed;
-    }
+- (void)addIntoDataSourceWithModels:(NSArray<KTVModel*>*)models delegate:(id<DataManagerDelegate>)delegate {
     //drap  all  data for tables
-    [self eraserTables:fileNames];
-    [self setDatabaseAlready:NO];
-    //Import all data for tables
-    for (NSString *oneFilePath in fileNames) {
-        NSString *fileName=[oneFilePath lastPathComponent];
-        if ([fileName isEqualToString:@"songlist.txt"]) {
-            [self importDataForSongs:oneFilePath];
+    _delegate=delegate;
+    [self eraserTables:models];
+    if ([_db open]) {
+        for (KTVModel *oneModel in models) {
+            if (![oneModel.tableVersion isEqualToString:newVersion]) {
+                if (self.delegate && [self.delegate respondsToSelector:@selector(startingImportData:model:)]) {
+                    __weak __typeof(self) weakSelf=self;
+                    [self.delegate startingImportData:weakSelf model:oneModel];
+                }
+                oneModel.importDataStatus=TxtDownloadModel_starting;
+                if ([oneModel.fileName isEqualToString:@"songlist.txt"]) {
+                    [self importDataForSongs:oneModel];
+                } else if([oneModel.fileName isEqualToString:@"singlist.txt"]) {
+                    [self importDataForSingers:oneModel];
+                } else if([oneModel.fileName isEqualToString:@"typelist.txt"]) {
+                    [self importDataForType:oneModel];
+                } else if ([oneModel.fileName isEqualToString:@"orderdata.txt"]) {
+                    [self importDataForOrder:oneModel];
+                }
+            }
+            oneModel.importDataStatus=TxtDownloadModel_finished;
+            oneModel.tableVersion=newVersion;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(finishedImportData:model:)]) {
+                __weak __typeof(self) weakSelf=self;
+                [self.delegate finishedImportData:weakSelf model:oneModel];
+            }
         }
-        else if([fileName isEqualToString:@"singlist.txt"]) {
-            [self importDataForSingers:oneFilePath];
-        }else if([fileName isEqualToString:@"typelist.txt"]) {
-            [self importDataForType:oneFilePath];
-        } else if ([fileName isEqualToString:@"orderdata.txt"]) {
-            [self importDataForOrder:oneFilePath];
-        }
+    } else {
+//        finishedBlock(YES,[NSError errorWithDomain:@"9999" code:9999 userInfo:@{@"errorDescript":@"error  to open the database"}]);
     }
-    [self setDatabaseAlready:YES];
-    _completed(YES);
-    
+
 }
 
-- (NSError*)importDataForSongs:(NSString*)txtFilePath {
-    NSString *fileName=[txtFilePath lastPathComponent];
+- (NSError*)importDataForSongs:(KTVModel*)model {
+    NSString *txtFilePath=[savePath_TxtDir stringByAppendingPathComponent:model.fileName];
     NSString *str=[NSString stringWithContentsOfFile:txtFilePath encoding:NSUTF8StringEncoding error:nil];
     NSArray *lines=[str componentsSeparatedByString:@"\t\r\n"];
     hasCount=(int)lines.count;
     [self insertSongsData:0 toIndex:999 useTransaction:YES dataSource:lines];
-    [userDefaults setObject:@YES forKey:fileName];
+    model.importDataStatus=TxtDownloadModel_finished;
     str=nil;
     lines=nil;
     return nil;
@@ -329,13 +489,14 @@ static  int limit=1000;
 }
 
 
-- (NSError*)importDataForSingers:(NSString*)txtFilePath {
-    NSString *fileName=[txtFilePath lastPathComponent];
+
+- (NSError*)importDataForSingers:(KTVModel*)model {
+    NSString *txtFilePath=[savePath_TxtDir stringByAppendingPathComponent:model.fileName];
     NSString *str=[NSString stringWithContentsOfFile:txtFilePath encoding:NSUTF8StringEncoding error:nil];
     NSArray *lines=[str componentsSeparatedByString:@"\r\n"];
     hasCount=(int)lines.count;
     [self insertSingersData:0 toIndex:999 useTransaction:YES dataSource:lines];
-    [userDefaults setObject:@YES forKey:fileName];
+    model.importDataStatus=TxtDownloadModel_finished;
     str=nil;
     lines=nil;
     return nil;
@@ -393,9 +554,8 @@ static  int limit=1000;
 }
 
 
-- (NSError*)importDataForType:(NSString*)txtFilePath {
-    
-    NSString *fileName=[txtFilePath lastPathComponent];
+- (NSError*)importDataForType:(KTVModel*)model {
+    NSString *txtFilePath=[savePath_TxtDir stringByAppendingPathComponent:model.fileName];
     NSString *str=[NSString stringWithContentsOfFile:txtFilePath encoding:NSUTF8StringEncoding error:nil];
     NSArray *lines=[str componentsSeparatedByString:@"\r\n"];
     [self insertTypesData:0 toIndex:999 useTransaction:YES dataSource:lines];
@@ -411,7 +571,7 @@ static  int limit=1000;
             
         }
     }
-    [userDefaults setObject:@YES forKey:fileName];
+    model.importDataStatus=TxtDownloadModel_finished;
     str=nil;
     lines=nil;
     return nil;
@@ -464,13 +624,14 @@ static  int limit=1000;
 }
 
 
-- (NSError*)importDataForOrder:(NSString*)txtFilePath {
+- (NSError*)importDataForOrder:(KTVModel*)model {
     struct orderrec {
         char number[8];
         int rcid;
         int order;
     };
     struct orderrec *orderadd;
+    NSString *txtFilePath=[savePath_TxtDir stringByAppendingPathComponent:model.fileName];
     FILE *fn=fopen([txtFilePath UTF8String], "r");
     if (fn==NULL) {
         return nil;
@@ -510,7 +671,7 @@ static  int limit=1000;
 
 - (int)rowCountWithStatment:(NSString*)statment {
     if ([_db open]) {
-        FMResultSet *rs=[[DataMananager instanceShare].db executeQuery:statment];
+        FMResultSet *rs=[[DataManager instanceShare].db executeQuery:statment];
         while ([rs next]) {
             return [rs intForColumnIndex:0];
         }
@@ -518,29 +679,30 @@ static  int limit=1000;
     return 0;
 }
 
-
-//解压文件为演示
-
-- (void)unArchiveDemoDbFile {
-     if (![[NSFileManager defaultManager]fileExistsAtPath:DEMODBPATH]) {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        NSString *fileSourcePath=[[NSBundle mainBundle]pathForResource:@"DemoDB.sqlite" ofType:@"zip"];
-        if  (fileSourcePath==nil || fileSourcePath.length==0) return ;
-        NSString *savaPath=[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB"];
-        if ([ZipArchive unzipFileAtPath:fileSourcePath toDestination:savaPath overwrite:YES password:nil error:nil delegate:nil]) {
-            NSFileManager *manager=[NSFileManager defaultManager];
-            [manager moveItemAtPath:[savaPath stringByAppendingPathComponent:@"DemoDB.sqlite"] toPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DemoDB.sqlite"] error:nil];
-            
-            [manager removeItemAtPath:savaPath error:nil];
-        }
-//        [ZipArchive unzipFileAtPath:fileSourcePath
-//                toDestination:savaPath];
-    });
-     }
-}
-
-
+/*
+ //解压文件为演示
+ 
+ - (void)unArchiveDemoDbFile {
+ if (![[NSFileManager defaultManager]fileExistsAtPath:DEMODBPATH]) {
+ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+ NSString *fileSourcePath=[[NSBundle mainBundle]pathForResource:@"DemoDB.sqlite" ofType:@"zip"];
+ if  (fileSourcePath==nil || fileSourcePath.length==0) return ;
+ NSString *savaPath=[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB"];
+ if ([ZipArchive unzipFileAtPath:fileSourcePath toDestination:savaPath overwrite:YES password:nil error:nil delegate:nil]) {
+ NSFileManager *manager=[NSFileManager defaultManager];
+ [manager moveItemAtPath:[savaPath stringByAppendingPathComponent:@"DemoDB.sqlite"] toPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DemoDB.sqlite"] error:nil];
+ 
+ [manager removeItemAtPath:savaPath error:nil];
+ }
+ //        [ZipArchive unzipFileAtPath:fileSourcePath
+ //                toDestination:savaPath];
+ });
+ }
+ }
+ 
+ */
 - (void)dealloc {
     [self closeDB];
 }
+
 @end
