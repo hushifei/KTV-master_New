@@ -45,7 +45,6 @@
     searchArray=[[NSMutableArray alloc]init];
     [self initializeSearchController];
     _searchDb = [DataManager instanceShare].db;
-    [_searchDb open];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardDidHide:)
                                                  name:UIKeyboardDidHideNotification

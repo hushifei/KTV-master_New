@@ -300,10 +300,13 @@ static DataManager *instance=nil;
 
 // 清除表-清数据
 - (BOOL)eraseTable:(NSString *)tableName {
-    NSString *sqlstr = [NSString stringWithFormat:@"DELETE FROM %@", tableName];
-    if (![_db executeUpdate:sqlstr])
-    {
-        return NO;
+    if ([self getTableItemCount:tableName]>0) {
+        NSString *sqlstr = [NSString stringWithFormat:@"DELETE FROM %@", tableName];
+        if (![_db executeUpdate:sqlstr])
+        {
+            NSLog(@"%@",sqlstr);
+            return NO;
+        }
     }
     return YES;
 }
@@ -376,7 +379,7 @@ static DataManager *instance=nil;
     
     //5.check and create CollectionTable
     if (![self isTableOK:@"CollectionTable"]) {
-        sqlCreateTable =@"CREATE TABLE IF NOT EXISTS CollectionTable (number TEXT,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
+        sqlCreateTable =@"CREATE TABLE IF NOT EXISTS CollectionTable (number TEXT PRIMARY KEY,songname TEXT,singer TEXT,singer1 TEXT,songpiy TEXT,word TEXT,language TEXT,volume TEXT,channel TEXT,sex TEXT,stype TEXT,newsong TEXT,movie TEXT,pathid TEXT,bihua TEXT,addtime TEXT,spath TEXT)";
         res = [_db executeUpdate:sqlCreateTable];
         if (!res) {
             NSLog(@"error when creating TypeTable table");
@@ -388,19 +391,18 @@ static DataManager *instance=nil;
     
 }
 
-- (void)eraserTables:(NSArray*)models{
-    for (KTVModel *oneModel in models) {
-        [self eraseTable:[oneModel.fileName stringByDeletingPathExtension]];
-    }
+- (BOOL)eraserTables:(KTVModel*)model{
+//    for (KTVModel *oneModel in models) {
+      return  [self eraseTable:model.tableName];
+//    }
 }
 
 - (void)addIntoDataSourceWithModels:(NSArray<KTVModel*>*)models delegate:(id<DataManagerDelegate>)delegate {
     //drap  all  data for tables
     _delegate=delegate;
-    [self eraserTables:models];
-    if ([_db open]) {
         for (KTVModel *oneModel in models) {
             if (![oneModel.tableVersion isEqualToString:newVersion]) {
+                [self eraserTables:oneModel];
                 if (self.delegate && [self.delegate respondsToSelector:@selector(startingImportData:model:)]) {
                     __weak __typeof(self) weakSelf=self;
                     [self.delegate startingImportData:weakSelf model:oneModel];
@@ -415,18 +417,22 @@ static DataManager *instance=nil;
                 } else if ([oneModel.fileName isEqualToString:@"orderdata.txt"]) {
                     [self importDataForOrder:oneModel];
                 }
+                oneModel.importDataStatus=TxtDownloadModel_finished;
+                oneModel.tableVersion=newVersion;
             }
-            oneModel.importDataStatus=TxtDownloadModel_finished;
-            oneModel.tableVersion=newVersion;
+ 
             if (self.delegate && [self.delegate respondsToSelector:@selector(finishedImportData:model:)]) {
                 __weak __typeof(self) weakSelf=self;
                 [self.delegate finishedImportData:weakSelf model:oneModel];
             }
+            
+            if ([oneModel isEqual:[models lastObject]] ) {
+                if (self.delegate && [self.delegate respondsToSelector:@selector(tasksDataImported:)]) {
+                    __weak __typeof(self) weakSelf=self;
+                    [self.delegate tasksDataImported:weakSelf];
+                }
+            }
         }
-    } else {
-//        finishedBlock(YES,[NSError errorWithDomain:@"9999" code:9999 userInfo:@{@"errorDescript":@"error  to open the database"}]);
-    }
-
 }
 
 - (NSError*)importDataForSongs:(KTVModel*)model {
@@ -670,11 +676,9 @@ static DataManager *instance=nil;
 }
 
 - (int)rowCountWithStatment:(NSString*)statment {
-    if ([_db open]) {
-        FMResultSet *rs=[[DataManager instanceShare].db executeQuery:statment];
-        while ([rs next]) {
-            return [rs intForColumnIndex:0];
-        }
+    FMResultSet *rs=[[DataManager instanceShare].db executeQuery:statment];
+    while ([rs next]) {
+        return [rs intForColumnIndex:0];
     }
     return 0;
 }

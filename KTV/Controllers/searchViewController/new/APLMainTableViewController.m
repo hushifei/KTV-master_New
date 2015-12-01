@@ -89,7 +89,6 @@ enum selectSearchType{
 
     //open database
     _searchDb = [DataManager instanceShare].db;
-    [_searchDb open];
 
 }
 

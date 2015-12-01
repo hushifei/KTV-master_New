@@ -92,7 +92,6 @@
 
 
 - (void)insertSongToCollectionTable:(void(^)(BOOL complete))actionCompleted{
-    [[DataManager instanceShare].db open];
     __block __weak typeof (self) weakSelf=self;
     NSString *querySqlStr=[NSString stringWithFormat:@"select * from CollectionTable where number='%@'",[_number encodeBase64]];
     FMResultSet *rs=[[DataManager instanceShare].db executeQuery:querySqlStr];
@@ -119,7 +118,6 @@
     if (actionCompleted) {
         actionCompleted(YES);
     }
-//    [[DataManager instanceShare].db open];
 
 }
 

@@ -11,7 +11,6 @@
 #import "Utility.h"
 #import "NSString+Utility.h"
 #import "SHBQRView.h"
-#import <AudioToolbox/AudioToolbox.h>
 #import "AppDelegate.h"
 @interface TempViewController ()<SHBQRViewDelegate>
 
@@ -30,7 +29,10 @@
 }
 
 - (void)qrView:(SHBQRView *)view ScanResult:(NSString *)result {
-    AudioServicesPlayAlertSoundWithCompletion(1107,nil);
+//    AudioServicesPlayAlertSoundWithCompletion(1107,nil);
+//    AudioServicesPlaySystemSoundWithCompletion(kSystemSoundID_Vibrate, ^{
+//        AudioServicesPlaySystemSound(1336);
+//    });
     if (_completed) {
         _completed(self,result);
     }

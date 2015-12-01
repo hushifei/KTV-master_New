@@ -58,4 +58,18 @@
     [userDefaults synchronize];
 }
 
+- (NSString *)tableName {
+    if ([_fileName isEqualToString:@"songlist.txt"]) {
+        return @"SongTable";
+    } else if ([_fileName isEqualToString:@"singlist.txt"]) {
+        return @"SingerTable";
+    }else if ([_fileName isEqualToString:@"typelist.txt"]) {
+        return @"TypeTable";
+    }else if ([_fileName isEqualToString:@"orderdata.txt"]) {
+        return @"OrderTable";
+    } else {
+        return @"unkown";
+    }
+};
+
 @end

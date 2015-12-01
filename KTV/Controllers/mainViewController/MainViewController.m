@@ -9,6 +9,7 @@
 #import "huSearchBar.h"
 #import "SettingViewController.h"
 #import "SearchSongListViewController.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 #import "SingerAreaViewController.h"
 #import "jinxuanViewController.h"
@@ -56,6 +57,8 @@
 //    if (DEBUG) {
 //        [self copyFile];
 //    }
+
+    
     
     NSArray *downloadTxtFiles=@[@"songlist.txt",@"singlist.txt",@"typelist.txt",@"orderdata.txt"];
     models=[NSMutableArray new];
@@ -88,21 +91,33 @@
 
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
-    if (onGoingInitData || ![Utility instanceShare].netWorkStatus)  return;
-    onGoingInitData=YES;
-    [self initData];
+    
+    if ([[change objectForKey:NSKeyValueChangeNewKey]boolValue]) {
+        if (promptConnectBtn.hidden==NO) {
+            [self showConnectionHostMessage:NO];
+        }
+        if (!onGoingInitData) {
+            onGoingInitData=YES;
+            [self initData];
+        }
+    } else {
+        if (promptConnectBtn.hidden==YES) {
+            [self showConnectionHostMessage:YES];
+        }
+    }
+
 }
 
 - (void)initData {
     if ([Utility instanceShare].netWorkStatus) {
             [[DataManager instanceShare]downloadTxtFiles:models delegate:self completionBlock:^(BOOL isOk, NSError *error) {
                 if (error) {
-                    NSLog(@"%@",error.description);
+//                    NSLog(@"%@",error.description);
                     return ;
                 }
                 NSBlockOperation *operation=[NSBlockOperation blockOperationWithBlock:^{
                     [[DataManager instanceShare]addIntoDataSourceWithModels:models delegate:self];
-                    NSLog(@"data import done ok!");
+//                    NSLog(@"data import done ok!");
                 }];
                 [operation start];
             }];
@@ -114,30 +129,24 @@
 }
 
 - (void)startingDownload:(DataManager*)downloadFileTool model:(KTVModel*)model {
-    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+//    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
 }
 
 - (void)failDownload:(DataManager *)downloadFileTool model:(KTVModel *)model {
-    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+//    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
 
 }
 - (void)finishedDownload:(DataManager*)downloadFileTool model:(KTVModel*)model {
-    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+//    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
 }
 - (void)tasksWillDownloading:(DataManager *)downloadFileTool {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    if (!HUD) {
-        HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-        HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
-        HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
-        HUD.detailsLabelColor=[UIColor greenColor];
-    }
+//    NSLog(@"%s",__PRETTY_FUNCTION__);
+
       [HUD show:YES];
 }
 
 - (void)tasksDownloaded:(DataManager *)downloadFileTool {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
+//    NSLog(@"%s",__PRETTY_FUNCTION__);
     NSArray *retryDownloadModels=[models filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"downloadStatus != 3"]]; // !=TxtDownloadModel_finished
     if (retryDownloadModels.count <= 0) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -145,56 +154,45 @@
         });
     } else {
         [models enumerateObjectsUsingBlock:^(KTVModel * obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSLog(@"%d",obj.downloadStatus);
+            NSLog(@"%lu",(unsigned long)obj.downloadStatus);
         }];
     }
-    NSLog(@"\n txt  done ok!");
-    if (HUD.hidden==NO) {
-        HUD.hidden=YES;
-        [HUD removeFromSuperview];
-        HUD=nil;
-    };
-
+//    NSLog(@"\n txt  done ok!");
 
 }
 
 
 - (void)startingImportData:(DataManager*)downloadFileTool model:(KTVModel*)model {
-    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+//    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
 
 }
 
 
 - (void)failImportData:(DataManager*)downloadFileTool model:(KTVModel*)model {
-    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+//    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
 
 }
 
 - (void)finishedImportData:(DataManager*)downloadFileTool model:(KTVModel*)model {
-    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
+//    NSLog(@"%s %@",__PRETTY_FUNCTION__,model.fileName);
 
 }
 
 - (void)tasksWillImportData:(DataManager*)downloadFileTool {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    if (!HUD) {
-        HUD = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:HUD];
-    }
-    HUD.labelText=NSLocalizedString(@"Import Data",@"导入数据");
-    HUD.detailsLabelText =NSLocalizedString(@"please Watting",@"请稍后...");
-    HUD.detailsLabelColor=[UIColor greenColor];
-    [HUD show:YES];
-
+//    NSLog(@"%s",__PRETTY_FUNCTION__);
 
 }
 
 - (void)tasksDataImported:(DataManager*)downloadFileTool {
-    NSLog(@"%s",__PRETTY_FUNCTION__);
-    HUD.hidden=YES;
-    [HUD removeFromSuperview];
-    HUD=nil;
-    onGoingInitData=NO;
+//    NSLog(@"%s",__PRETTY_FUNCTION__);
+    [self hideHud];
+}
+
+- (void)hideHud {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        HUD.hidden=YES;
+        onGoingInitData=NO;
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -214,16 +212,20 @@
         [self.view addSubview:promptConnectBtn];
     }
     if (show) {
-        [UIView animateWithDuration:1.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:6 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            promptConnectBtn.hidden=NO;
-            promptConnectBtn.frame= CGRectMake(20, CGRectGetMaxY(bottomBGView.frame)+15,size.width-40,40);
-        } completion:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:1.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:6 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                promptConnectBtn.hidden=NO;
+                promptConnectBtn.frame= CGRectMake(20, CGRectGetMaxY(bottomBGView.frame)+15,size.width-40,40);
+            } completion:nil];
+        });
+
     } else {
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
         [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:0.4 initialSpringVelocity:8 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             promptConnectBtn.hidden=YES;
             promptConnectBtn.frame= CGRectMake(20, CGRectGetMaxY(self.view.frame),size.width-40,40);
         } completion:nil];
+        });
     }
 }
 
@@ -281,7 +283,9 @@
 
 
 - (void)handScanResult:(NSString*)result {
-    
+    AudioServicesPlaySystemSoundWithCompletion(kSystemSoundID_Vibrate, ^{
+        AudioServicesPlaySystemSound(1109);
+    });
     if ([result hasPrefix:@"wifi: ;T:WPA2;S:"] && [[result substringFromIndex:[@"wifi: ;T:WPA2;S:" length]] componentsSeparatedByString:@";"].count ==2){
         NSArray *scanArray=[[result substringFromIndex:[@"wifi: ;T:WPA2;S:" length]] componentsSeparatedByString:@";"];
         NSString *wifiName=scanArray[0];
@@ -492,6 +496,13 @@
     conHostLabel.textAlignment=NSTextAlignmentCenter;
     [conHostBtn addTarget:self action:@selector(connect_Host:) forControlEvents:UIControlEventTouchUpInside];
     [bottomBGView addSubview:conHostLabel];
+    
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.labelText=NSLocalizedString(@"hud_text_init",nil);
+    HUD.detailsLabelText =NSLocalizedString(@"hud_detail_wait",nil);
+    HUD.detailsLabelColor=[UIColor greenColor];
 }
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {

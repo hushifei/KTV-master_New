@@ -19,6 +19,7 @@ typedef NS_ENUM(NSUInteger,handelStatus) {
 @property(nonatomic,assign)handelStatus downloadStatus;
 @property(nonatomic,copy)NSString *txtVersion;
 @property(nonatomic,copy)NSString *tableVersion;
+@property(nonatomic,copy,readonly)NSString *tableName;
 
 @property(nonatomic,assign)handelStatus importDataStatus;
 

@@ -31,8 +31,8 @@
     myToast=[[HuToast alloc]init];
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newSong_bg"]];
     self.tableView.backgroundView=bgImageView;
-//    UINib *nib=[UINib nibWithNibName:@"SongTopCell" bundle:nil];
-//    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
+    UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
     _previousRow = -1;
     UIImageView  *headerImageV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 200)];
     [headerImageV setImage:[UIImage imageNamed:@"newsong_header"]];
@@ -104,8 +104,8 @@
         return cell;
     } else {
 //        SongTopCell *cell=[[SongTopCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[NSString stringWithFormat:@"%@_%d",TOPCELLIDENTIFY,(int)indexPath.row]];
-//        SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
-        SongTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"SongTopCell" owner:nil options:nil] firstObject];
+        SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
+//        SongTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"SongTopCell" owner:nil options:nil] firstObject];
         cell.numberStr.text =[NSString stringWithFormat:@"%02d",(int)indexPath.row+1];
         cell.numberStr.font=[UIFont fontWithName:@"DIN Condensed" size:22];
         cell.oneSong=dataList[indexPath.row];

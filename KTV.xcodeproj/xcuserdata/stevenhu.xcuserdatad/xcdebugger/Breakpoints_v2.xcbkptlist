@@ -9,29 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "KTV/Controllers/mainViewController/MainViewController.m"
-            timestampString = "470506945.46629"
+            filePath = "KTV/Funcions/fmdb/DataManager.m"
+            timestampString = "470677727.696439"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
-            landmarkName = "-tasksDataImported:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "KTV/Controllers/mainViewController/MainViewController.m"
-            timestampString = "470506945.46629"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
-            landmarkName = "-tasksWillImportData:"
+            startingLineNumber = "304"
+            endingLineNumber = "304"
+            landmarkName = "-eraseTable:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

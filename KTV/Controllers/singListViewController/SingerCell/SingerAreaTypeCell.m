@@ -15,7 +15,8 @@
 @implementation SingerAreaTypeCell
 
 - (void)awakeFromNib {
-//    _headImageV.backgroundColor=[UIColor orangeColor]   ;
+    _headImageV.layer.cornerRadius=10;
+    _headImageV.clipsToBounds=YES;
     // Initialization code
 }
 

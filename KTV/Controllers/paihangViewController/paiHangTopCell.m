@@ -13,9 +13,9 @@
 @implementation paiHangTopCell
 
 - (void)awakeFromNib {
-    [_songName sizeToFit];
+   [_songName sizeToFit];
    [_singer sizeToFit];
-        _opened=NO;
+    _opened=NO;
     // Initialization code
 }
 
@@ -26,18 +26,20 @@
 }
 
 - (IBAction)addSong:(id)sender {
+    //没有检查是否添加成功
     if ([Utility instanceShare].netWorkStatus) {
         if (self.buttonitem && self.oneSong.number.length > 0) {
             CommandControler *cmd=[[CommandControler alloc]init];
-            [cmd sendCmd_Diange:_oneSong.number completed:^(BOOL completed, NSError *error) {
-                if (completed) {
+            [cmd sendCmd_Diange:self.oneSong.number completed:^(BOOL completed, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
                     [self.numberStr shakeAndFlyAnimationToView:self.buttonitem];
-                }
+                });
             }];
         }
     } else {
         [[Utility readAppDelegate] showMessageTitle:@"error" message:@"networkError" showType:1];
     }
+    
 }
 
 - (void)setOneSong:(Song *)oneSong {

@@ -35,8 +35,8 @@
     [super viewDidLoad];
     self.title=NSLocalizedString(@"hotest", nil);
     _previousRow = -1;
-//    UINib *nib=[UINib nibWithNibName:CELLIDENTIFY bundle:nil];
-//    [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
+    UINib *nib=[UINib nibWithNibName:CELLIDENTIFY bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
     UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.tableView.tableFooterView=backView;
     self.tableView.showsHorizontalScrollIndicator=NO;
@@ -113,15 +113,16 @@
         if (!cell) {
             cell = [[paiHangBottomCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:BOTTOMCELLIDENTIFY];
             cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"song_bt_bg"]];
-            cell.oneSong=dataList[_previousRow];
-            cell.oneSong.delegate=self;
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
         }
+        cell.oneSong=dataList[_previousRow];
+        cell.oneSong.delegate=self;
+
         return cell;
     } else {
 //        paihang_flag0
-        paiHangTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"paiHangTopCell" owner:nil options:nil] firstObject];
-//        paiHangTopCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDENTIFY forIndexPath:indexPath];
+//        paiHangTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"paiHangTopCell" owner:nil options:nil] firstObject];
+        paiHangTopCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDENTIFY forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.numberStr.text =[NSString stringWithFormat:@"%02d",(int)indexPath.row+1];
         cell.numberStr.font=[UIFont fontWithName:@"DIN Condensed" size:18];
@@ -129,7 +130,7 @@
         cell.singer.font=[UIFont systemFontOfSize:12];
         cell.buttonitem=self.navigationItem.rightBarButtonItem;
         cell.backgroundColor=[UIColor clearColor];
-        cell.paihangFlagView.image=[UIImage imageNamed:[NSString stringWithFormat:@"paihang_flag%d",(int)(indexPath.row+7)%7]];
+//        cell.paihangFlagView.image=[UIImage imageNamed:[NSString stringWithFormat:@"paihang_flag%d",(int)(indexPath.row+7)%7]];
         cell.oneSong=dataList[indexPath.row];
         if (cell.opened) {
             cell.sanjiaoxing.hidden=NO;

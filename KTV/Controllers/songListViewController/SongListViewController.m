@@ -37,8 +37,8 @@
     _previousRow = -1;
     myToast=[[HuToast alloc]init];
     self.title=NSLocalizedString(@"songs", nil);
-//    UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
-//    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
+    UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
     self.tableView.backgroundView=bgImageView;
@@ -179,8 +179,8 @@
         }
         return cell;
     } else {
-//        SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
-        SongTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"SongTopCell" owner:nil options:nil] firstObject];
+        SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
+//        SongTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"SongTopCell" owner:nil options:nil] firstObject];
         cell.numberStr.text =[NSString stringWithFormat:@"%02d",(int)indexPath.row+1];
         cell.numberStr.font=[UIFont fontWithName:@"DIN Condensed" size:22];
         cell.oneSong=dataList[indexPath.row];
