@@ -13,13 +13,14 @@
 #import "DataManager.h"
 #import "SDWebImageManager.h"
 #import "KTVModel.h"
+#import "ZipArchive.h"
 static  int limit=1000;
 
 #define DOCUMENTPATH [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
 
 #define DBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB.sqlite"]
 
-#define DEMODBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DemoDB.sqlite"]
+#define DEMODBPATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB.sqlite.zip"]
 typedef void (^completedBlock)(BOOL isOk,NSError *error);
 
 @interface DataManager () {
@@ -37,7 +38,7 @@ typedef void (^completedBlock)(BOOL isOk,NSError *error);
     //import
     int hasCount;
     dispatch_group_t importGroup;
-
+    
 }
 @property(nonatomic,strong)NSOperationQueue *queue;
 @property(nonatomic,strong)NSArray *downloadModels;
@@ -140,7 +141,7 @@ static DataManager *instance=nil;
             downloadModel.downloadStatus=TxtDownloadModel_starting;
             if (self.delegate && [self.delegate respondsToSelector:@selector(startingDownload:model:)]) {
                 __weak __typeof(self) weakSelf=self;
-                    [self.delegate startingDownload:weakSelf model:downloadModel];
+                [self.delegate startingDownload:weakSelf model:downloadModel];
             }
             [_queue addOperation:[self createSingalTxtFileOpearation:downloadModel depenency:finishedOperation]];
         } else {
@@ -152,7 +153,7 @@ static DataManager *instance=nil;
         }
     }
     if (_queue.operationCount > 0 && [self.delegate respondsToSelector:@selector(tasksWillDownloading:)]) {
-
+        
         __weak __typeof(self) weakSelf=self;
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.delegate tasksWillDownloading:weakSelf];
@@ -160,7 +161,7 @@ static DataManager *instance=nil;
     }
     
     [_queue addOperation:finishedOperation];
-
+    
 }
 
 - (NSBlockOperation*)createSingalTxtFileOpearation:(KTVModel*)model depenency:(NSOperation*)deOperation {
@@ -392,47 +393,47 @@ static DataManager *instance=nil;
 }
 
 - (BOOL)eraserTables:(KTVModel*)model{
-//    for (KTVModel *oneModel in models) {
-      return  [self eraseTable:model.tableName];
-//    }
+    //    for (KTVModel *oneModel in models) {
+    return  [self eraseTable:model.tableName];
+    //    }
 }
 
 - (void)addIntoDataSourceWithModels:(NSArray<KTVModel*>*)models delegate:(id<DataManagerDelegate>)delegate {
     //drap  all  data for tables
     _delegate=delegate;
-        for (KTVModel *oneModel in models) {
-            if (![oneModel.tableVersion isEqualToString:newVersion]) {
-                [self eraserTables:oneModel];
-                if (self.delegate && [self.delegate respondsToSelector:@selector(startingImportData:model:)]) {
-                    __weak __typeof(self) weakSelf=self;
-                    [self.delegate startingImportData:weakSelf model:oneModel];
-                }
-                oneModel.importDataStatus=TxtDownloadModel_starting;
-                if ([oneModel.fileName isEqualToString:@"songlist.txt"]) {
-                    [self importDataForSongs:oneModel];
-                } else if([oneModel.fileName isEqualToString:@"singlist.txt"]) {
-                    [self importDataForSingers:oneModel];
-                } else if([oneModel.fileName isEqualToString:@"typelist.txt"]) {
-                    [self importDataForType:oneModel];
-                } else if ([oneModel.fileName isEqualToString:@"orderdata.txt"]) {
-                    [self importDataForOrder:oneModel];
-                }
-                oneModel.importDataStatus=TxtDownloadModel_finished;
-                oneModel.tableVersion=newVersion;
-            }
- 
-            if (self.delegate && [self.delegate respondsToSelector:@selector(finishedImportData:model:)]) {
+    for (KTVModel *oneModel in models) {
+        if (![oneModel.tableVersion isEqualToString:newVersion]) {
+            [self eraserTables:oneModel];
+            if (self.delegate && [self.delegate respondsToSelector:@selector(startingImportData:model:)]) {
                 __weak __typeof(self) weakSelf=self;
-                [self.delegate finishedImportData:weakSelf model:oneModel];
+                [self.delegate startingImportData:weakSelf model:oneModel];
             }
-            
-            if ([oneModel isEqual:[models lastObject]] ) {
-                if (self.delegate && [self.delegate respondsToSelector:@selector(tasksDataImported:)]) {
-                    __weak __typeof(self) weakSelf=self;
-                    [self.delegate tasksDataImported:weakSelf];
-                }
+            oneModel.importDataStatus=TxtDownloadModel_starting;
+            if ([oneModel.fileName isEqualToString:@"songlist.txt"]) {
+                [self importDataForSongs:oneModel];
+            } else if([oneModel.fileName isEqualToString:@"singlist.txt"]) {
+                [self importDataForSingers:oneModel];
+            } else if([oneModel.fileName isEqualToString:@"typelist.txt"]) {
+                [self importDataForType:oneModel];
+            } else if ([oneModel.fileName isEqualToString:@"orderdata.txt"]) {
+                [self importDataForOrder:oneModel];
+            }
+            oneModel.importDataStatus=TxtDownloadModel_finished;
+            oneModel.tableVersion=newVersion;
+        }
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(finishedImportData:model:)]) {
+            __weak __typeof(self) weakSelf=self;
+            [self.delegate finishedImportData:weakSelf model:oneModel];
+        }
+        
+        if ([oneModel isEqual:[models lastObject]] ) {
+            if (self.delegate && [self.delegate respondsToSelector:@selector(tasksDataImported:)]) {
+                __weak __typeof(self) weakSelf=self;
+                [self.delegate tasksDataImported:weakSelf];
             }
         }
+    }
 }
 
 - (NSError*)importDataForSongs:(KTVModel*)model {
@@ -683,28 +684,26 @@ static DataManager *instance=nil;
     return 0;
 }
 
-/*
- //解压文件为演示
- 
- - (void)unArchiveDemoDbFile {
- if (![[NSFileManager defaultManager]fileExistsAtPath:DEMODBPATH]) {
- dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
- NSString *fileSourcePath=[[NSBundle mainBundle]pathForResource:@"DemoDB.sqlite" ofType:@"zip"];
- if  (fileSourcePath==nil || fileSourcePath.length==0) return ;
- NSString *savaPath=[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DB"];
- if ([ZipArchive unzipFileAtPath:fileSourcePath toDestination:savaPath overwrite:YES password:nil error:nil delegate:nil]) {
- NSFileManager *manager=[NSFileManager defaultManager];
- [manager moveItemAtPath:[savaPath stringByAppendingPathComponent:@"DemoDB.sqlite"] toPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject] stringByAppendingPathComponent:@"DemoDB.sqlite"] error:nil];
- 
- [manager removeItemAtPath:savaPath error:nil];
- }
- //        [ZipArchive unzipFileAtPath:fileSourcePath
- //                toDestination:savaPath];
- });
- }
- }
- 
- */
+//解压文件为演示
+
+- (void)unArchiveDemoDbFile:(void(^)(BOOL completed))completed {
+    if ([[NSFileManager defaultManager]fileExistsAtPath:DBPATH])
+        [fileManager removeItemAtPath:DBPATH error:nil];
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            NSString *fileSourcePath=[[NSBundle mainBundle]pathForResource:@"DB.sqlite" ofType:@"zip"];
+            NSString *savaPath=[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject];
+            if ([ZipArchive unzipFileAtPath:fileSourcePath
+                              toDestination:savaPath]) {
+                [self openDB];
+                completed(YES);
+            } else {
+                completed(NO);
+            }
+        });
+    
+}
+
 - (void)dealloc {
     [self closeDB];
 }

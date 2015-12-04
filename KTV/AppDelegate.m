@@ -10,6 +10,8 @@
 #import "Utility.h"
 #import "SDWebImageManager.h"
 #import "MBProgressHUD.h"
+#import "XZMCoreNewFeatureVC.h"
+#import "CALayer+Animation.h"
 @interface AppDelegate () {
     MBProgressHUD *HUD;
 }
@@ -21,8 +23,44 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     UIWindow *window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window = window;
-    [self enter];
+    //判断是否需要显示：（内部已经考虑版本及本地版本缓存）
+    BOOL canShow = [XZMCoreNewFeatureVC canShowNewFeature];
+    
+    //测试代码，正式版本应该删除
+    canShow = YES;
+    if(canShow){ // 初始化新特性界面
+        window.rootViewController = [XZMCoreNewFeatureVC newFeatureVCWithImageNames:@[@"a6",@"b7"] enterBlock:^{
+            [self enter];
+            
+        } configuration:^(UIButton *enterButton,UIButton *demoButton) {
+            // 配置进入按钮
+            [enterButton setTitle:NSLocalizedString(@"enter", nil) forState:UIControlStateNormal];
+            enterButton.bounds = CGRectMake(0, 0, 120, 40);
+            enterButton.layer.cornerRadius=8;
+            enterButton.layer.borderWidth=2;
+            enterButton.layer.borderColor=[UIColor whiteColor].CGColor;
+            enterButton.center = CGPointMake(KScreenW * 0.5, KScreenH* 0.85);
+            
+            //demo button
+            [demoButton setTitle:NSLocalizedString(@"showdemo", nil) forState:UIControlStateNormal];
+            demoButton.bounds = CGRectMake(0, 0, 120, 40);
+            demoButton.layer.cornerRadius=8;
+            demoButton.layer.borderWidth=2;
+            demoButton.layer.borderColor=[UIColor whiteColor].CGColor;
+            demoButton.center = CGPointMake(KScreenW * 0.5, KScreenH* 0.93);
+            if (IS_IPHONE_4_OR_LESS) {
+                demoButton.center = CGPointMake(KScreenW * 0.5, KScreenH* 0.95);
+            }
+        }];
+        
+    }else{
+        [self enter];
+    }
+    
+    [window makeKeyAndVisible];
+    
     return YES;
+
 }
 
 

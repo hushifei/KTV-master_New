@@ -58,7 +58,7 @@ typedef void(^DownloadTxtFilesCompleted)(BOOL Completed,NSError *error);
 - (BOOL)openDB;
 - (BOOL)closeDB;
 - (BOOL)databaseAlready;
-
+- (void)unArchiveDemoDbFile:(void(^)(BOOL completed))completed;
 @end
 
 

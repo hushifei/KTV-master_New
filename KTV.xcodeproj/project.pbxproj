@@ -33,7 +33,6 @@
 		C3558C5C1BD5CB8C005D2F48 /* CALayer+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = C3558C5B1BD5CB8C005D2F48 /* CALayer+Animation.m */; };
 		C3558C5F1BD5D370005D2F48 /* SFHeaderFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = C3558C5E1BD5D370005D2F48 /* SFHeaderFooterView.m */; };
 		C3558C621BD637FD005D2F48 /* paiHangBottomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3558C611BD637FD005D2F48 /* paiHangBottomCell.m */; };
-		C389FE501BD47E450017ECBF /* DemoDB.sqlite.zip in Resources */ = {isa = PBXBuildFile; fileRef = C389FE4F1BD47E450017ECBF /* DemoDB.sqlite.zip */; };
 		C389FE721BD489830017ECBF /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C389FE711BD489830017ECBF /* libz.tbd */; };
 		C389FE9C1BD491B80017ECBF /* ZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = C389FE8F1BD491B80017ECBF /* ZipArchive.m */; };
 		C389FE9D1BD491B80017ECBF /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = C389FE921BD491B80017ECBF /* ioapi.c */; };
@@ -272,6 +271,9 @@
 		D1E39F0D1AFDDF4500E739F9 /* cancel_bt_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E39F0C1AFDDF4500E739F9 /* cancel_bt_bg.png */; };
 		D1E39F0F1AFDE11B00E739F9 /* brt.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E39F0E1AFDE11B00E739F9 /* brt.png */; };
 		D1E39F111AFE051B00E739F9 /* geshou_area_cell_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E39F101AFE051B00E739F9 /* geshou_area_cell_bg.png */; };
+		D1EF0F381C11E92000731EFA /* CALayer+Transition.m in Sources */ = {isa = PBXBuildFile; fileRef = D1EF0F351C11E92000731EFA /* CALayer+Transition.m */; };
+		D1EF0F391C11E92000731EFA /* XZMCoreNewFeatureVC.m in Sources */ = {isa = PBXBuildFile; fileRef = D1EF0F371C11E92000731EFA /* XZMCoreNewFeatureVC.m */; };
+		D1EF0F3B1C11FBF900731EFA /* DB.sqlite.zip in Resources */ = {isa = PBXBuildFile; fileRef = D1EF0F3A1C11FBF900731EFA /* DB.sqlite.zip */; };
 		D1F6C0311B2C95640018C96F /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = D1F6C0231B2C95640018C96F /* FMDatabase.m */; };
 		D1F6C0321B2C95640018C96F /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D1F6C0251B2C95640018C96F /* FMDatabaseAdditions.m */; };
 		D1F6C0331B2C95640018C96F /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = D1F6C0271B2C95640018C96F /* FMDatabasePool.m */; };
@@ -360,7 +362,6 @@
 		C3558C5E1BD5D370005D2F48 /* SFHeaderFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHeaderFooterView.m; sourceTree = "<group>"; };
 		C3558C601BD637FD005D2F48 /* paiHangBottomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = paiHangBottomCell.h; sourceTree = "<group>"; };
 		C3558C611BD637FD005D2F48 /* paiHangBottomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = paiHangBottomCell.m; sourceTree = "<group>"; };
-		C389FE4F1BD47E450017ECBF /* DemoDB.sqlite.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = DemoDB.sqlite.zip; sourceTree = "<group>"; };
 		C389FE711BD489830017ECBF /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		C389FE8E1BD491B80017ECBF /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		C389FE8F1BD491B80017ECBF /* ZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZipArchive.m; sourceTree = "<group>"; };
@@ -720,6 +721,11 @@
 		D1E39F0C1AFDDF4500E739F9 /* cancel_bt_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel_bt_bg.png; sourceTree = "<group>"; };
 		D1E39F0E1AFDE11B00E739F9 /* brt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = brt.png; sourceTree = "<group>"; };
 		D1E39F101AFE051B00E739F9 /* geshou_area_cell_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = geshou_area_cell_bg.png; sourceTree = "<group>"; };
+		D1EF0F341C11E92000731EFA /* CALayer+Transition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+Transition.h"; sourceTree = "<group>"; };
+		D1EF0F351C11E92000731EFA /* CALayer+Transition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+Transition.m"; sourceTree = "<group>"; };
+		D1EF0F361C11E92000731EFA /* XZMCoreNewFeatureVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XZMCoreNewFeatureVC.h; sourceTree = "<group>"; };
+		D1EF0F371C11E92000731EFA /* XZMCoreNewFeatureVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XZMCoreNewFeatureVC.m; sourceTree = "<group>"; };
+		D1EF0F3A1C11FBF900731EFA /* DB.sqlite.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = DB.sqlite.zip; sourceTree = "<group>"; };
 		D1F6C0221B2C95640018C96F /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		D1F6C0231B2C95640018C96F /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
 		D1F6C0241B2C95640018C96F /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseAdditions.h; sourceTree = "<group>"; };
@@ -862,7 +868,7 @@
 		C3AAC0B01BCC8C22009582D1 /* downloadDir */ = {
 			isa = PBXGroup;
 			children = (
-				C389FE4F1BD47E450017ECBF /* DemoDB.sqlite.zip */,
+				D1EF0F3A1C11FBF900731EFA /* DB.sqlite.zip */,
 			);
 			path = downloadDir;
 			sourceTree = "<group>";
@@ -1469,6 +1475,7 @@
 		D16D116C1AE1FE85005D7719 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D1EF0F331C11E5BA00731EFA /* Introuducing */,
 				D15C03B51BCA519700F4F112 /* CommVC */,
 				D156A3EA1AECE2050091C419 /* mainViewController */,
 				D15931FC1AF4DE1000A9C53C /* sondViewController */,
@@ -1705,6 +1712,17 @@
 			path = pinYin;
 			sourceTree = "<group>";
 		};
+		D1EF0F331C11E5BA00731EFA /* Introuducing */ = {
+			isa = PBXGroup;
+			children = (
+				D1EF0F341C11E92000731EFA /* CALayer+Transition.h */,
+				D1EF0F351C11E92000731EFA /* CALayer+Transition.m */,
+				D1EF0F361C11E92000731EFA /* XZMCoreNewFeatureVC.h */,
+				D1EF0F371C11E92000731EFA /* XZMCoreNewFeatureVC.m */,
+			);
+			path = Introuducing;
+			sourceTree = "<group>";
+		};
 		D1F6C0211B2C95640018C96F /* fmdb */ = {
 			isa = PBXGroup;
 			children = (
@@ -1880,9 +1898,9 @@
 				D175E8BE1B0237DE003449A6 /* searchBar.png in Resources */,
 				D15430361AFDDCD600522DE1 /* collectionFlag3.png in Resources */,
 				D10E26801BFF761B008F77EF /* scanLine@2x.png in Resources */,
+				D1EF0F3B1C11FBF900731EFA /* DB.sqlite.zip in Resources */,
 				D15430391AFDDCD600522DE1 /* collectionFlag6.png in Resources */,
 				D15430791AFDDCD600522DE1 /* shoucan.png in Resources */,
-				C389FE501BD47E450017ECBF /* DemoDB.sqlite.zip in Resources */,
 				D154306F1AFDDCD600522DE1 /* kege_selected@2x.png in Resources */,
 				D175E8CE1B024C99003449A6 /* collection_bt@2x.png in Resources */,
 				D15C03C01BCA5A5500F4F112 /* yidian@2x.png in Resources */,
@@ -2015,6 +2033,7 @@
 				D19994B01AEA87D200CEC16D /* SongTopCell.m in Sources */,
 				D15C03BB1BCA51D000F4F112 /* BaseViewController.m in Sources */,
 				D12374561B2D163500902361 /* SDWebImageDownloader.m in Sources */,
+				D1EF0F381C11E92000731EFA /* CALayer+Transition.m in Sources */,
 				C3AAC1221BCCA2F7009582D1 /* UIScrollView+MJExtension.m in Sources */,
 				D15C03C51BCA5BE100F4F112 /* YiDianButton.m in Sources */,
 				D155899E1B038C52000AA4C9 /* UIView+Round.m in Sources */,
@@ -2106,6 +2125,7 @@
 				D16E52821AE6755F00E57011 /* SingerAreaTypeCell.m in Sources */,
 				D156A3E01AEC981D0091C419 /* paiHangTopCell.m in Sources */,
 				D1F6C0371B2C95640018C96F /* README.markdown in Sources */,
+				D1EF0F391C11E92000731EFA /* XZMCoreNewFeatureVC.m in Sources */,
 				C3AAC1141BCCA2F7009582D1 /* MJRefreshComponent.m in Sources */,
 				D12374591B2D163500902361 /* SDWebImagePrefetcher.m in Sources */,
 				C344DB621BCB4AAB00F1325D /* UINavigationBar+customBar.m in Sources */,

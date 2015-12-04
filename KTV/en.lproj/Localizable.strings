@@ -81,7 +81,6 @@
 "connectNetOK"  =  "Network has been connected";
 "playing"="onPlaying";
 
-
 //** new song VC **/
 "collect" = "Collect";
 "jumpSetting" = "Go Setting";
@@ -90,3 +89,6 @@
 "collectionsuccess" = "Collection Success";
 "collectioninfo" = "Duplicate collection";
 "ceollectionerror" = "Collection failure";
+
+"enter" = "Enter";
+"showdemo" = "Show Demo";
