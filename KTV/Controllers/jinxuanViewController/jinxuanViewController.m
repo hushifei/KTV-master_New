@@ -44,7 +44,7 @@
 
 - (void)initializeTableContent {
     dataList=[[NSMutableArray alloc]init];
-    NSString *sqlStr= [NSString stringWithFormat:@"select * from TypeTable where type='%@'",[@"3" encodeBase64]];
+    NSString *sqlStr=@"select * from TypeTable where type='3'";
     FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Typelist *type=[[Typelist alloc]init];

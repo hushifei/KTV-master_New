@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class Singer;
 @interface SearchResultCell : UITableViewCell
-@property(nonatomic,strong)UIImageView * _Nullable  header;
-@property(nonatomic,strong)UILabel * _Nullable titleLabel;
-- (void)configWithObject:(nonnull id)object;
+
+@property(nonatomic,strong)UIImageView *header;
+@property(nonatomic,strong)UILabel *titleLabel;
+- (void)configWithObject:(Singer*)object;
 @end

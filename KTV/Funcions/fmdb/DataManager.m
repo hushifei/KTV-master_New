@@ -439,7 +439,7 @@ static DataManager *instance=nil;
 - (NSError*)importDataForSongs:(KTVModel*)model {
     NSString *txtFilePath=[savePath_TxtDir stringByAppendingPathComponent:model.fileName];
     NSString *str=[NSString stringWithContentsOfFile:txtFilePath encoding:NSUTF8StringEncoding error:nil];
-    NSArray *lines=[str componentsSeparatedByString:@"\t\r\n"];
+    NSArray *lines=[str componentsSeparatedByString:@"\r\n"];
     hasCount=(int)lines.count;
     [self insertSongsData:0 toIndex:999 useTransaction:YES dataSource:lines];
     model.importDataStatus=TxtDownloadModel_finished;
@@ -457,13 +457,19 @@ static DataManager *instance=nil;
                 hasCount--;
                 @autoreleasepool {
                     NSArray *lineArry=[dataSource[i] componentsSeparatedByString:@"\t"];
-                    if  (lineArry.count !=17) {
+                    if  (lineArry.count < 17) {
                         toIndex--;
                         // NSLog(@"--line error--%d",i);
                         continue;
                     }
                     
-                    NSString *insertSql1= [NSString stringWithFormat:@"INSERT INTO SongTable (number,songname,singer,singer1,songpiy,word,language,volume,channel,sex,stype,newsong,movie,pathid,bihua,addtime,spath)VALUES ('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",[lineArry[0] encodeBase64],[lineArry[1] encodeBase64],[lineArry[2] encodeBase64],[lineArry[3] encodeBase64],[lineArry[4] encodeBase64],[lineArry[5] encodeBase64],[lineArry[6] encodeBase64],[lineArry[7] encodeBase64],[lineArry[8] encodeBase64],[lineArry[9] encodeBase64],[lineArry[10] encodeBase64],[lineArry[11] encodeBase64],[lineArry[12] encodeBase64],[lineArry[13] encodeBase64],[lineArry[14] encodeBase64],[lineArry[15] encodeBase64],[lineArry[16] encodeBase64]];
+//                    NSString *insertSql1= [NSString stringWithFormat:@"INSERT INTO SongTable (number,songname,singer,singer1,songpiy,word,language,volume,channel,sex,stype,newsong,movie,pathid,bihua,addtime,spath)VALUES ('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",[lineArry[0] encodeBase64],[lineArry[1] encodeBase64],[lineArry[2] encodeBase64],[lineArry[3] encodeBase64],[lineArry[4] encodeBase64],[lineArry[5] encodeBase64],[lineArry[6] encodeBase64],[lineArry[7] encodeBase64],[lineArry[8] encodeBase64],[lineArry[9] encodeBase64],[lineArry[10] encodeBase64],[lineArry[11] encodeBase64],[lineArry[12] encodeBase64],[lineArry[13] encodeBase64],[lineArry[14] encodeBase64],[lineArry[15] encodeBase64],[lineArry[16] encodeBase64]];
+                    
+                    NSString *songnm=[lineArry[1] stringByReplacingOccurrencesOfString:@"'" withString:@"‘"];
+                    NSString *singnm=[lineArry[2] stringByReplacingOccurrencesOfString:@"'" withString:@"‘"];
+                    NSString *singnm2=[lineArry[3] stringByReplacingOccurrencesOfString:@"'" withString:@"‘"];
+                    
+                   NSString *insertSql1= [NSString stringWithFormat:@"INSERT INTO SongTable (number,songname,singer,singer1,songpiy,word,language,volume,channel,sex,stype,newsong,movie,pathid,bihua,addtime,spath)VALUES ('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@')",lineArry[0] ,songnm ,singnm ,singnm2,lineArry[4] ,lineArry[5] ,lineArry[6] ,lineArry[7] ,lineArry[8] ,lineArry[9] ,lineArry[10] ,lineArry[11] ,lineArry[12] ,lineArry[13] ,lineArry[14] ,lineArry[15] ,lineArry[16]];
                     if (![_db executeUpdate:insertSql1]) {
                         NSLog(@"插入失败_SongTable");
                     }
@@ -523,12 +529,15 @@ static DataManager *instance=nil;
                     NSMutableString *lineStr=[dataSource[i] mutableCopy];
                     [lineStr replaceOccurrencesOfString:@"\t\t" withString:@"\t" options:NSLiteralSearch range:NSMakeRange(0, lineStr.length)];
                     NSArray *lineArry=[lineStr componentsSeparatedByString:@"\t"];
-                    if  (lineArry.count !=4) {
+                    if  (lineArry.count < 4) {
                         toIndex--;
-                        NSLog(@"line error %d",fromIndex);
+//                        NSLog(@"line error %d",fromIndex);
                         continue;
                     }
-                    NSString *insertSql1=[NSString stringWithFormat:@"INSERT INTO SingerTable (singer,pingyin,s_bi_hua,area)VALUES ('%@','%@','%@','%@')",[lineArry[0] encodeBase64],[lineArry[1] encodeBase64],[lineArry[2] encodeBase64],[lineArry[3] encodeBase64]];
+                    NSString *singnm=[lineArry[0] stringByReplacingOccurrencesOfString:@"'" withString:@"‘"];
+                    NSString *pingying=[lineArry[1] stringByReplacingOccurrencesOfString:@"'" withString:@"‘"];
+                    NSString *bihua=[lineArry[2] stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                    NSString *insertSql1=[NSString stringWithFormat:@"INSERT INTO SingerTable (singer,pingyin,s_bi_hua,area)VALUES ('%@','%@','%@','%@')",singnm,pingying,bihua,lineArry[3]];
                     if (![_db executeUpdate:insertSql1]) {
                         NSLog(@"插入失败 _SingerTable");
                     }
@@ -573,7 +582,7 @@ static DataManager *instance=nil;
             if  (lineArry.count !=3) {
                 continue;
             }
-            NSString *insertSql= [NSString stringWithFormat:@"INSERT INTO TypeTable (typeid,type,typename)VALUES ('%@','%@','%@')",[lineArry[0] encodeBase64],[lineArry[1] encodeBase64],[lineArry[2] encodeBase64]];
+            NSString *insertSql= [NSString stringWithFormat:@"INSERT INTO TypeTable (typeid,type,typename)VALUES ('%@','%@','%@')",lineArry[0] ,lineArry[1] ,lineArry[2] ];
             [_db executeUpdate:insertSql];
             
         }
@@ -599,7 +608,7 @@ static DataManager *instance=nil;
                     if  (lineArry.count !=3) {
                         continue;
                     }
-                    NSString *insertSql= [NSString stringWithFormat:@"INSERT INTO TypeTable (typeid,type,typename)VALUES ('%@','%@','%@')",[lineArry[0] encodeBase64],[lineArry[1] encodeBase64],[lineArry[2] encodeBase64]];
+                    NSString *insertSql= [NSString stringWithFormat:@"INSERT INTO TypeTable (typeid,type,typename)VALUES ('%@','%@','%@')",lineArry[0],lineArry[1],lineArry[2]];
                     if (![_db executeUpdate:insertSql]) {
                         NSLog(@"插入失败_TypeTable");
                     }
@@ -665,7 +674,7 @@ static DataManager *instance=nil;
             continue;
         }
         //        NSLog(@"\n%@\n%@\n%@",number,rcid,order);
-        NSString *insertSql= [NSString stringWithFormat:@"INSERT INTO OrderTable (number,rcid,ordername)VALUES ('%@','%@','%@')",[number encodeBase64],[rcid encodeBase64],[order encodeBase64]];
+        NSString *insertSql= [NSString stringWithFormat:@"INSERT INTO OrderTable (number,rcid,ordername)VALUES ('%@','%@','%@')",number,rcid,order];
         if (![_db executeUpdate:insertSql]) {
             NSLog(@"插入失败 ——OrderTable");
         }

@@ -7,21 +7,21 @@
 //
 
 #import "Typelist.h"
-#import "NSString+Utility.h"
+//#import "NSString+Utility.h"
 @implementation Typelist
 
 
-- (void)setZtype:(NSString *)ztype {
-    _ztype=[ztype  decodeBase64];
-}
-
-- (void)setZtypeid:(NSString *)ztypeid {
-    _ztypeid=[ztypeid decodeBase64];
-}
-
-- (void)setZtypename:(NSString *)ztypename {
-    _ztypename=[ztypename  decodeBase64];
-}
+//- (void)setZtype:(NSString *)ztype {
+//    _ztype=[ztype  decodeBase64];
+//}
+//
+//- (void)setZtypeid:(NSString *)ztypeid {
+//    _ztypeid=[ztypeid decodeBase64];
+//}
+//
+//- (void)setZtypename:(NSString *)ztypename {
+//    _ztypename=[ztypename  decodeBase64];
+//}
 
 
 @end

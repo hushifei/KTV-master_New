@@ -44,5 +44,6 @@
 - (void)cutSong:(void(^)(BOOL complete))actionCompleted;
 - (void)prioritySong:(void(^)(BOOL complete))actionCompleted;
 - (void)diangeToTop:(void(^)(BOOL complete))actionCompleted;
+- (NSString*)getLuangeString;
 
 @end

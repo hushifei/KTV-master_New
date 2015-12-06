@@ -7,9 +7,10 @@
 //
 
 #import "paiHangViewController.h"
-#import "paiHangTopCell.h"
+//#import "newSongListTopCell.h"
+#import "newSongListTopCell.h"
 #import "paiHangBottomCell.h"
-#define CELLIDENTIFY @"paiHangTopCell"
+#define CELLIDENTIFY @"newSongListTopCell"
 #define BOTTOMCELLIDENTIFY @"paiHangBottomCell"
 #import "YiDianViewController.h"
 #import "BBBadgeBarButtonItem.h"
@@ -35,8 +36,10 @@
     [super viewDidLoad];
     self.title=NSLocalizedString(@"hotest", nil);
     _previousRow = -1;
-    UINib *nib=[UINib nibWithNibName:CELLIDENTIFY bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
+    [self.tableView registerClass:[newSongListTopCell class] forCellReuseIdentifier:CELLIDENTIFY];
+
+//    UINib *nib=[UINib nibWithNibName:CELLIDENTIFY bundle:nil];
+//    [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
     UIView *backView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
     self.tableView.tableFooterView=backView;
     self.tableView.showsHorizontalScrollIndicator=NO;
@@ -109,7 +112,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     //    NSLog(@"insert is %ld=%ld:",_previousRow+1,indexPath.row);
     if (_previousRow >= 0 && _previousRow+1==indexPath.row) {
-        paiHangBottomCell *cell=[tableView dequeueReusableCellWithIdentifier:BOTTOMCELLIDENTIFY];
+        paiHangBottomCell *cell=(paiHangBottomCell*)[tableView dequeueReusableCellWithIdentifier:BOTTOMCELLIDENTIFY];
         if (!cell) {
             cell = [[paiHangBottomCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:BOTTOMCELLIDENTIFY];
             cell.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"song_bt_bg"]];
@@ -120,17 +123,11 @@
 
         return cell;
     } else {
-//        paihang_flag0
-//        paiHangTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"paiHangTopCell" owner:nil options:nil] firstObject];
-        paiHangTopCell *cell = [tableView dequeueReusableCellWithIdentifier:CELLIDENTIFY forIndexPath:indexPath];
+        newSongListTopCell *cell = (newSongListTopCell*)[tableView dequeueReusableCellWithIdentifier:CELLIDENTIFY forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.numberStr.text =[NSString stringWithFormat:@"%02d",(int)indexPath.row+1];
-        cell.numberStr.font=[UIFont fontWithName:@"DIN Condensed" size:18];
-        cell.songName.font=[UIFont systemFontOfSize:15];
-        cell.singer.font=[UIFont systemFontOfSize:12];
         cell.buttonitem=self.navigationItem.rightBarButtonItem;
         cell.backgroundColor=[UIColor clearColor];
-//        cell.paihangFlagView.image=[UIImage imageNamed:[NSString stringWithFormat:@"paihang_flag%d",(int)(indexPath.row+7)%7]];
         cell.oneSong=dataList[indexPath.row];
         if (cell.opened) {
             cell.sanjiaoxing.hidden=NO;
@@ -146,8 +143,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    paiHangTopCell *cell=(paiHangTopCell*)[tableView cellForRowAtIndexPath:indexPath];
-    if (![cell isKindOfClass:[paiHangTopCell class]])  {
+    newSongListTopCell *cell=(newSongListTopCell*)[tableView cellForRowAtIndexPath:indexPath];
+    if (![cell isKindOfClass:[newSongListTopCell class]])  {
         return;
     };
     cell.opened=!cell.opened;
@@ -158,7 +155,7 @@
     }
     if (_previousRow >= 0) {
         NSIndexPath *preIndexPath=[NSIndexPath indexPathForRow:_previousRow inSection:0];
-        paiHangTopCell *preCell=(paiHangTopCell*)[tableView cellForRowAtIndexPath:preIndexPath];
+        newSongListTopCell *preCell=(newSongListTopCell*)[tableView cellForRowAtIndexPath:preIndexPath];
         if (indexPath.row == _previousRow + 1) {
 //            NSLog(@"fff");
         }
@@ -228,7 +225,7 @@
         switch (result) {
             case KMessageSuccess: {
                 NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-                paiHangTopCell *cell=(paiHangTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+                newSongListTopCell *cell=(newSongListTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
                 cell.opened=!cell.opened;
                 if (cell.opened) {
                     cell.sanjiaoxing.hidden=NO;
@@ -252,7 +249,7 @@
             }
             case KMessageStyleInfo: {
                 NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-                paiHangTopCell *cell=(paiHangTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+                newSongListTopCell *cell=(newSongListTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
                 cell.opened=!cell.opened;
                 if (cell.opened) {
                     cell.sanjiaoxing.hidden=NO;
@@ -277,7 +274,7 @@
     //ding ge
        if(_previousRow<=-1) return;
         NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-        paiHangTopCell *cell=(paiHangTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+        newSongListTopCell *cell=(newSongListTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
         cell.opened=!cell.opened;
         if (cell.opened) {
             cell.sanjiaoxing.hidden=NO;
@@ -302,7 +299,7 @@
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-    paiHangTopCell *cell=(paiHangTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    newSongListTopCell *cell=(newSongListTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
     if (cell.opened) {
         cell.sanjiaoxing.hidden=NO;

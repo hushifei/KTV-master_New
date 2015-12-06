@@ -44,7 +44,6 @@
 }
 
 - (void)configWithObject:(nonnull id)object {
-    if (object==nil) return;
     if ([object isKindOfClass:[Singer class]]) {
         Singer *oneSinger=(Singer*)object;
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -58,12 +57,6 @@
                 _header.image=[UIImage imageNamed:@"Default_Header"];
             });
         }
-    } else if ([object isKindOfClass:[Song class]]){
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            _header.image=[UIImage imageNamed:@"music_icon"];
-            _titleLabel.text=[(Song*)object songname];
-        });
-        
     }
     
 }

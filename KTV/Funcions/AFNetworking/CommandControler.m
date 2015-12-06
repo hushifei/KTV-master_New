@@ -126,27 +126,34 @@
 }
 
 //静音/放音
+static int  ii=1;
 - (void)sendCmd_mute_unmute:(sendCompleted)completed {
     //    http://192.168.43.1:8080/puze?cmd=0xb6&ID=(1静音 2=放音)
-    int value=([accountDefaults boolForKey:@"MUTE_SOUND"])?2:1;
-    NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xb6&ID=%d",value];
+//    int value=([accountDefaults boolForKey:@"MUTE_SOUND"])?2:1;
+    NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xb6&ID=%d",ii];
+    if (ii==1) {
+        ii=2;
+    } else {
+        ii=1;
+    }
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if ([self httpsStatuCode:response]==200 && !error) {
-            if (value==1) {
-                [accountDefaults setBool:YES forKey:@"MUTE_SOUND"];
-            } else {
-                [accountDefaults setBool:NO forKey:@"MUTE_SOUND"];
-            }
-            [accountDefaults synchronize];
-            if (completed) {
-                completed(YES,nil);
-            }
-        } else {
+
+//        if ([self httpsStatuCode:response]==200 && !error) {
+//            if (value==1) {
+//                [accountDefaults setBool:YES forKey:@"MUTE_SOUND"];
+//            } else {
+//                [accountDefaults setBool:NO forKey:@"MUTE_SOUND"];
+//            }
+//            [accountDefaults synchronize];
+//            if (completed) {
+//                completed(YES,nil);
+//            }
+//        } else {
             if (completed) {
                 completed(NO,[CommandControler errorWithMessage:error.description]);
             }
-        }
+//        }
     }];
     dataTask.priority=NSURLSessionTaskPriorityHigh;
     [dataTask resume];
@@ -249,56 +256,44 @@
     dataTask.priority=NSURLSessionTaskPriorityHigh;
     [dataTask resume];
 }
+//静音，播放 已点
 
 
 //暂停/播放
+ static int i=1;
 - (void)sendCmd_stopPlay:(sendCompleted)completed {
     // http://192.168.43.1:8080/puze?cmd=0xba&ID=(1暂停 2 播放)
-    int value =([accountDefaults boolForKey:@"PLAYING"])?1:2;
-    NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xba&ID=%d",value];
-    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+    NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xba&ID=%d",i];
+    if (i==1) {
+        i=2;
+    } else {
+        i=1;
+    }
+    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:10];
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if ([self httpsStatuCode:response]==200  && !error) {
-            if (value==1) {
-                [accountDefaults setBool:NO forKey:@"PLAYING"];
-            } else {
-                [accountDefaults setBool:YES forKey:@"PLAYING"];
-            }
-            [accountDefaults synchronize];
-            if (completed) {
-                completed(YES,nil);
-            }
-        } else {
-            if (completed) {
-                completed(NO,[CommandControler errorWithMessage:error.description]);
-            }
+
+        if (completed) {
+            completed(NO,[CommandControler errorWithMessage:error.description]);
         }
     }];
     dataTask.priority=NSURLSessionTaskPriorityHigh;
     [dataTask resume];
 }
 //原唱/伴唱
+static int iii=1;
 - (void)sendCmd_yuanChang_pangChang:(sendCompleted)completed {
     //http://192.168.43.1:8080/puze?cmd=0xbb&ID=(1原唱2伴唱)
-    int value=([accountDefaults boolForKey:@"PANGYING"])?1:2;
-    NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xbb&ID=%d",value];
+    NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xbb&ID=%d",iii];
+    if (iii==1) {
+        iii=2;
+    } else {
+        iii=1;
+    }
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if ([self httpsStatuCode:response]==200 && !error) {
-            if (value==1) {
-                [accountDefaults setBool:NO forKey:@"PANGYING"];
-            } else {
-                [accountDefaults setBool:YES forKey:@"PANGYING"];
-            }
-            [accountDefaults synchronize];
-            if (completed) {
-                completed(YES,nil);
-            }
-        } else {
             if (completed) {
                 completed(NO,[CommandControler errorWithMessage:error.description]);
             }
-        }
     }];
     dataTask.priority=NSURLSessionTaskPriorityHigh;
     [dataTask resume];
@@ -308,10 +303,11 @@
 - (void)sendCmd_get_yiDianList:(yiDianCompleted)completed {
     //http://192.168.43.1:8080/puze?cmd=0xbc
     NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xbc"];
-    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:20];
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
-        if ([self httpsStatuCode:response]==200 && !error) {
+        if (!error) {
+            NSLog(@"return %@",[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding]);
+            [self httpsStatuCode:response];
             if (completed) {
                 NSString *strContent=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
                 NSMutableArray *arr=[[strContent componentsSeparatedByString:@"\r\n"] mutableCopy];
@@ -332,9 +328,10 @@
 - (void)sendCmd_remove_yidian:(NSString *)value completed:(sendCompleted)completed {
     //    http://192.168.43.1:8080/puze?cmd=0xbd&orderid=序号
     NSString *urlStr=[COMMANDURLHEADER stringByAppendingFormat:@"0xbd&orderid=%@",value];
-    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+    NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:20];
     NSURLSessionDataTask *dataTask=[session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if ([self httpsStatuCode:response]==200 && !error) {
+        if (!error) {
+//        if ([self httpsStatuCode:response]==200 && !error) {
             if (completed) {
                 completed(YES,nil);
             }
@@ -383,6 +380,7 @@
                 completed(NO,[CommandControler errorWithMessage:error.description]);
             }
         }
+        
     }];
     dataTask.priority=NSURLSessionTaskPriorityHigh;
     [dataTask resume];
@@ -542,7 +540,7 @@
             NSMutableArray *arr=[[strContent componentsSeparatedByString:@"\r\n"] mutableCopy];
             [arr removeLastObject];
             dispatch_async(dispatch_get_main_queue(), ^{
-                item.badgeValue=[NSString stringWithFormat:@"%d",(int)arr.count];
+                item.badgeValue=[NSString stringWithFormat:@"%d",(int)arr.count-1];
         });
             if (completed) {
                 completed(YES,nil);
@@ -559,6 +557,7 @@
 
 - (NSInteger)httpsStatuCode:(NSURLResponse*)response {
     NSHTTPURLResponse *httpResponse=(NSHTTPURLResponse*)response;
+    NSLog(@"%ld",(long)httpResponse.statusCode);
     return httpResponse.statusCode;
 }
 

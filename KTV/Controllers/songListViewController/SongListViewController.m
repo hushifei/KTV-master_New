@@ -7,8 +7,8 @@
 //
 
 #import "SongListViewController.h"
-#define TOPCELLIDENTIFY @"SongTopCell"
-#import "SongTopCell.h"
+#define TOPCELLIDENTIFY @"newSongListTopCell"
+#import "newSongListTopCell.h"
 #define BOTTOMCELLIDENTIFY @"SongBottomCell"
 #import "SongBottomCell.h"
 #import "YiDianViewController.h"
@@ -37,8 +37,10 @@
     _previousRow = -1;
     myToast=[[HuToast alloc]init];
     self.title=NSLocalizedString(@"songs", nil);
-    UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
+    [self.tableView registerClass:[newSongListTopCell class] forCellReuseIdentifier:TOPCELLIDENTIFY];
+
+//    UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
+//    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
     self.tableView.backgroundView=bgImageView;
@@ -77,7 +79,7 @@
 }
 
 - (void)initializeTableContent {
-    NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where singer='%@' order by singer",[_singerName encodeBase64]];
+    NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where singer='%@' order by singer",_singerName];
     FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
@@ -113,11 +115,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SongTopCell *cell=(SongTopCell*)[tableView cellForRowAtIndexPath:indexPath];
-    if (![cell isKindOfClass:[SongTopCell class]]) return;
+    newSongListTopCell *cell=(newSongListTopCell*)[tableView cellForRowAtIndexPath:indexPath];
+    if (![cell isKindOfClass:[newSongListTopCell class]]) return;
     if (_previousRow >= 0) {
         NSIndexPath *preIndexPath=[NSIndexPath indexPathForRow:_previousRow inSection:0];
-        SongTopCell *preCell=(SongTopCell*)[tableView cellForRowAtIndexPath:preIndexPath];
+        newSongListTopCell *preCell=(newSongListTopCell*)[tableView cellForRowAtIndexPath:preIndexPath];
          if (indexPath.row == _previousRow) {
              cell.sanjiaoxing.hidden=!(cell.opened=!cell.opened);
             [dataList removeObjectAtIndex:indexPath.row +1];
@@ -179,8 +181,8 @@
         }
         return cell;
     } else {
-        SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
-//        SongTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"SongTopCell" owner:nil options:nil] firstObject];
+        newSongListTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
+//        newSongListTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"newSongListTopCell" owner:nil options:nil] firstObject];
         cell.numberStr.text =[NSString stringWithFormat:@"%02d",(int)indexPath.row+1];
         cell.numberStr.font=[UIFont fontWithName:@"DIN Condensed" size:22];
         cell.oneSong=dataList[indexPath.row];
@@ -225,7 +227,7 @@
     switch (result) {
         case KMessageSuccess: {
             NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-            SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+            newSongListTopCell *cell=(newSongListTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
             cell.opened=!cell.opened;
             if (cell.opened) {
                 cell.sanjiaoxing.hidden=NO;
@@ -250,7 +252,7 @@
         }
         case KMessageStyleInfo: {
             NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-            SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+            newSongListTopCell *cell=(newSongListTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
             cell.opened=!cell.opened;
             if (cell.opened) {
                 cell.sanjiaoxing.hidden=NO;
@@ -277,7 +279,7 @@
     //ding ge
     if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-    SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    newSongListTopCell *cell=(newSongListTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
     if (cell.opened) {
         cell.sanjiaoxing.hidden=NO;
@@ -295,7 +297,7 @@
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-    SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    newSongListTopCell *cell=(newSongListTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
     if (cell.opened) {
         cell.sanjiaoxing.hidden=NO;

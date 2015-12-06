@@ -198,7 +198,7 @@
 
 
 - (void)initializeTableContent:(NSString*)searchStr {
-    NSString *enCodeSearchStr = [[searchStr uppercaseString] encodeBase64];
+    NSString *enCodeSearchStr = [searchStr uppercaseString];
     [searchArray addObject:enCodeSearchStr];
     if (_searchSelectIndex == searchAll) {
         

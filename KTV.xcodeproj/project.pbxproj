@@ -208,7 +208,6 @@
 		D161A5451B480A380029AC19 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = D161A5441B480A380029AC19 /* Order.m */; };
 		D161A5481B483F910029AC19 /* ip4.png in Resources */ = {isa = PBXBuildFile; fileRef = D161A5461B483F910029AC19 /* ip4.png */; };
 		D161A5491B483F910029AC19 /* ip5.png in Resources */ = {isa = PBXBuildFile; fileRef = D161A5471B483F910029AC19 /* ip5.png */; };
-		D16735991BA4542D0057CA0A /* YiDianBottomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D16735971BA4542D0057CA0A /* YiDianBottomCell.xib */; };
 		D167359A1BA4542D0057CA0A /* YiDianTopViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D16735981BA4542D0057CA0A /* YiDianTopViewCell.xib */; };
 		D167359D1BA4544C0057CA0A /* SongBottomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D167359B1BA4544C0057CA0A /* SongBottomCell.xib */; };
 		D16735A51BA454EB0057CA0A /* SongTopCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D16735A41BA454EB0057CA0A /* SongTopCell.xib */; };
@@ -252,6 +251,8 @@
 		D18719021AF7A3C000E39A62 /* BBBadgeBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D18719011AF7A3C000E39A62 /* BBBadgeBarButtonItem.m */; };
 		D188AEE61AE160880018DD36 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D188AEE51AE160880018DD36 /* CoreData.framework */; };
 		D188AEEA1AE160920018DD36 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D188AEE91AE160920018DD36 /* AVFoundation.framework */; };
+		D18DC9B41C12A7DB003B83B3 /* New.png in Resources */ = {isa = PBXBuildFile; fileRef = D18DC9B31C12A7DB003B83B3 /* New.png */; };
+		D18DC9B71C12A828003B83B3 /* newSongTopCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D18DC9B61C12A828003B83B3 /* newSongTopCell.m */; };
 		D19326861B062C4500F89470 /* search_0548@2x.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D19326831B062C4500F89470 /* search_0548@2x.PNG */; };
 		D19326871B062C4500F89470 /* search_0549@2x.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D19326841B062C4500F89470 /* search_0549@2x.PNG */; };
 		D19326881B062C4500F89470 /* search_0550@2x.PNG in Resources */ = {isa = PBXBuildFile; fileRef = D19326851B062C4500F89470 /* search_0550@2x.PNG */; };
@@ -264,6 +265,18 @@
 		D1B159271BFF97EF00350B5B /* Default_Header.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B159261BFF97EF00350B5B /* Default_Header.png */; };
 		D1B1592D1C004D8100350B5B /* cancel_bt_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B1592A1C004D8100350B5B /* cancel_bt_bg.png */; };
 		D1B159311C0050E600350B5B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1B159301C0050E600350B5B /* AudioToolbox.framework */; };
+		D1B1839D1C12CB3400349C72 /* 菲律賓.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B183901C12CB3400349C72 /* 菲律賓.png */; };
+		D1B1839E1C12CB3400349C72 /* 國語.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B183911C12CB3400349C72 /* 國語.png */; };
+		D1B1839F1C12CB3400349C72 /* 韓語.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B183921C12CB3400349C72 /* 韓語.png */; };
+		D1B183A31C12CB3400349C72 /* 日語.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B183961C12CB3400349C72 /* 日語.png */; };
+		D1B183A41C12CB3400349C72 /* 臺語.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B183971C12CB3400349C72 /* 臺語.png */; };
+		D1B183A51C12CB3400349C72 /* 泰語.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B183981C12CB3400349C72 /* 泰語.png */; };
+		D1B183A61C12CB3400349C72 /* 英語.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B183991C12CB3400349C72 /* 英語.png */; };
+		D1B183A71C12CB3400349C72 /* 越南.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B1839A1C12CB3400349C72 /* 越南.png */; };
+		D1B183A81C12CB3400349C72 /* 粵語.png in Resources */ = {isa = PBXBuildFile; fileRef = D1B1839B1C12CB3400349C72 /* 粵語.png */; };
+		D1B183AB1C12D3B400349C72 /* CollectionTopCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D1B183AA1C12D3B400349C72 /* CollectionTopCell.m */; };
+		D1B183AE1C12D81700349C72 /* newSongListTopCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D1B183AD1C12D81700349C72 /* newSongListTopCell.m */; };
+		D1B183B41C12DEAD00349C72 /* SearchSongResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D1B183B31C12DEAD00349C72 /* SearchSongResultCell.m */; };
 		D1BBF2F21C0166010013E286 /* music_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1BBF2F11C0166010013E286 /* music_icon@2x.png */; };
 		D1E32F351BFCDD7D001FB54E /* nav_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E32F341BFCDD7D001FB54E /* nav_back@2x.png */; };
 		D1E32F371BFCDFBB001FB54E /* nav_back@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D1E32F361BFCDFBB001FB54E /* nav_back@3x.png */; };
@@ -635,7 +648,6 @@
 		D161A5441B480A380029AC19 /* Order.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order.m; sourceTree = "<group>"; };
 		D161A5461B483F910029AC19 /* ip4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ip4.png; sourceTree = "<group>"; };
 		D161A5471B483F910029AC19 /* ip5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ip5.png; sourceTree = "<group>"; };
-		D16735971BA4542D0057CA0A /* YiDianBottomCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YiDianBottomCell.xib; sourceTree = "<group>"; };
 		D16735981BA4542D0057CA0A /* YiDianTopViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YiDianTopViewCell.xib; sourceTree = "<group>"; };
 		D167359B1BA4544C0057CA0A /* SongBottomCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SongBottomCell.xib; sourceTree = "<group>"; };
 		D16735A41BA454EB0057CA0A /* SongTopCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SongTopCell.xib; sourceTree = "<group>"; };
@@ -699,6 +711,9 @@
 		D18719011AF7A3C000E39A62 /* BBBadgeBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBBadgeBarButtonItem.m; sourceTree = "<group>"; };
 		D188AEE51AE160880018DD36 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		D188AEE91AE160920018DD36 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		D18DC9B31C12A7DB003B83B3 /* New.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = New.png; sourceTree = "<group>"; };
+		D18DC9B51C12A828003B83B3 /* newSongTopCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newSongTopCell.h; sourceTree = "<group>"; };
+		D18DC9B61C12A828003B83B3 /* newSongTopCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newSongTopCell.m; sourceTree = "<group>"; };
 		D19326831B062C4500F89470 /* search_0548@2x.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_0548@2x.PNG"; sourceTree = "<group>"; };
 		D19326841B062C4500F89470 /* search_0549@2x.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_0549@2x.PNG"; sourceTree = "<group>"; };
 		D19326851B062C4500F89470 /* search_0550@2x.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_0550@2x.PNG"; sourceTree = "<group>"; };
@@ -714,6 +729,21 @@
 		D1B159261BFF97EF00350B5B /* Default_Header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default_Header.png; sourceTree = "<group>"; };
 		D1B1592A1C004D8100350B5B /* cancel_bt_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel_bt_bg.png; sourceTree = "<group>"; };
 		D1B159301C0050E600350B5B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		D1B183901C12CB3400349C72 /* 菲律賓.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "菲律賓.png"; sourceTree = "<group>"; };
+		D1B183911C12CB3400349C72 /* 國語.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "國語.png"; sourceTree = "<group>"; };
+		D1B183921C12CB3400349C72 /* 韓語.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "韓語.png"; sourceTree = "<group>"; };
+		D1B183961C12CB3400349C72 /* 日語.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "日語.png"; sourceTree = "<group>"; };
+		D1B183971C12CB3400349C72 /* 臺語.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "臺語.png"; sourceTree = "<group>"; };
+		D1B183981C12CB3400349C72 /* 泰語.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "泰語.png"; sourceTree = "<group>"; };
+		D1B183991C12CB3400349C72 /* 英語.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "英語.png"; sourceTree = "<group>"; };
+		D1B1839A1C12CB3400349C72 /* 越南.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "越南.png"; sourceTree = "<group>"; };
+		D1B1839B1C12CB3400349C72 /* 粵語.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "粵語.png"; sourceTree = "<group>"; };
+		D1B183A91C12D3B400349C72 /* CollectionTopCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionTopCell.h; sourceTree = "<group>"; };
+		D1B183AA1C12D3B400349C72 /* CollectionTopCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionTopCell.m; sourceTree = "<group>"; };
+		D1B183AC1C12D81700349C72 /* newSongListTopCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = newSongListTopCell.h; sourceTree = "<group>"; };
+		D1B183AD1C12D81700349C72 /* newSongListTopCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = newSongListTopCell.m; sourceTree = "<group>"; };
+		D1B183B21C12DEAD00349C72 /* SearchSongResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchSongResultCell.h; sourceTree = "<group>"; };
+		D1B183B31C12DEAD00349C72 /* SearchSongResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchSongResultCell.m; sourceTree = "<group>"; };
 		D1BBF2F11C0166010013E286 /* music_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music_icon@2x.png"; sourceTree = "<group>"; };
 		D1E32F341BFCDD7D001FB54E /* nav_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_back@2x.png"; path = "KTV/images/kege/nav_back@2x.png"; sourceTree = SOURCE_ROOT; };
 		D1E32F361BFCDFBB001FB54E /* nav_back@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "nav_back@3x.png"; path = "KTV/images/kege/nav_back@3x.png"; sourceTree = SOURCE_ROOT; };
@@ -876,6 +906,16 @@
 		C3AAC0BC1BCC94FE009582D1 /* ohter */ = {
 			isa = PBXGroup;
 			children = (
+				D1B183901C12CB3400349C72 /* 菲律賓.png */,
+				D1B183911C12CB3400349C72 /* 國語.png */,
+				D1B183921C12CB3400349C72 /* 韓語.png */,
+				D1B183961C12CB3400349C72 /* 日語.png */,
+				D1B183971C12CB3400349C72 /* 臺語.png */,
+				D1B183981C12CB3400349C72 /* 泰語.png */,
+				D1B183991C12CB3400349C72 /* 英語.png */,
+				D1B1839A1C12CB3400349C72 /* 越南.png */,
+				D1B1839B1C12CB3400349C72 /* 粵語.png */,
+				D18DC9B31C12A7DB003B83B3 /* New.png */,
 				D1BBF2F11C0166010013E286 /* music_icon@2x.png */,
 				D1B159261BFF97EF00350B5B /* Default_Header.png */,
 				C3AAC0BD1BCC953C009582D1 /* password_cancel_down@2x.png */,
@@ -1001,6 +1041,8 @@
 				C3C716E51C043A4000F0D810 /* APLMainTableViewController.m */,
 				C3C716DE1C040C1800F0D810 /* APLResultsTableController.h */,
 				C3C716DF1C040C1800F0D810 /* APLResultsTableController.m */,
+				D1B183B21C12DEAD00349C72 /* SearchSongResultCell.h */,
+				D1B183B31C12DEAD00349C72 /* SearchSongResultCell.m */,
 			);
 			path = new;
 			sourceTree = "<group>";
@@ -1283,6 +1325,8 @@
 			children = (
 				D156A3DA1AEC97AB0091C419 /* newSongViewController.h */,
 				D156A3DB1AEC97AB0091C419 /* newSongViewController.m */,
+				D18DC9B51C12A828003B83B3 /* newSongTopCell.h */,
+				D18DC9B61C12A828003B83B3 /* newSongTopCell.m */,
 				C3E543571BD729AE0003D734 /* newSongBottomCell.h */,
 				C3E543581BD729AE0003D734 /* newSongBottomCell.m */,
 			);
@@ -1299,7 +1343,6 @@
 				D16735981BA4542D0057CA0A /* YiDianTopViewCell.xib */,
 				D15201201B07547400217F1C /* YiDianBottomCell.h */,
 				D15201211B07547400217F1C /* YiDianBottomCell.m */,
-				D16735971BA4542D0057CA0A /* YiDianBottomCell.xib */,
 			);
 			path = yidianViewController;
 			sourceTree = "<group>";
@@ -1514,6 +1557,8 @@
 			children = (
 				D156A3E21AECE0F80091C419 /* CollectionViewController.h */,
 				D156A3E31AECE0F80091C419 /* CollectionViewController.m */,
+				D1B183A91C12D3B400349C72 /* CollectionTopCell.h */,
+				D1B183AA1C12D3B400349C72 /* CollectionTopCell.m */,
 				D155C6A41AF48A1C0085CDCB /* CollectionViewCell.h */,
 				D155C6A51AF48A1C0085CDCB /* CollectionViewCell.m */,
 				D155C6A61AF48A1C0085CDCB /* CollectionViewCell.xib */,
@@ -1619,6 +1664,8 @@
 			children = (
 				D159025B1AEA55E700D8409B /* SongListViewController.h */,
 				D159025C1AEA55E700D8409B /* SongListViewController.m */,
+				D1B183AC1C12D81700349C72 /* newSongListTopCell.h */,
+				D1B183AD1C12D81700349C72 /* newSongListTopCell.m */,
 				D19994AD1AEA87D200CEC16D /* SongTopCell.h */,
 				D19994AE1AEA87D200CEC16D /* SongTopCell.m */,
 				D16735A41BA454EB0057CA0A /* SongTopCell.xib */,
@@ -1875,6 +1922,7 @@
 				D10E26821BFF761B008F77EF /* scanscanBg.png in Resources */,
 				D12374641B2D795D00902361 /* close_1.png in Resources */,
 				D154302C1AFDDCD600522DE1 /* bokong4.png in Resources */,
+				D1B183A71C12CB3400349C72 /* 越南.png in Resources */,
 				D1F6C0361B2C95640018C96F /* LICENSE.txt in Resources */,
 				D15430981AFDDCD600522DE1 /* yidianheader.png in Resources */,
 				D15430571AFDDCD600522DE1 /* huatong.png in Resources */,
@@ -1887,6 +1935,7 @@
 				D15430831AFDDCD600522DE1 /* paihang_flag2.png in Resources */,
 				D154303F1AFDDCD600522DE1 /* diange_icon.png in Resources */,
 				D154304E1AFDDCD600522DE1 /* jinxuanji_folder.png in Resources */,
+				D18DC9B41C12A7DB003B83B3 /* New.png in Resources */,
 				D154302E1AFDDCD600522DE1 /* bokong_bg.png in Resources */,
 				D1E32F371BFCDFBB001FB54E /* nav_back@3x.png in Resources */,
 				D175E8CA1B024C37003449A6 /* cutsong_bt@2x.png in Resources */,
@@ -1896,9 +1945,11 @@
 				D15430901AFDDCD600522DE1 /* jiajian.png in Resources */,
 				D17E67B31B4D70F400FA2E72 /* ip6+.png in Resources */,
 				D175E8BE1B0237DE003449A6 /* searchBar.png in Resources */,
+				D1B183A81C12CB3400349C72 /* 粵語.png in Resources */,
 				D15430361AFDDCD600522DE1 /* collectionFlag3.png in Resources */,
 				D10E26801BFF761B008F77EF /* scanLine@2x.png in Resources */,
 				D1EF0F3B1C11FBF900731EFA /* DB.sqlite.zip in Resources */,
+				D1B183A41C12CB3400349C72 /* 臺語.png in Resources */,
 				D15430391AFDDCD600522DE1 /* collectionFlag6.png in Resources */,
 				D15430791AFDDCD600522DE1 /* shoucan.png in Resources */,
 				D154306F1AFDDCD600522DE1 /* kege_selected@2x.png in Resources */,
@@ -1906,8 +1957,10 @@
 				D15C03C01BCA5A5500F4F112 /* yidian@2x.png in Resources */,
 				D15430971AFDDCD600522DE1 /* stopstart.png in Resources */,
 				D15430751AFDDCD600522DE1 /* shenkong.png in Resources */,
+				D1B183A51C12CB3400349C72 /* 泰語.png in Resources */,
 				D15430401AFDDCD600522DE1 /* nav_bottom_bg.png in Resources */,
 				D15332971BA1B2BC00734C77 /* rouhe_normal.png in Resources */,
+				D1B1839D1C12CB3400349C72 /* 菲律賓.png in Resources */,
 				D154302D1AFDDCD600522DE1 /* bokong5.png in Resources */,
 				D153328D1BA1B2B000734C77 /* gaiguang_normal.png in Resources */,
 				20D8380B1BA132F000FB6AE3 /* LaunchScreen.strings in Resources */,
@@ -1926,6 +1979,7 @@
 				D15430581AFDDCD600522DE1 /* kge_head.png in Resources */,
 				D175E8C01B02444E003449A6 /* selectView_bg.png in Resources */,
 				D154304B1AFDDCD600522DE1 /* pick_bg@2x.png in Resources */,
+				D1B1839E1C12CB3400349C72 /* 國語.png in Resources */,
 				D15430411AFDDCD600522DE1 /* nav_bottom_bg@2x.png in Resources */,
 				D15430531AFDDCD600522DE1 /* geshou_area_bg.png in Resources */,
 				D170BF941BAE66E000A8FAF5 /* ZVolumeSlide_clearBack.png in Resources */,
@@ -1935,7 +1989,6 @@
 				D10E26811BFF761B008F77EF /* scanLine@3x.png in Resources */,
 				D175E8C31B024B59003449A6 /* priority_bt.png in Resources */,
 				D161A5481B483F910029AC19 /* ip4.png in Resources */,
-				D16735991BA4542D0057CA0A /* YiDianBottomCell.xib in Resources */,
 				D1E39F111AFE051B00E739F9 /* geshou_area_cell_bg.png in Resources */,
 				D1586B4F1AE14CBF00AF3EDB /* Main.storyboard in Resources */,
 				C3AAC1201BCCA2F7009582D1 /* MJRefresh.bundle in Resources */,
@@ -1974,6 +2027,7 @@
 				D154307A1AFDDCD600522DE1 /* touxiang.png in Resources */,
 				D15430681AFDDCD600522DE1 /* bokong_selected@2x.png in Resources */,
 				C3AAC0D21BCC958F009582D1 /* error.png in Resources */,
+				D1B183A31C12CB3400349C72 /* 日語.png in Resources */,
 				D19326871B062C4500F89470 /* search_0549@2x.PNG in Resources */,
 				D15430281AFDDCD600522DE1 /* bokong0.png in Resources */,
 				D19326881B062C4500F89470 /* search_0550@2x.PNG in Resources */,
@@ -1996,10 +2050,12 @@
 				D154304A1AFDDCD600522DE1 /* line@2x.png in Resources */,
 				D1586B541AE14CBF00AF3EDB /* LaunchScreen.xib in Resources */,
 				D1FCD64F1B305B4A00F37EED /* SingsTableViewCell.xib in Resources */,
+				D1B183A61C12CB3400349C72 /* 英語.png in Resources */,
 				20D838161BA1330100FB6AE3 /* Localizable.strings in Resources */,
 				D15430801AFDDCD600522DE1 /* paihang_flag0.png in Resources */,
 				D15430731AFDDCD600522DE1 /* setting@2x.png in Resources */,
 				D154302A1AFDDCD600522DE1 /* bokong2.png in Resources */,
+				D1B1839F1C12CB3400349C72 /* 韓語.png in Resources */,
 				D154305F1AFDDCD600522DE1 /* song_bt_bg.png in Resources */,
 				D156A3E11AEC981D0091C419 /* paiHangTopCell.xib in Resources */,
 			);
@@ -2056,6 +2112,7 @@
 				D155899C1B038C52000AA4C9 /* NSInvocation+Constructors.m in Sources */,
 				D175F1121AE15F78004E3B9A /* PinYinForObjc.m in Sources */,
 				D15E2AAC1AEBB9970093C773 /* jingXuanTableViewCell.m in Sources */,
+				D1B183AB1C12D3B400349C72 /* CollectionTopCell.m in Sources */,
 				D12374551B2D163500902361 /* SDWebImageDecoder.m in Sources */,
 				D155C6A71AF48A1C0085CDCB /* CollectionViewCell.m in Sources */,
 				D159025D1AEA55E700D8409B /* SongListViewController.m in Sources */,
@@ -2081,6 +2138,7 @@
 				D123745D1B2D163500902361 /* UIImage+WebP.m in Sources */,
 				D12374531B2D163500902361 /* SDImageCache.m in Sources */,
 				D175F1131AE15F78004E3B9A /* PinyinHelper.m in Sources */,
+				D1B183AE1C12D81700349C72 /* newSongListTopCell.m in Sources */,
 				C3AAC1181BCCA2F7009582D1 /* MJRefreshAutoNormalFooter.m in Sources */,
 				D123745E1B2D163500902361 /* UIImageView+HighlightedWebCache.m in Sources */,
 				D15902701AEA7F8400D8409B /* Singer.m in Sources */,
@@ -2152,10 +2210,12 @@
 				D15C03C81BCA5E2C00F4F112 /* BaseTableViewController.m in Sources */,
 				D17FE1901BA9A44300FB6395 /* AdjustSoundArray.m in Sources */,
 				D159320E1AF4FFBE00A9C53C /* SoundViewController.m in Sources */,
+				D18DC9B71C12A828003B83B3 /* newSongTopCell.m in Sources */,
 				C3AAC11C1BCCA2F7009582D1 /* MJRefreshBackStateFooter.m in Sources */,
 				D15932021AF4DE1000A9C53C /* soundView.m in Sources */,
 				D175F1111AE15F78004E3B9A /* PinyinFormatter.m in Sources */,
 				D1586B461AE14CBF00AF3EDB /* main.m in Sources */,
+				D1B183B41C12DEAD00349C72 /* SearchSongResultCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

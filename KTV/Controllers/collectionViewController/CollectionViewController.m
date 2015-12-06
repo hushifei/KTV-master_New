@@ -7,9 +7,10 @@
 //
 
 #import "CollectionViewController.h"
-#import "CollectionViewCell.h"
+//#import "CollectionViewCell.h"
+#import "CollectionTopCell.h"
 #import "CollectionBottomCell.h"
-#define TOPCELLIDENTIFY @"CollectionViewCell"
+#define TOPCELLIDENTIFY @"CollectionTopCell"
 #define BOTTOMCELLIDENTIFY @"CollectionBottomCell"
 #import "YiDianViewController.h"
 #import "Utility.h"
@@ -33,8 +34,10 @@
     myToast=[[HuToast alloc]init];
     _previousRow = -1;
     self.title=NSLocalizedString(@"house", nil);
-    UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
+    [self.tableView registerClass:[CollectionTopCell class] forCellReuseIdentifier:TOPCELLIDENTIFY];
+
+//    UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
+//    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
     self.tableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"geshou_area_bg"]];
     self.tableView.backgroundView=bgImageView;
@@ -90,11 +93,11 @@
 #pragma mark - Table view data source
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CollectionViewCell *cell=(CollectionViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-    if (![cell isKindOfClass:[CollectionViewCell class]]) return;
+    CollectionTopCell *cell=(CollectionTopCell*)[tableView cellForRowAtIndexPath:indexPath];
+    if (![cell isKindOfClass:[CollectionTopCell class]]) return;
     if (_previousRow >= 0) {
         NSIndexPath *preIndexPath=[NSIndexPath indexPathForRow:_previousRow inSection:0];
-        CollectionViewCell *preCell=(CollectionViewCell*)[tableView cellForRowAtIndexPath:preIndexPath];
+        CollectionTopCell *preCell=(CollectionTopCell*)[tableView cellForRowAtIndexPath:preIndexPath];
         
         if (indexPath.row == _previousRow + 1) {
             //            NSLog(@"fff");
@@ -158,12 +161,13 @@
             cell.oneSong.delegate=self;
             return cell;
     } else {
-        CollectionViewCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
+        CollectionTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
         cell.oneSong=dataList[indexPath.row];
+        cell.numberStr.text =[NSString stringWithFormat:@"%02d",(int)indexPath.row+1];
         cell.buttonitem=self.navigationItem.rightBarButtonItem;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor=[UIColor clearColor];
-        cell.collectionFlagView.image=[UIImage imageNamed:[NSString stringWithFormat:@"collectionFlag%d",(int)(indexPath.row+7)%7]];
+//        cell.collectionFlagView.image=[UIImage imageNamed:[NSString stringWithFormat:@"collectionFlag%d",(int)(indexPath.row+7)%7]];
         if (cell.opened) {
             cell.sanjiaoxing.hidden=NO;
         } else {
@@ -234,7 +238,7 @@
     //ding ge
     if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-    CollectionViewCell *cell=(CollectionViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    CollectionTopCell *cell=(CollectionTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
     if (cell.opened) {
         cell.sanjiaoxing.hidden=NO;
@@ -259,7 +263,7 @@
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-    CollectionViewCell *cell=(CollectionViewCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    CollectionTopCell *cell=(CollectionTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
     if (cell.opened) {
         cell.sanjiaoxing.hidden=NO;

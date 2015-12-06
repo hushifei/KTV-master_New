@@ -27,7 +27,7 @@
     BOOL canShow = [XZMCoreNewFeatureVC canShowNewFeature];
     
     //测试代码，正式版本应该删除
-    canShow = YES;
+//    canShow = YES;
     if(canShow){ // 初始化新特性界面
         window.rootViewController = [XZMCoreNewFeatureVC newFeatureVCWithImageNames:@[@"a6",@"b7"] enterBlock:^{
             [self enter];

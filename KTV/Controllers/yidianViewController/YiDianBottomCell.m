@@ -17,9 +17,40 @@
 
 @implementation YiDianBottomCell
 
-- (void)awakeFromNib {
-//
- 
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self initViewContent];
+    }
+    return self;
+}
+
+
+- (void)initViewContent {
+    _collectionrec=[[UIButton alloc]initWithFrame:CGRectZero];
+    [_collectionrec setImage:[UIImage imageNamed:@"collection_bt"] forState:UIControlStateNormal];
+    [_collectionrec setTitle:@"收藏" forState:UIControlStateNormal];
+    [_collectionrec addTarget:self action:@selector(clicked_collection:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    _priority=[[UIButton alloc]initWithFrame:CGRectZero];
+    [_priority setImage:[UIImage imageNamed:@"priority_bt"] forState:UIControlStateNormal];
+    [_priority setTitle:@"优先" forState:UIControlStateNormal];
+
+    [_priority addTarget:self action:@selector(clicked_priority:) forControlEvents:UIControlEventTouchUpInside];
+
+    
+    _remove=[[UIButton alloc]initWithFrame:CGRectZero];
+    [_remove setImage:[UIImage imageNamed:@"remove_yidian"] forState:UIControlStateNormal];
+    [_remove setTitle:@"移除" forState:UIControlStateNormal];
+    
+    [_remove addTarget:self action:@selector(removeSong:) forControlEvents:UIControlEventTouchUpInside];
+
+    
+    [self.contentView addSubview:_collectionrec];
+    [self.contentView addSubview:_priority];
+    [self.contentView addSubview:_remove];
+
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -28,7 +59,9 @@
     // Configure the view for the selected state
 }
 
-- (void)drawRect:(CGRect)rect {
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
     CGSize size=self.contentView.bounds.size;
     NSArray *btns=@[_collectionrec,_priority,_remove];
     float width=size.width/btns.count;
@@ -37,10 +70,11 @@
         oneButton.frame=CGRectMake(width*i, 0, width,size.height);
         NSLog(@"%@",NSStringFromCGRect(oneButton.frame));
     }
-    [super drawRect:rect];
 }
 
-- (IBAction)clicked_priority:(id)sender {
+
+
+- (void)clicked_priority:(id)sender {
     //1.search order tableDemoTableViewController
     if ([Utility instanceShare].netWorkStatus) {
     if (self.orderID==nil) return;
@@ -58,12 +92,12 @@
 }
 
 
-- (IBAction)clicked_cutsong:(id)sender {
+- (void)clicked_cutsong:(id)sender {
     [_oneSong cutSong:^(BOOL complete) {
     }];
 }
 
-- (IBAction)removeSong:(id)sender {
+- (void)removeSong:(id)sender {
     if ([Utility instanceShare].netWorkStatus) {
     CommandControler *cmd=[[CommandControler alloc]init];
     [cmd sendCmd_remove_yidian:_orderID completed:^(BOOL completed, NSError *error) {
@@ -81,7 +115,7 @@
 }
 
 
-- (IBAction)clicked_collection:(id)sender {
+- (void)clicked_collection:(id)sender {
     [_oneSong insertSongToCollectionTable:^(BOOL complete) {
         
     }];

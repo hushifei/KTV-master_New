@@ -7,9 +7,9 @@
 //
 
 #import "newSongViewController.h"
-#define TOPCELLIDENTIFY @"SongTopCell"
+#define TOPCELLIDENTIFY @"newSongTopCell"
 #define BOTTOMCELLIDENTIFY @"newSongBottomCell"
-#import "SongTopCell.h"
+#import "newSongTopCell.h"
 #import "newSongBottomCell.h"
 #import "YiDianViewController.h"
 #import "BBBadgeBarButtonItem.h"
@@ -31,8 +31,9 @@
     myToast=[[HuToast alloc]init];
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"newSong_bg"]];
     self.tableView.backgroundView=bgImageView;
-    UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
+    [self.tableView registerClass:[newSongTopCell class] forCellReuseIdentifier:TOPCELLIDENTIFY];
+//    UINib *nib=[UINib nibWithNibName:TOPCELLIDENTIFY bundle:nil];
+//    [self.tableView registerNib:nib forCellReuseIdentifier:TOPCELLIDENTIFY];
     _previousRow = -1;
     UIImageView  *headerImageV=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 200)];
     [headerImageV setImage:[UIImage imageNamed:@"newsong_header"]];
@@ -44,8 +45,7 @@
 }
 
 - (void)initializeTableContent{
-    NSString *newSongFlag=[@"1" encodeBase64];
-    NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where newsong='%@' ORDER BY singer limit %d OFFSET %@",newSongFlag,pageLimint,offset];
+    NSString *sqlStr= [NSString stringWithFormat:@"select * from SongTable where newsong='1' ORDER BY singer limit %d OFFSET %@",pageLimint,offset];
     FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Song *oneSong=[[Song alloc]init];
@@ -104,10 +104,9 @@
         return cell;
     } else {
 //        SongTopCell *cell=[[SongTopCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[NSString stringWithFormat:@"%@_%d",TOPCELLIDENTIFY,(int)indexPath.row]];
-        SongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
+        newSongTopCell *cell = [tableView dequeueReusableCellWithIdentifier:TOPCELLIDENTIFY forIndexPath:indexPath];
 //        SongTopCell *cell= [[[NSBundle mainBundle] loadNibNamed:@"SongTopCell" owner:nil options:nil] firstObject];
         cell.numberStr.text =[NSString stringWithFormat:@"%02d",(int)indexPath.row+1];
-        cell.numberStr.font=[UIFont fontWithName:@"DIN Condensed" size:22];
         cell.oneSong=dataList[indexPath.row];
         cell.buttonitem=self.navigationItem.rightBarButtonItem;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -128,11 +127,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SongTopCell *cell=(SongTopCell*)[tableView cellForRowAtIndexPath:indexPath];
-    if (![cell isKindOfClass:[SongTopCell class]]) return;
+    newSongTopCell *cell=(newSongTopCell*)[tableView cellForRowAtIndexPath:indexPath];
+    if (![cell isKindOfClass:[newSongTopCell class]]) return;
     if (_previousRow >= 0) {
         NSIndexPath *preIndexPath=[NSIndexPath indexPathForRow:_previousRow inSection:0];
-        SongTopCell *preCell=(SongTopCell*)[tableView cellForRowAtIndexPath:preIndexPath];
+        newSongTopCell *preCell=(newSongTopCell*)[tableView cellForRowAtIndexPath:preIndexPath];
         if (indexPath.row == _previousRow) {
             cell.sanjiaoxing.hidden=!(cell.opened=!cell.opened);
             [dataList removeObjectAtIndex:indexPath.row +1];
@@ -203,7 +202,7 @@
         switch (result) {
             case KMessageSuccess: {
                 NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-                SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+                newSongTopCell *cell=(newSongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
                 cell.opened=!cell.opened;
                 if (cell.opened) {
                     cell.sanjiaoxing.hidden=NO;
@@ -227,7 +226,7 @@
             }
             case KMessageStyleInfo: {
                 NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-                SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+                newSongTopCell *cell=(newSongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
                 cell.opened=!cell.opened;
                 if (cell.opened) {
                     cell.sanjiaoxing.hidden=NO;
@@ -253,7 +252,7 @@
     //ding ge
     if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-    SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    newSongTopCell *cell=(newSongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
     if (cell.opened) {
         cell.sanjiaoxing.hidden=NO;
@@ -274,7 +273,7 @@
 - (void)cutSongFromCollection:(Song *)oneSong result:(KMessageStyle)result {
     if(_previousRow<=-1) return;
     NSIndexPath *indexPath=[NSIndexPath indexPathForItem:_previousRow inSection:0];
-    SongTopCell *cell=(SongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
+    newSongTopCell *cell=(newSongTopCell*)[self.tableView cellForRowAtIndexPath:indexPath];
     cell.opened=!cell.opened;
     if (cell.opened) {
         cell.sanjiaoxing.hidden=NO;

@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface NSString (Utility)
-+ (NSString*)encodeBase64WithString:(NSString*)decodestr;
-+ (NSString*)decodeBase64WithString:(NSString*)encodeStr;
-- (NSString*)encodeBase64;
-- (NSString*)decodeBase64;
+//+ (NSString*)encodeBase64WithString:(NSString*)decodestr;
+//+ (NSString*)decodeBase64WithString:(NSString*)encodeStr;
+//- (NSString*)encodeBase64;
+//- (NSString*)decodeBase64;
 
 #pragma mark - chinease to pinyi
 - (NSString *) pinyin;

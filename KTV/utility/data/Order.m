@@ -10,18 +10,18 @@
 #import "NSString+Utility.h"
 @implementation Order
 
-- (void)setNumber:(NSString *)number {
-    _number=[number decodeBase64];
-
-}
-
-- (void)setRcid:(NSString *)rcid {
-    _rcid=[rcid decodeBase64];
-
-}
-
--  (void)setOrdername:(NSString *)ordername {
-    _ordername=[ordername decodeBase64];
-}
+//- (void)setNumber:(NSString *)number {
+//    _number=[number decodeBase64];
+//
+//}
+//
+//- (void)setRcid:(NSString *)rcid {
+//    _rcid=[rcid decodeBase64];
+//
+//}
+//
+//-  (void)setOrdername:(NSString *)ordername {
+//    _ordername=[ordername decodeBase64];
+//}
 
 @end

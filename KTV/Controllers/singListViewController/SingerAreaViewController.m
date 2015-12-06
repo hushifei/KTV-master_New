@@ -41,8 +41,7 @@
 }
 
 - (void)initializeTableContent {
-    NSString *typeID=[@"4" encodeBase64];
-    NSString *sqlStr= [NSString stringWithFormat:@"select * from TypeTable where typeid='%@'",typeID];
+    NSString *sqlStr= @"select * from TypeTable where typeid='4'";
     FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Typelist *oneType=[[Typelist alloc]init];

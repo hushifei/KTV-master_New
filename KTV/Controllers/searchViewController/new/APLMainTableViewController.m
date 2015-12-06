@@ -224,7 +224,7 @@ enum selectSearchType{
   [_queue cancelAllOperations];
   NSMutableArray *searchResult=[[NSMutableArray alloc]init];
     NSString *searchStr=[searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-  NSString *enCodeSearchStr = [[searchStr uppercaseString] encodeBase64];
+  NSString *enCodeSearchStr = [searchStr uppercaseString];
    NSBlockOperation *operationSong=[NSBlockOperation blockOperationWithBlock:^{
        if (searchStr && searchStr.length>0) {
             [searchResult addObjectsFromArray:[self searchSongData:SONGTABLE :@"songpiy" :enCodeSearchStr :@"songname"]];

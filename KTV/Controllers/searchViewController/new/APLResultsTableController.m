@@ -10,15 +10,19 @@
 #import "Song.h"
 #import "Singer.h"
 #import "SearchResultCell.h"
+#import "SearchSongResultCell.h"
 #import "WebImage.h"
-NSString *const SFCellIdentifier = @"SearchResultCell_Identify";
+NSString *const SFCellIdentifierSinger = @"SFCellIdentifierSinger";
+NSString *const SFCellIdentifierSong = @"SFCellIdentifierSong";
+
 @implementation APLResultsTableController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.edgesForExtendedLayout=UIRectEdgeNone;
     self.definesPresentationContext = YES;  // know where you want UISearchController to be displayed
-    [self.tableView registerClass:[SearchResultCell class] forCellReuseIdentifier:SFCellIdentifier];
+    [self.tableView registerClass:[SearchResultCell class] forCellReuseIdentifier:SFCellIdentifierSinger];
+        [self.tableView registerClass:[SearchSongResultCell class] forCellReuseIdentifier:SFCellIdentifierSong];
     self.tableView.showsHorizontalScrollIndicator=NO;
     self.tableView.showsVerticalScrollIndicator=NO;
     self.tableView.backgroundColor=[UIColor clearColor];
@@ -31,30 +35,39 @@ NSString *const SFCellIdentifier = @"SearchResultCell_Identify";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SearchResultCell *cell = (SearchResultCell *)[self.tableView dequeueReusableCellWithIdentifier:SFCellIdentifier];
+    UITableViewCell *cell=nil;
+    if ([self.filteredProducts[indexPath.row] isKindOfClass:[Singer class]]) {
+      cell = (SearchResultCell *)[self.tableView dequeueReusableCellWithIdentifier:SFCellIdentifierSinger];
+
+    } else {
+    cell = (SearchSongResultCell *)[self.tableView dequeueReusableCellWithIdentifier:SFCellIdentifierSong];
+    }
     cell.contentView.backgroundColor=[UIColor clearColor];
     cell.backgroundColor=[UIColor clearColor];
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
+    if ([self.filteredProducts[indexPath.row] isKindOfClass:[Song class]]) {
+        [(SearchSongResultCell*)cell setOneSong:self.filteredProducts[indexPath.row]];
+    }
     [self configureCell:cell forProduct:self.filteredProducts[indexPath.row]];
     return cell;
 }
 
-- (void)configureCell:(SearchResultCell *)cell forProduct:(id)object {
+- (void)configureCell:(UITableViewCell *)cellObject forProduct:(id)object {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (object==nil) return;
         if ([object isKindOfClass:[Singer class]]) {
             Singer *oneSinger=(Singer*)object;
+            SearchResultCell*cell=(SearchResultCell*)cellObject;
             cell.titleLabel.text=oneSinger.singer;
             NSString *urlStr=[[NSString stringWithFormat:@"http://%@:8080/puze?cmd=0x02&filename=%@",[Utility instanceShare].serverIPAddress,oneSinger.singer]stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
             [cell.header sd_setImageWithURL:[NSURL URLWithString:urlStr] placeholderImage:[UIImage imageNamed:@"Default_Header"]];
         } else if ([object isKindOfClass:[Song class]]){
+            SearchSongResultCell*cell=(SearchSongResultCell*)cellObject;
             cell.header.image=[UIImage imageNamed:@"music_icon"];
-            cell.titleLabel.text=[(Song*)object songname];
         }
     });
-    
- 
+
 }
 
 

@@ -38,7 +38,7 @@
     UINib *nib=[UINib nibWithNibName:@"SingerAreaTypeCell" bundle:nil];
     [self.tableView registerNib:nib forCellReuseIdentifier:CELLIDENTIFY];
     UIImageView *bgImageView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"songsList_bg"]];
-   totalRowCount= [[DataManager instanceShare]rowCountWithStatment:[NSString stringWithFormat:@"select count(*) from SingerTable where area='%@'",[_area encodeBase64]]];
+   totalRowCount= [[DataManager instanceShare]rowCountWithStatment:[NSString stringWithFormat:@"select count(*) from SingerTable where area='%@'",_area]];
     [self loadMJRefreshingView];
     
     self.tableView.backgroundView=bgImageView;
@@ -54,8 +54,7 @@
 
 - (void)initializeTableContent {
     //DESC 降序
-    NSString *typeID=[_area encodeBase64];
-    NSString *sqlStr= [NSString stringWithFormat:@"select * from SingerTable where area='%@' order by singer limit %d OFFSET %@",typeID,pageLimint,offset];
+    NSString *sqlStr= [NSString stringWithFormat:@"select * from SingerTable where area='%@' order by singer limit %d OFFSET %@",_area,pageLimint,offset];
     FMResultSet *rs=[[DataManager instanceShare].db executeQuery:sqlStr];
     while ([rs next]) {
         Singer *oneSinger=[[Singer alloc]init];
